@@ -1,0 +1,16 @@
+.console
+{
+    height: 300px;
+    width:610px;
+    max-height:300px;
+    padding: 10px 10px 10px 10px;
+    font-family: sans-serif;
+    color:white;
+    background-color:black;
+    overflow:auto;
+}
+
+.error
+{
+    color:red;
+}
