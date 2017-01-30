@@ -10,6 +10,11 @@
     overflow:auto;
 }
 
+.input
+{
+color: lightskyblue;
+}
+
 .error
 {
     color:red;

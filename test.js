@@ -3,7 +3,7 @@
  */
 
 
-
+console.log(input);
 
 function displayInput()
 {
