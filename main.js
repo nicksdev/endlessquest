@@ -42,8 +42,8 @@ introScenario(consoleMe, badcopy);
 //Pushes input to the consoleDiv
                 displayInput();
 //Starts the game, not sure why this belongs here
-//              room1Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-                room1(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+//            room1Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+            room1(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
 //Resets the input field to be empty
                 document.getElementById('userInput').value = "";
                 // Autoscroll to bottom of console Div
@@ -61,32 +61,6 @@ var introScenario = function(consoleMe,errorMessage) {
 };
 
 
-var room1 = function (consoleMe,errorMessage,choice1) {
-    var choice1;
-    var options = {
-        "start": function () {
-            choice1 = "start item";
-            //consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
-        },
-        "help": function () {
-            choice1 = "help item";
-            //consoleMe.innerHTML += "Here is some help<br>";
-        },
-        "default": function () {
-            choice1 = "default item";
-            //consoleMe.innerHTML += errorMessage;
-        }
-
-    };
-
-    (options[choice1] || options['default'])();
-
-    return 'You chose ' + choice1;
-};
-
-var choice1 = room1(choice1);
-
-console.log(choice1);
 
 
 
@@ -97,9 +71,18 @@ console.log(choice1);
 
 
 
-//
-//
+
+
+
+
+
+
+
+
+
 // var room1Scenario = function(consoleMe,errorMessage,input) {
+//     // var room1choice = input;
+//     // console.log(room1choice);
 //     switch (input) {
 //         case "start":
 //             consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
@@ -115,6 +98,12 @@ console.log(choice1);
 //             consoleMe.innerHTML += errorMessage;
 //     }
 // };
+
+
+
+
+
+
 
 //
 // var room2Scenario = function(consoleMe,errorMessage,input) {

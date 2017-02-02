@@ -3,6 +3,70 @@
  */
 
 
+//Code not calling the intro until an input is submitted
+//Want the intro to display and then accept inputs
+
+
+//Room 1
+var room1 = function (consoleMe,errorMessage,input) {
+    var choice1 = input;
+    var choices = {
+        "start": function () {
+            choice1 = "start item";
+            consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
+        },
+        "north": function () {
+            choice1 = "north item";
+            consoleMe.innerHTML += "You chose " + input + "<br>";
+            room2Intro(consoleMe);
+        },
+        "help": function () {
+            choice1 = "help item";
+            consoleMe.innerHTML += "Here is some help<br>";
+        },
+        "default": function () {
+            choice1 = "default item";
+            consoleMe.innerHTML += errorMessage;
+        }
+    };
+    (choices[choice1] || choices['default'])();
+};
+
+
+
+
+//Room 2
+var room2Intro = function (consoleMe) {
+    document.getElementById("consoleDiv").innerHTML += "ROOM2 DESCRIPTION<br>";
+    room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+};
+
+
+var room2 = function (consoleMe,errorMessage,input) {
+    var choice2 = input;
+    var choices = {
+        "up": function () {
+            choice2 = "up item";
+            consoleMe.innerHTML += "You chose <br>";
+        },
+        "help": function () {
+            choice2 = "help item";
+            consoleMe.innerHTML += "Here is some help<br>";
+        },
+        "default": function () {
+            choice2 = "default item";
+            consoleMe.innerHTML += errorMessage;
+        }
+    };
+    (choices[choice2] || choices['default'])();
+};
+
+
+
+
+
+
+
 // //INTRO SCENARIO
 //
 // var loadIntro = function(consoleMe,errorMessage) {
