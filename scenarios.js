@@ -18,7 +18,7 @@ var room1 = function (consoleMe,errorMessage,input) {
         "north": function () {
             choice1 = "north item";
             consoleMe.innerHTML += "You chose " + input + "<br>";
-            room2Intro(consoleMe);
+            room2Intro(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
         },
         "help": function () {
             choice1 = "help item";
@@ -37,9 +37,10 @@ var room1 = function (consoleMe,errorMessage,input) {
 
 //Room 2
 var room2Intro = function (consoleMe) {
-    document.getElementById("consoleDiv").innerHTML += "ROOM2 DESCRIPTION<br>";
+    consoleMe.innerHTML += "Welcome to the second room, there is a ladder going up<br>";
     room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
 };
+
 
 
 var room2 = function (consoleMe,errorMessage,input) {
@@ -47,7 +48,7 @@ var room2 = function (consoleMe,errorMessage,input) {
     var choices = {
         "up": function () {
             choice2 = "up item";
-            consoleMe.innerHTML += "You chose <br>";
+            consoleMe.innerHTML += "You chose " + input + "<br>";
         },
         "help": function () {
             choice2 = "help item";
@@ -55,7 +56,8 @@ var room2 = function (consoleMe,errorMessage,input) {
         },
         "default": function () {
             choice2 = "default item";
-            consoleMe.innerHTML += errorMessage;
+            consoleMe.innerHTML += "WHY IS THIS APPEARING BEFORE USER INPUT";
+//            consoleMe.innerHTML += errorMessage;
         }
     };
     (choices[choice2] || choices['default'])();

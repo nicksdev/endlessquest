@@ -42,7 +42,6 @@ introScenario(consoleMe, badcopy);
 //Pushes input to the consoleDiv
                 displayInput();
 //Starts the game, not sure why this belongs here
-//            room1Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
             room1(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
 //Resets the input field to be empty
                 document.getElementById('userInput').value = "";
