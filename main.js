@@ -27,10 +27,15 @@ var inputerror = function(){
     consoleMe.innerHTML += badcopy;
 };
 
-
+var clearInput = function() {
+    document.getElementById('userInput').value = "";
+};
 
 //Call the introScenario function passing the consoleMe and badCopy variables so that these can be used in the function.
+
 introScenario(consoleMe, badcopy);
+
+window.currentRoom = 'room1';
 
 
 // Capture Enter button for UserInput console
@@ -42,15 +47,56 @@ introScenario(consoleMe, badcopy);
 //Pushes input to the consoleDiv
                 displayInput();
 //Starts the game, not sure why this belongs here
-            room1(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+                if (window.currentRoom === 'room1') {
+                    room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+                } else if (window.currentRoom === 'room2') {
+                    room2(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+                }
 //Resets the input field to be empty
-                document.getElementById('userInput').value = "";
+             clearInput();
                 // Autoscroll to bottom of console Div
                 if(isScrolledToBottom)
                     consoleMe.scrollTop = consoleMe.scrollHeight - consoleMe.clientHeight;
             }
         });
 };
+
+
+
+
+var loadRoom = function(consoleMe, badcopy) {
+
+    document.getElementById("userInput").addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode == 13)
+        {
+//Pushes input to the consoleDiv
+            displayInput();
+//Starts the game, not sure why this belongs here
+            if (window.currentRoom === 'room1') {
+                room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+            } else if (window.currentRoom === 'room2') {
+                room2(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+            }
+//Resets the input field to be empty
+            clearInput();
+            // Autoscroll to bottom of console Div
+            if(isScrolledToBottom)
+                consoleMe.scrollTop = consoleMe.scrollHeight - consoleMe.clientHeight;
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 //INTRO SCENARIO

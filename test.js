@@ -1,59 +1,147 @@
 /**
- * Created by nickhughes on 20/1/17.
+ * Created by nickhughes on 24/1/17.
  */
 
 
-// function getDrink (type) {
-//     var drink;
-//     var drinks = {
-//         'coke': function () {
-//             drink = 'Coke';
-//         },
-//         'pepsi': function () {
-//             drink = 'Pepsi';
-//         },
-//         'lemonade': function () {
-//             drink = 'Lemonade';
-//         },
-//         'default': function () {
-//             drink = 'Default item';
-//         }
-//     };
-//
-//     // invoke it
-//     (drinks[type] || drinks['default'])();
-//
-//     // return a String with chosen drink
-//     return 'The drink I chose was ' + drink;
-// }
-//
-// var drink = getDrink('coke');
-// // The drink I chose was Coke
-// console.log(drink);
+//Code not calling the intro until an input is submitted
+//Want the intro to display and then accept inputs
 
 
-var room1 = function (type) {
-    var choice;
-    var options = {
+//Room 1
+var room1 = function (consoleMe,errorMessage,input) {
+    var choice1 = input;
+    var choices = {
         "start": function () {
-            choice = "start item";
-            //consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
+            choice1 = "start item";
+            consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
+        },
+        "north": function () {
+            choice1 = "north item";
+            //            consoleMe.innerHTML += "You chose " + input + "<br>";
+            window.currentRoom = 'room2';
+            console.log("Choice1 = " + choice1);
+            loadRoom();
+            //room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+            consoleMe.innerHTML += 'Entering room 2 ' + '<br>' + 'Choose Up';
         },
         "help": function () {
-            choice = "help item";
-            //consoleMe.innerHTML += "Here is some help<br>";
+            choice1 = "help item";
+            consoleMe.innerHTML += "Here is some help<br>";
         },
         "default": function () {
-            choice = "default item";
-            //consoleMe.innerHTML += errorMessage;
+            choice1 = "default item";
+//            consoleMe.innerHTML += errorMessage;
+            console.log("ROOM1 DEFAULT");
         }
-
     };
+    (choices[choice1] || choices['default'])();
+};
 
-    (options[type] || options['default'])();
 
-    return 'You chose ' + choice;
-}
-var choice = room1("bork");
+// Problem appears to be that choices is persisting between rooms. THerefore when a new room loads and the choice in not there, it deiplays default
 
-console.log(choice);
+
+
+
+
+
+
+
+
+//Room 2 Intro
+// var room2Intro = function (consoleMe) {
+//     consoleMe.innerHTML += "Room 2 Intro<br>";
+//     room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+// };
+
+
+
+
+
+//WHen this version of Room 2 is run it jumps to default
+//Room 2
+var room2 = function (consoleMe,errorMessage,input) {
+    console.log("Room2 Check Choice2 = " + choice2);
+    //Choice 2 is undefined here
+    console.log("Room2 Check input = " + input);
+    var choice2 = input;
+    var choices = {
+        "up": function () {
+            choice2 = "up item";
+            consoleMe.innerHTML += "You chose " + input + "<br>";
+        },
+        "help": function () {
+            choice2 = "help item";
+            consoleMe.innerHTML += "Here is some help<br>";
+        },
+        "default": function () {
+            choice2 = "default item";
+//            consoleMe.innerHTML += errorMessage;
+            console.log("ROOM2 DEFAULT - STILL BROKEN");
+            console.log("Default Check Choice2 = " + choice2);
+            //Choice 2 is default here
+            console.log("Room2 Check input = " + input);
+        }
+    };
+    (choices[choice2] || choices['default'])();
+};
+
+
+
+
+
+
+
+// //INTRO SCENARIO
+//
+// var loadIntro = function(consoleMe,errorMessage) {
+//     consoleMe.innerHTML += "Welcome to Endless Quest! <br> Type 'start' to begin your game.<br><br>";
+// };
+//
+//
+// //Attempting replacing if/esle with switch. Not working yet.
+//
+// var room1Scenario = function(consoleMe,errorMessage,input) {
+//     switch (input) {
+//         case "start":
+//             consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
+//             break;
+//         case "north":
+//             consoleMe.innerHTML += "You take the northern path and enter a room with a ladder going up<br>";
+//             consoleMe.innerHTML += "Call Room 2 here somehow..<br>";
+//             room2Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+//             break;
+//         case "help":
+//             consoleMe.innerHTML += "Here is some help<br>";
+//             break;
+//         default:
+//             consoleMe.innerHTML += errorMessage;
+//     }
+// };
+//
+//
+// var room2Scenario = function(consoleMe,errorMessage,input) {
+//     switch (input) {
+//         case "up":
+//             consoleMe.innerHTML += "You head up to Room 3, it has an exit west<br>";
+//             room3Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+//         case "help":
+//             consoleMe.innerHTML += "Here is some help<br>";
+//             break;
+//         default:
+//             consoleMe.innerHTML += errorMessage;
+//     }
+// };
+//
+// var room3Scenario = function(consoleMe,errorMessage,input) {
+//     switch (input) {
+//         case "west":
+//             consoleMe.innerHTML += "You head West<br>";
+//             room4Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+//         case "help":
+//             consoleMe.innerHTML += "Here is some help<br>";
+//             break;
+//         default:
+//             consoleMe.innerHTML += errorMessage;
+//     }
+// };

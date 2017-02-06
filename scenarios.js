@@ -18,7 +18,9 @@ var room1 = function (consoleMe,errorMessage,input) {
         "north": function () {
             choice1 = "north item";
             consoleMe.innerHTML += "You chose " + input + "<br>";
-            room2Intro(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+            window.currentRoom = 'room2';
+            loadRoom();
+            consoleMe.innerHTML += 'Entering room 2 ' + '<br>' + 'Choose Up';
         },
         "help": function () {
             choice1 = "help item";
@@ -27,22 +29,35 @@ var room1 = function (consoleMe,errorMessage,input) {
         "default": function () {
             choice1 = "default item";
             consoleMe.innerHTML += errorMessage;
+
         }
     };
     (choices[choice1] || choices['default'])();
 };
 
 
+// Problem appears to be that choices is persisting between rooms. THerefore when a new room loads and the choice in not there, it deiplays default
 
 
+
+
+
+
+
+
+
+//Room 2 Intro
+// var room2Intro = function (consoleMe) {
+//     consoleMe.innerHTML += "Room 2 Intro<br>";
+//     room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
+// };
+
+
+
+
+
+//WHen this version of Room 2 is run it jumps to default
 //Room 2
-var room2Intro = function (consoleMe) {
-    consoleMe.innerHTML += "Welcome to the second room, there is a ladder going up<br>";
-    room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-};
-
-
-
 var room2 = function (consoleMe,errorMessage,input) {
     var choice2 = input;
     var choices = {
@@ -56,8 +71,8 @@ var room2 = function (consoleMe,errorMessage,input) {
         },
         "default": function () {
             choice2 = "default item";
-            consoleMe.innerHTML += "WHY IS THIS APPEARING BEFORE USER INPUT";
-//            consoleMe.innerHTML += errorMessage;
+            consoleMe.innerHTML += errorMessage;
+
         }
     };
     (choices[choice2] || choices['default'])();
