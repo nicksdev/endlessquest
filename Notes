@@ -3,7 +3,7 @@ OUTSTANDING TASKS:
 1)  Call the loadRoom() function for Room 1
 
 
-2)  Raplace the following code with a function:
+2)  Replace the following code with a function:
 
                 if (window.currentRoom === 'room1') {
                     room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
