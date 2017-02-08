@@ -1,5 +1,5 @@
 /**
- * Created by nickhughes on 20/1/17.
+  Created by nickhughes on 20/1/17.
  */
 
 
@@ -93,12 +93,6 @@ var loadRoom = function(consoleMe, badcopy) {
 
 
 
-
-
-
-
-
-
 //INTRO SCENARIO
 
 var introScenario = function(consoleMe,errorMessage) {
@@ -111,70 +105,4 @@ var introScenario = function(consoleMe,errorMessage) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var room1Scenario = function(consoleMe,errorMessage,input) {
-//     // var room1choice = input;
-//     // console.log(room1choice);
-//     switch (input) {
-//         case "start":
-//             consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
-//             break;
-//         case "north":
-//             consoleMe.innerHTML += "You take the northern path and enter a room with a ladder going up<br>"
-//             room2Scenario(consoleMe,document.getElementById("userInput").value.toLowerCase());
-//             break;
-//         case "help":
-//             consoleMe.innerHTML += "Here is some help<br>";
-//             break;
-//         default:
-//             consoleMe.innerHTML += errorMessage;
-//     }
-// };
-
-
-
-
-
-
-
-//
-// var room2Scenario = function(consoleMe,errorMessage,input) {
-//     console.log("Welcome to Room 2");
-//     switch (input) {
-//         case "up":
-//             consoleMe.innerHTML += "You head up to Room 3, it has an exit west<br>";
-//             room3Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-//         case "help":
-//             consoleMe.innerHTML += "Here is some help<br>";
-//             break;
-//         default:
-//             consoleMe.innerHTML += errorMessage;
-//     }
-// };
-//
-// var room3Scenario = function(consoleMe,errorMessage,input) {
-//     switch (input) {
-//         case "west":
-//             consoleMe.innerHTML += "You head West<br>";
-//             room4Scenario(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-//         case "help":
-//             consoleMe.innerHTML += "Here is some help<br>";
-//             break;
-//         default:
-//             consoleMe.innerHTML += errorMessage;
-//     }
-// };
 

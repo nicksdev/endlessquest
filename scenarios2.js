@@ -1,25 +1,27 @@
-/**
- * Created by nickhughes on 24/1/17.
- */
 
 
-//Code not calling the intro until an input is submitted
-//Want the intro to display and then accept inputs
+
+//INTRO SCENARIO
 
 
-//Room 1
+
+var introScenario = function(consoleMe,errorMessage) {
+    consoleMe.innerHTML += "Welcome to Endless Quest! <br> Type 'start' to begin your game.<br><br>";
+};
+
+
 var room1 = function (consoleMe,errorMessage,input) {
     var choice1 = input;
     var choices = {
         "start": function () {
             choice1 = "start item";
             consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
+            console.log("Input Value = " + input);
         },
         "north": function () {
             choice1 = "north item";
             consoleMe.innerHTML += "You chose " + input + "<br>";
-            window.currentRoom = 'room2';
-            loadRoom();
+            window.currentRoom = room2;
             consoleMe.innerHTML += 'Entering room 2 ' + '<br>' + 'Choose Up';
         },
         "help": function () {
@@ -28,6 +30,7 @@ var room1 = function (consoleMe,errorMessage,input) {
         },
         "default": function () {
             choice1 = "default item";
+            consoleMe.innerHTML += "Room1 Error";
             consoleMe.innerHTML += errorMessage;
 
         }
@@ -36,34 +39,15 @@ var room1 = function (consoleMe,errorMessage,input) {
 };
 
 
-// Problem appears to be that choices is persisting between rooms. THerefore when a new room loads and the choice in not there, it deiplays default
-
-
-
-
-
-
-
-
-
-//Room 2 Intro
-// var room2Intro = function (consoleMe) {
-//     consoleMe.innerHTML += "Room 2 Intro<br>";
-//     room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-// };
-
-
-
-
-
-//WHen this version of Room 2 is run it jumps to default
-//Room 2
 var room2 = function (consoleMe,errorMessage,input) {
     var choice2 = input;
     var choices = {
         "up": function () {
             choice2 = "up item";
             consoleMe.innerHTML += "You chose " + input + "<br>";
+            window.currentRoom = room3;
+            loadRoom();
+            consoleMe.innerHTML += 'Entering room 3 ' + '<br>' + 'Choose Up';
         },
         "help": function () {
             choice2 = "help item";
@@ -71,15 +55,12 @@ var room2 = function (consoleMe,errorMessage,input) {
         },
         "default": function () {
             choice2 = "default item";
+            consoleMe.innerHTML += "Room2 Error <br>";
             consoleMe.innerHTML += errorMessage;
 
         }
     };
     (choices[choice2] || choices['default'])();
 };
-
-
-
-
 
 

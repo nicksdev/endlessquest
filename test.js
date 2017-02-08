@@ -145,3 +145,15 @@ var room2 = function (consoleMe,errorMessage,input) {
 //             consoleMe.innerHTML += errorMessage;
 //     }
 // };
+
+
+
+
+
+if (window.currentRoom === 'room1') {
+    console.log("Welcome to Room 1");
+    window.currentRoom = 'room2';
+} else if (window.currentRoom === 'room2') {
+    console.log("Welcome to Room 2");
+    window.currentRoom = 'room1';
+}

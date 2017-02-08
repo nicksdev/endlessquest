@@ -1,5 +1,8 @@
 OUTSTANDING TASKS:
 
+
+Replace the hardcoding of the room number from the loadRoom function.
+
 1)  Call the loadRoom() function for Room 1
 
 

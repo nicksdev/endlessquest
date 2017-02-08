@@ -9,10 +9,12 @@ function displayInput()
     document.getElementById("consoleDiv").innerHTML += consoleDisplay + "<br>";
 }
 
+//Define the variable which returns some html copy using the error class (i.e. in red)
+var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> Please try again.</div>";
 
 window.onload=function() {
 
-window.currentRoom = 'room1';
+window.currentRoom = room1;
 
 var clearInput = function() {
     document.getElementById('userInput').value = "";
@@ -22,8 +24,19 @@ var clearInput = function() {
 var consoleMe = document.getElementById("consoleDiv");
 
 //Auto scrolling to bottom of the Console Div
-    var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= consoleMe.scrollTop + 1;
+var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= consoleMe.scrollTop + 1;
 
+//Load a room
+
+
+
+loadRoom = function(currentRoom) {
+    window.currentRoom(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    clearInput();
+};
+
+
+introScenario(consoleMe, badcopy);
 
 // Capture Enter button for UserInput console
 
@@ -33,14 +46,8 @@ var consoleMe = document.getElementById("consoleDiv");
         if (event.keyCode == 13) {
 //Pushes input to the consoleDiv
             displayInput();
-//Starts the game, not sure why this belongs here
-            if (window.currentRoom === 'room1') {
-                console.log("Welcome to Room 1");
-                window.currentRoom = 'room2';
-            } else if (window.currentRoom === 'room2') {
-                console.log("Welcome to Room 2");
-                window.currentRoom = 'room1';
-            }
+//Load the room defined in currentRoom
+loadRoom();
 //Resets the input field to be empty
             clearInput();
             // Autoscroll to bottom of console Div
@@ -51,3 +58,10 @@ var consoleMe = document.getElementById("consoleDiv");
 
 
 };
+
+
+
+
+
+
+
