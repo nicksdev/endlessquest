@@ -14,7 +14,7 @@ var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> P
 
 window.onload=function() {
 
-window.currentRoom = room1;
+window.currentRoom = room1.options;
 
 var clearInput = function() {
     document.getElementById('userInput').value = "";
@@ -37,6 +37,8 @@ loadRoom = function(currentRoom) {
 
 
 introScenario(consoleMe, badcopy);
+
+
 
 // Capture Enter button for UserInput console
 
