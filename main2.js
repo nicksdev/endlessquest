@@ -14,7 +14,7 @@ var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> P
 
 window.onload=function() {
 
-window.currentRoom = room1.options;
+currentRoom = room1;
 
 var clearInput = function() {
     document.getElementById('userInput').value = "";
@@ -31,7 +31,7 @@ var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= cons
 
 
 loadRoom = function(currentRoom) {
-    window.currentRoom(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();
 };
 
@@ -50,6 +50,7 @@ introScenario(consoleMe, badcopy);
             displayInput();
 //Load the room defined in currentRoom
 loadRoom();
+consoleMe.innerHTML += currentRoom.intro;
 //Resets the input field to be empty
             clearInput();
             // Autoscroll to bottom of console Div
@@ -60,6 +61,10 @@ loadRoom();
 
 
 };
+
+
+
+
 
 
 
