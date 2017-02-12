@@ -1,17 +1,11 @@
 OUTSTANDING TASKS:
 
+Refactor Rooms so common commands (help etc) are not types for each room.
 
-Replace the hardcoding of the room number from the loadRoom function.
+Combat (basics):
 
-1)  Call the loadRoom() function for Room 1
-
-
-2)  Replace the following code with a function:
-
-                if (window.currentRoom === 'room1') {
-                    room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-                } else if (window.currentRoom === 'room2') {
-                    room2(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-                }
-
-3) Add Intros to the rooms
+- Define character (Str + HP's)
+- Define Inventory
+- Add weapon (with damage value)
+- Add monstor (Str + HP's)
+- Add monstor weapon (claws?) and damage

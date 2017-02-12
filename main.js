@@ -1,6 +1,12 @@
-/**
-  Created by nickhughes on 20/1/17.
- */
+
+
+//Random Number Generator
+function diceRoll(minimum, maximum){
+    return Math.round( Math.random() * (maximum - minimum) + minimum);
+}
+
+
+
 
 
 //Take the input from 'userInput' field and write it to the 'consoleDiv' area
@@ -14,7 +20,17 @@ function displayInput()
 //Define the variable which returns some html copy using the error class (i.e. in red)
 var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> Please try again.</div>";
 
+//Load all the following code first
 window.onload=function() {
+
+//Set the current room to room0
+currentRoom = room3;
+
+
+//Clears the copy from the input boc
+var clearInput = function() {
+    document.getElementById('userInput').value = "";
+};
 
 //Define the variable consoleMe which creates some shorthand for pushing copy to the console.
 var consoleMe = document.getElementById("consoleDiv");
@@ -22,84 +38,37 @@ var consoleMe = document.getElementById("consoleDiv");
 //Auto scrolling to bottom of the Console Div
 var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= consoleMe.scrollTop + 1;
 
-// Define a variable inputerror which pushes 'badcopy' to the consoleDiv element when called
-var inputerror = function(){
-    consoleMe.innerHTML += badcopy;
+//Load a room
+loadRoom = function(currentRoom) {
+    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    clearInput();
 };
 
-var clearInput = function() {
-    document.getElementById('userInput').value = "";
-};
-
-//Call the introScenario function passing the consoleMe and badCopy variables so that these can be used in the function.
-
+// Display Intro
 introScenario(consoleMe, badcopy);
 
-window.currentRoom = 'room1';
-
-
 // Capture Enter button for UserInput console
-    // add an event listener to the userInput field which listens for ENTER key (keycode 13) which then runs some code
-    document.getElementById("userInput").addEventListener("keyup", function (event) {
-            event.preventDefault();
-            if (event.keyCode == 13)
-            {
-//Pushes input to the consoleDiv
-                displayInput();
-//Starts the game, not sure why this belongs here
-                if (window.currentRoom === 'room1') {
-                    room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-                } else if (window.currentRoom === 'room2') {
-                    room2(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-                }
-//Resets the input field to be empty
-             clearInput();
-                // Autoscroll to bottom of console Div
-                if(isScrolledToBottom)
-                    consoleMe.scrollTop = consoleMe.scrollHeight - consoleMe.clientHeight;
-            }
-        });
-};
-
-
-
-
-var loadRoom = function(consoleMe, badcopy) {
-
+// add an event listener to the userInput field which listens for ENTER key (keycode 13) which then runs some code
     document.getElementById("userInput").addEventListener("keyup", function (event) {
         event.preventDefault();
-        if (event.keyCode == 13)
-        {
+        if (event.keyCode == 13) {
 //Pushes input to the consoleDiv
             displayInput();
-//Starts the game, not sure why this belongs here
-            if (window.currentRoom === 'room1') {
-                room1(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-            } else if (window.currentRoom === 'room2') {
-                room2(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-            }
+//Load the room defined in currentRoom
+loadRoom();
+consoleMe.innerHTML += currentRoom.intro;
+currentRoom.combat();
+
 //Resets the input field to be empty
             clearInput();
             // Autoscroll to bottom of console Div
-            if(isScrolledToBottom)
+            if (isScrolledToBottom)
                 consoleMe.scrollTop = consoleMe.scrollHeight - consoleMe.clientHeight;
         }
     });
 
-}
 
-
-
-
-
-
-//INTRO SCENARIO
-
-var introScenario = function(consoleMe,errorMessage) {
-    consoleMe.innerHTML += "Welcome to Endless Quest! <br> Type 'start' to begin your game.<br><br>";
 };
-
-
 
 
 

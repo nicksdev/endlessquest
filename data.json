@@ -1,0 +1,29 @@
+
+
+
+{
+  "monsters": [
+    {
+      "mobName": "Weak Goblin",
+      "str": 10,
+      "hp": 5,
+      "weapon": "claws",
+      "weaponDam": 5
+    },
+
+    {
+      "mobName": "Cave Viper",
+      "str": 6,
+      "hp": 4,
+      "weapon": "bite",
+      "weaponDam": 15
+    }
+  ]
+}
+
+
+
+
+
+
+

@@ -1,85 +1,225 @@
-/**
- * Created by nickhughes on 24/1/17.
- */
-
-
-//Code not calling the intro until an input is submitted
-//Want the intro to display and then accept inputs
-
-
-//Room 1
-var room1 = function (consoleMe,errorMessage,input) {
-    var choice1 = input;
-    var choices = {
-        "start": function () {
-            choice1 = "start item";
-            consoleMe.innerHTML += "You arrive at the start. There is really only one option here, head North<br>";
-        },
-        "north": function () {
-            choice1 = "north item";
-            consoleMe.innerHTML += "You chose " + input + "<br>";
-            window.currentRoom = 'room2';
-            loadRoom();
-            consoleMe.innerHTML += 'Entering room 2 ' + '<br>' + 'Choose Up';
-        },
-        "help": function () {
-            choice1 = "help item";
-            consoleMe.innerHTML += "Here is some help<br>";
-        },
-        "default": function () {
-            choice1 = "default item";
-            consoleMe.innerHTML += errorMessage;
-
-        }
-    };
-    (choices[choice1] || choices['default'])();
-};
-
-
-// Problem appears to be that choices is persisting between rooms. THerefore when a new room loads and the choice in not there, it deiplays default
 
 
 
+//INTRO SCENARIO
 
 
 
-
-
-
-//Room 2 Intro
-// var room2Intro = function (consoleMe) {
-//     consoleMe.innerHTML += "Room 2 Intro<br>";
-//     room2(consoleMe,badcopy,document.getElementById("userInput").value.toLowerCase());
-// };
-
-
-
-
-
-//WHen this version of Room 2 is run it jumps to default
-//Room 2
-var room2 = function (consoleMe,errorMessage,input) {
-    var choice2 = input;
-    var choices = {
-        "up": function () {
-            choice2 = "up item";
-            consoleMe.innerHTML += "You chose " + input + "<br>";
-        },
-        "help": function () {
-            choice2 = "help item";
-            consoleMe.innerHTML += "Here is some help<br>";
-        },
-        "default": function () {
-            choice2 = "default item";
-            consoleMe.innerHTML += errorMessage;
-
-        }
-    };
-    (choices[choice2] || choices['default'])();
+var introScenario = function(consoleMe,errorMessage) {
+    consoleMe.innerHTML += "Welcome to Endless Quest! <br> Type 'start' to begin your game.<br><br>";
 };
 
 
 
 
+var room0 = {
+
+    intro:  "Welcome to Endless Quest! <br> Type 'start' to begin your game.<br>",
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice = "start item";
+                window.currentRoom = room1;
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
+
+
+
+
+
+var room1 = {
+
+    intro:  "You arrive at the start. There is really only one option here, head North<br>",
+
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice1 = "start item";
+            },
+            "north": function () {
+                choice = "north item";
+                consoleMe.innerHTML += "You head " + input + "<br>";
+                window.currentRoom = room2;
+
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
+
+
+var room2 = {
+
+    intro:  "You are at Room 2, exit is UP<br>",
+
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice = "start item";
+            },
+            "up": function () {
+                choice = "up item";
+                consoleMe.innerHTML += "You head " + input + "<br>";
+                window.currentRoom = room4;
+
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
+
+
+var room3 = {
+
+    intro:  "You enter the room (room 3), there is an exit to the south.<br>",
+
+    combat: function(consoleMe) {
+
+        var mobWeakGoblin = new CreateMonster(
+        weakGoblin.mobName,
+        diceRoll(weakGoblin.mobMinStrength, weakGoblin.mobMaxStrength),
+        diceRoll(weakGoblin.mobMinHealth, weakGoblin.mobMaxHealth),
+        weakGoblin.mobWeapon,
+        weakGoblin.weaponDam);
+
+        consoleMe.innerHTML += "Hello my people!";
+        console.log(monsters[0].mobName)
+
+        //HAVING SOME TROUBLE HERE, consoleMe isn;t working.
+
+    },
+
+    // Are their any monsters? If yes then fight, if now then options.
+
+
+
+
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice = "start item";
+            },
+            "south": function () {
+                choice = "south item";
+                consoleMe.innerHTML += "You head " + input + "<br>";
+                window.currentRoom = room4;
+
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
+
+
+
+var room4 = {
+
+    intro:  "You are at Room 4, go East to get to Rooom 5<br>",
+
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice = "start item";
+            },
+            "east": function () {
+                choice = "east item";
+                consoleMe.innerHTML += "You head " + input + "<br>";
+                window.currentRoom = room5;
+
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
+
+
+var room5 = {
+
+    intro:  "You are at Room 5, go west to get back to the start<br>",
+
+    options:     function (consoleMe,errorMessage,input) {
+        var choice = input;
+        var choices = {
+            "start": function () {
+                choice = "start item";
+            },
+            "west": function () {
+                choice = "west item";
+                consoleMe.innerHTML += "You head " + input + "<br>";
+                window.currentRoom = room1;
+
+            },
+            "help": function () {
+                choice = "help item";
+                consoleMe.innerHTML += "Here is some help<br>";
+            },
+            "default": function () {
+                choice = "default item";
+                consoleMe.innerHTML += errorMessage;
+
+            }
+        };
+        (choices[choice] || choices['default'])();
+    }
+
+};
 
 
