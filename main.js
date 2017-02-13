@@ -6,9 +6,6 @@ function diceRoll(minimum, maximum){
 }
 
 
-
-
-
 //Take the input from 'userInput' field and write it to the 'consoleDiv' area
 function displayInput()
 {
@@ -26,6 +23,8 @@ window.onload=function() {
 //Set the current room to room0
 currentRoom = room3;
 
+//Creates an array which holds the monstors in a room
+var monsterArray = [];
 
 //Clears the copy from the input boc
 var clearInput = function() {
@@ -40,7 +39,9 @@ var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= cons
 
 //Load a room
 loadRoom = function(currentRoom) {
-    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    window.currentRoom.intro();
+//    window.currentRoom.combat();
+//    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();
 };
 
@@ -56,8 +57,6 @@ introScenario(consoleMe, badcopy);
             displayInput();
 //Load the room defined in currentRoom
 loadRoom();
-consoleMe.innerHTML += currentRoom.intro;
-currentRoom.combat();
 
 //Resets the input field to be empty
             clearInput();

@@ -107,25 +107,29 @@ var room2 = {
 
 var room3 = {
 
-    intro:  "You enter the room (room 3), there is an exit to the south.<br>",
+    intro:  function() {
+        document.getElementById("consoleDiv").innerHTML += "You enter the room (room 3), there is an exit to the south.<br>"
+        window.currentRoom.combat();
+    },
 
-    combat: function(consoleMe) {
 
-        var mobWeakGoblin = new CreateMonster(
-        weakGoblin.mobName,
-        diceRoll(weakGoblin.mobMinStrength, weakGoblin.mobMaxStrength),
-        diceRoll(weakGoblin.mobMinHealth, weakGoblin.mobMaxHealth),
-        weakGoblin.mobWeapon,
-        weakGoblin.weaponDam);
+    combat: function() {
 
-        consoleMe.innerHTML += "Hello my people!";
-        console.log(monsters[0].mobName)
+        createMob(weakGoblin);
+        createMob(caveViper);
 
-        //HAVING SOME TROUBLE HERE, consoleMe isn;t working.
+        if (monsterArray.length >= 1) {
+            document.getElementById("consoleDiv").innerHTML += "You are attacked by " + monsterArray.length + " creatures!<br>"
+            mobList();
+        } else {
+        document.getElementById("consoleDiv").innerHTML += "NO MONSTERS HERE"
+}
+
+        //HAVING SOME TROUBLE HERE, consoleMe isn;t working, have to hardcode the document.getElementById("consoleDiv").
 
     },
 
-    // Are their any monsters? If yes then fight, if now then options.
+    // Are their any monsters? If yes then fight, if no then options.
 
 
 
