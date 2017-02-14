@@ -2,6 +2,21 @@
 
 
 
+//var charDamage = function() {
+//    character.charWeapon.minDamage + character.charWeapon.maxDamage
+//    diceRoll(character.charWeapon.minDamage, character.charWeapon.maxDamage)
+//};
+//
+// var charDamage =  {
+//     var rollThis = function() {diceRoll(character.charWeapon.minDamage, character.charWeapon.maxDamage)};
+//     return rollThis;
+// };
+
+//var charDamage = diceRoll(character.charWeapon.minDamage, character.charWeapon.maxDamage)
+
+function charDamage() {
+    return (diceRoll(character.charWeapon.minDamage, character.charWeapon.maxDamage) + (character.charStrength / 3));
+}
 
 
 //Display a list of the current Mobs

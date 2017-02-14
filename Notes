@@ -9,3 +9,12 @@ Combat (basics):
 - Add weapon (with damage value)
 - Add monstor (Str + HP's)
 - Add monstor weapon (claws?) and damage
+
+
+
+
+
+ROOM LOAD ISSUE
+
+everytime press enter, its loads the room function
+this means that if there is a command mistyped it runs the function again.

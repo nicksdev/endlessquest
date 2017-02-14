@@ -23,6 +23,11 @@ window.onload=function() {
 //Set the current room to room0
 currentRoom = room3;
 
+//Set combat status
+combatStatus = false;
+
+roomVisited = false;
+
 //Creates an array which holds the monstors in a room
 var monsterArray = [];
 
@@ -39,7 +44,7 @@ var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= cons
 
 //Load a room
 loadRoom = function(currentRoom) {
-    window.currentRoom.intro();
+    window.currentRoom.start();
 //    window.currentRoom.combat();
 //    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();

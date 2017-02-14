@@ -1,5 +1,25 @@
 
 
+
+
+var character = {
+
+    charName: "Robbie Badass",
+    charStrength: 12,
+    charHealth: 36,
+    charWeapon: {
+        name: "Rusty Sword",
+        minDamage: 1,
+        maxDamage: 6
+    }
+
+
+};
+
+
+
+
+
 //Monster Array
 
 var monsterArray = [];
@@ -8,7 +28,8 @@ var monsterArray = [];
 
 
 //WeakGoblin Template
-var weakGoblin = {mobName:"Weak Goblin",
+var weakGoblin = {
+    mobName:"Weak Goblin",
     mobMaxStrength:10,
     mobMinStrength:3,
     mobMaxHealth:6,
@@ -18,7 +39,8 @@ var weakGoblin = {mobName:"Weak Goblin",
 
 
 //Cave Viper Template
-var caveViper = {mobName:"Cave Viper",
+var caveViper = {
+    mobName:"Cave Viper",
     mobMaxStrength:10,
     mobMinStrength:3,
     mobMaxHealth:6,

@@ -107,34 +107,81 @@ var room2 = {
 
 var room3 = {
 
+    start: function() {
+        if (roomVisited === true) {
+            window.currentRoom.combat();
+        } else {
+            window.currentRoom.intro();
+        }
+    },
+
     intro:  function() {
         document.getElementById("consoleDiv").innerHTML += "You enter the room (room 3), there is an exit to the south.<br>"
+        window.currentRoom.encounter();
+    },
+
+    encounter: function() {
+        createMob(weakGoblin);
+        createMob(caveViper);
+        document.getElementById("consoleDiv").innerHTML += "Suddenly you are attacked by " + monsterArray.length + " creatures!<br>"
+        roomVisited = true;
         window.currentRoom.combat();
     },
 
-
     combat: function() {
-
-        createMob(weakGoblin);
-        createMob(caveViper);
-
         if (monsterArray.length >= 1) {
-            document.getElementById("consoleDiv").innerHTML += "You are attacked by " + monsterArray.length + " creatures!<br>"
+            document.getElementById("consoleDiv").innerHTML += "You are fighting... <br>";
             mobList();
+
+
+            for (i = 0; i < monsterArray.length; i++) {
+                document.getElementById("consoleDiv").innerHTML += monsterArray[i].mobName + " attacks you with " + monsterArray[i].mobWeapon + "<br>";
+
+
+
+
+
+                //Calc monst to hit
+                //Calc monst damage
+                //If character dead, end combat defeated
+
+                //Calc user to hit
+                //Calc user damage
+                var thisHit = charDamage();
+                document.getElementById("consoleDiv").innerHTML += "You hit the " + monsterArray[i].mobName + " for " + thisHit + " damage."
+                //console.log(charDamage());
+
+                //If monster dead, remove from array
+                //Next monster
+                //Finish combat victorios
+
+
+
+
+
+
+            }
+
+
+
+
+
         } else {
         document.getElementById("consoleDiv").innerHTML += "NO MONSTERS HERE"
-}
-
+    }
         //HAVING SOME TROUBLE HERE, consoleMe isn;t working, have to hardcode the document.getElementById("consoleDiv").
-
     },
+
+
+
+
+
 
     // Are their any monsters? If yes then fight, if no then options.
 
 
-
-
     options:     function (consoleMe,errorMessage,input) {
+        consoleMe.innerHTML += "Which way do you wish to go?";
         var choice = input;
         var choices = {
             "start": function () {
