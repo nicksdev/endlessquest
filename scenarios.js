@@ -142,11 +142,24 @@ var room3 = {
 
 
                 //Calc monst to hit
+                //If 1d4 + Mob attack - Char defence > 0
+                //MobAttack = 1d20 + Agility
+                //charDefence = 1d20 + Agility + Armor
+
+ //               monsterArray[i].
+
                 //Calc monst damage
+
                 //If character dead, end combat defeated
 
                 //Calc user to hit
                 //Calc user damage
+                var thisMobAttack = mobAttack();
+                console.log("MOBATK: " + thisMobAttack);
+                var thisDef = charDefence();
+//                console.log(thisDef);
+//                console.log(character.charAttack);
+//                console.log(character.charAgility);
                 var thisHit = charDamage();
                 document.getElementById("consoleDiv").innerHTML += "You hit the " + monsterArray[i].mobName + " for " + thisHit + " damage."
                 //console.log(charDamage());
