@@ -135,28 +135,36 @@ var room3 = {
 
 
             for (i = 0; i < monsterArray.length; i++) {
-                document.getElementById("consoleDiv").innerHTML += monsterArray[i].mobName + " attacks you with " + monsterArray[i].mobWeapon + "<br>";
+                document.getElementById("consoleDiv").innerHTML += monsterArray[i].mobName + " attacks you with " + monsterArray[i].mobWeapon.name;
+                var thisMobAttack = mobAttack();
+                var thisDef = charDefence();
+
+                //Calculate if a hit
+                if (diceRoll(1,4) + mobAttack() - charDefence() > 0){
+                    //If a hit, Calculate and display damage
+                    thisDamage = mobDamage();
+                        if (thisDamage > 0) {
+                            document.getElementById("consoleDiv").innerHTML += " and hits for " + thisDamage + " damage. <br>";
+                            character.charHealth = character.charHealth - thisDamage;
+                            console.log(character.charHealth);
+                            if (character.charHealth <= 0) {
+                                document.getElementById("consoleDiv").innerHTML += monsterArray[i].mobName + " kills you stone dead... <br>";
+                            } else {}
+                        } else {
+                            document.getElementById("consoleDiv").innerHTML += " and hits you but does no damage. <br>";
+                        }
+                } else {
+                    //If a miss
+                    document.getElementById("consoleDiv").innerHTML += " but misses<br>";
+                }
 
 
-
-
-
-                //Calc monst to hit
-                //If 1d4 + Mob attack - Char defence > 0
-                //MobAttack = 1d20 + Agility
-                //charDefence = 1d20 + Agility + Armor
-
- //               monsterArray[i].
-
-                //Calc monst damage
-
-                //If character dead, end combat defeated
 
                 //Calc user to hit
                 //Calc user damage
-                var thisMobAttack = mobAttack();
-                console.log("MOBATK: " + thisMobAttack);
-                var thisDef = charDefence();
+//                var thisMobAttack = mobAttack();
+//                console.log("MOBATK: " + thisMobAttack);
+//                var thisDef = charDefence();
 //                console.log(thisDef);
 //                console.log(character.charAttack);
 //                console.log(character.charAgility);

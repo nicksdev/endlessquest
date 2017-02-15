@@ -28,6 +28,12 @@ function charDefence() {
     return (diceRoll(1,20) + character.charAgility + character.charArmour.defence);
 }
 
+//Function for calculating mob damage
+function mobDamage() {
+        return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].weaponDamMin,monsterArray[i].weaponDamMax) - character.charArmour.damResist);
+//    return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].weaponDamMin,monsterArray[i].weaponDamMax) - character.charArmour.defence);
+}
+
 
 function mobAttack() {
     return (diceRoll(1,20) + monsterArray[i].mobAttack + monsterArray[i].mobAgility);
@@ -41,7 +47,7 @@ var mobList = function() {
 };
 
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
-function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDam) {
+function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
     this.mobName = mobName;
     this.mobStrength = mobStrength;
     this.mobAgility = mobAgility;
@@ -49,7 +55,8 @@ function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, 
     this.mobDefence = mobDefence;
     this.mobHealth = mobHealth;
     this.mobWeapon = mobWeapon;
-    this.weaponDam = weaponDam;
+    this.weaponDamMin = weaponDamMin;
+    this.weaponDamMax = weaponDamMax;
     monsterArray.push(this);
 }
 
@@ -63,7 +70,8 @@ var createMob = function (mobType) {
         mobType.mobDefence,
         diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
         mobType.mobWeapon,
-        mobType.weaponDam
+        mobType.weaponDamMin,
+        mobType.weaponDamMax
     )
 };
 
