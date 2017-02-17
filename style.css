@@ -10,6 +10,19 @@
     overflow:auto;
 }
 
+.charStats
+{
+    height: 30px;
+    width:610px;
+    max-height:30px;
+    padding: 10px 10px 10px 10px;
+    font-family: sans-serif;
+    color:white;
+    background-color:gray;
+    overflow:auto;
+}
+
+
 .input
 {
 color: lightskyblue;
@@ -18,4 +31,25 @@ color: lightskyblue;
 .error
 {
     color:red;
+}
+
+.combatMob
+{
+    color: yellow;
+}
+
+.combatPlayer
+{
+    color: pink;
+}
+
+.combatMiss
+{
+    color: grey;
+}
+
+.combatHit
+{
+    color: red;
+    font-weight: bold;
 }

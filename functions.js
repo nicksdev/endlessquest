@@ -13,10 +13,14 @@
 // };
 
 
+var consoleMe = document.getElementById("consoleDiv");
+
 
 //mobHit
 
-
+function charAttack() {
+    return (diceRoll(1,6))
+}
 
 //Function for calculating damage inflicted by character
 function charDamage() {
@@ -30,8 +34,7 @@ function charDefence() {
 
 //Function for calculating mob damage
 function mobDamage() {
-        return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].weaponDamMin,monsterArray[i].weaponDamMax) - character.charArmour.damResist);
-//    return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].weaponDamMin,monsterArray[i].weaponDamMax) - character.charArmour.defence);
+        return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].mobWeapon.minDamage,monsterArray[i].mobWeapon.maxDamage) - character.charArmour.damResist);
 }
 
 

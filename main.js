@@ -17,6 +17,11 @@ function displayInput()
 //Define the variable which returns some html copy using the error class (i.e. in red)
 var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> Please try again.</div>";
 
+//Define the variable which returns some html copy using the error class (i.e. in red)
+errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
+
+//
+
 //Load all the following code first
 window.onload=function() {
 
@@ -37,18 +42,22 @@ var clearInput = function() {
 };
 
 //Define the variable consoleMe which creates some shorthand for pushing copy to the console.
-var consoleMe = document.getElementById("consoleDiv");
+consoleMe = document.getElementById("consoleDiv");
 
 //Auto scrolling to bottom of the Console Div
 var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= consoleMe.scrollTop + 1;
 
 //Load a room
 loadRoom = function(currentRoom) {
-    window.currentRoom.start();
+//    window.currentRoom;
 //    window.currentRoom.combat();
-//    window.currentRoom.options(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    window.currentRoom.start(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();
 };
+
+
+
+
 
 // Display Intro
 introScenario(consoleMe, badcopy);
@@ -61,7 +70,7 @@ introScenario(consoleMe, badcopy);
 //Pushes input to the consoleDiv
             displayInput();
 //Load the room defined in currentRoom
-loadRoom();
+            loadRoom(consoleMe,badcopy);
 
 //Resets the input field to be empty
             clearInput();

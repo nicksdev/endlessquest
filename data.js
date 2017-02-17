@@ -6,17 +6,6 @@
 var monsterArray = [];
 
 
-
-
-
-
-
-
-
-// //Create a Cave Viper
-// var mobCaveViper = new CreateMonster("Cave Viper",6,4,"bite",15);
-
-
 //WEAPON TEMPLATES
 
 goblinClaws = {
@@ -59,9 +48,12 @@ var character = {
     charStrength: 12,
     charAgility: 12,
     charHealth: 36,
-    charAttack: 10, //character.charAgility/3 + character.charWeapon.attack,
-    charDefence: 10,
-    //2 + 2, //character.charAgility, //console.log(character.charAgility),    //character.charAgility + character.charArmour.defence,
+    charAttack: function () {
+        return (diceRoll(1,4) + (character.charAgility/3) + character.charWeapon.attack)
+    },
+    charDefence: function () {
+        return (diceRoll(1,4) + (character.charAgility/3) + character.charArmour.defence)
+    },
     charWeapon: rustySword,
     charArmour: leatherArmour
 };
