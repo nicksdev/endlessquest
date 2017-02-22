@@ -5,7 +5,6 @@ function diceRoll(minimum, maximum){
     return Math.round( Math.random() * (maximum - minimum) + minimum);
 }
 
-
 //Take the input from 'userInput' field and write it to the 'consoleDiv' area
 function displayInput()
 {
@@ -17,6 +16,10 @@ function displayInput()
 //Define the variable which returns some html copy using the error class (i.e. in red)
 var badcopy = "<div class='error'>I'm sorry but I dont understand that... <br> Please try again.</div>";
 
+//Declare the variable for tracking number of Mobs in combat. Used in the getObjectLength function
+var mobCount;
+
+
 //Define the variable which returns some html copy using the error class (i.e. in red)
 errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
 
@@ -26,15 +29,14 @@ errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
 window.onload=function() {
 
 //Set the current room to room0
-currentRoom = room3;
+currentRoom = room3b;
+
 
 //Set combat status
 combatStatus = false;
 
 roomVisited = false;
 
-//Creates an array which holds the monstors in a room
-var monsterArray = [];
 
 //Clears the copy from the input boc
 var clearInput = function() {
@@ -55,7 +57,7 @@ loadRoom = function(currentRoom) {
     clearInput();
 };
 
-
+updateChar();
 
 
 
@@ -77,6 +79,8 @@ introScenario(consoleMe, badcopy);
             // Autoscroll to bottom of console Div
             if (isScrolledToBottom)
                 consoleMe.scrollTop = consoleMe.scrollHeight - consoleMe.clientHeight;
+
+            updateChar();
         }
     });
 

@@ -21,3 +21,36 @@ ROOM LOAD ISSUE
 
 everytime press enter, its loads the room function
 this means that if there is a command mistyped it runs the function again.
+
+
+
+
+monsters array as a dictionary
+
+mob1: <mobInstance>
+
+mob2: <mobInstance>
+
+mob3: WeakGoblin1
+        mobName:"Weak Goblin",
+        MaxStrength:8,
+        mobAgility:5,
+        mobAttack: 4,
+        mobDefence: 3,
+        mobMaxHealth:19,
+        mobWeapon:goblinClaws
+
+
+
+monsterArray [monsterObject1, monsterObject2, monsterObject3, monsterObject4]
+
+
+
+Dictionary:
+
+combat
+
+mob1:   monsterArray[1],
+mob2:   monsterArray[2],
+mob3:   monsterArray[3]
+

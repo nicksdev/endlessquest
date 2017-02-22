@@ -16,36 +16,59 @@
 var consoleMe = document.getElementById("consoleDiv");
 
 
+
+
+// getObjectLength(combatObj) calculates the number of mobs currently in the combatObj Object Literal and passes this value to mobCount
+
+function getObjectLength(combatObj) {
+    var combatObjSize = 0;
+    for (var p in combatObj)
+    {
+        if (combatObj.hasOwnProperty(p))
+        {
+            combatObjSize++;
+        }
+
+    }
+    mobCount = combatObjSize;
+}
+
 //mobHit
 
-function charAttack() {
+function charAttackRoll() {
     return (diceRoll(1,6))
+    //1d6 +
 }
 
 //Function for calculating damage inflicted by character
-function charDamage() {
+function charDamageRoll() {
     return (diceRoll(character.charWeapon.minDamage, character.charWeapon.maxDamage) + (character.charStrength / 3));
 }
 
 //Function for calculating characters defence for a round
-function charDefence() {
+function charDefenceRoll() {
     return (diceRoll(1,20) + character.charAgility + character.charArmour.defence);
 }
 
 //Function for calculating mob damage
-function mobDamage() {
+function mobDamageRoll() {
         return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].mobWeapon.minDamage,monsterArray[i].mobWeapon.maxDamage) - character.charArmour.damResist);
 }
 
+//Function for calculating mob attack
+function mobAttackRoll() {
+    return (diceRoll(1,20) + combatObj['mob'+ i].mobAttack + combatObj['mob'+ i].mobAgility);
+}
 
-function mobAttack() {
-    return (diceRoll(1,20) + monsterArray[i].mobAttack + monsterArray[i].mobAgility);
+//Function for calculating mob defence
+function mobDefenceRoll() {
+    return (diceRoll(1,6) + monsterArray[i].mobDefence);
 }
 
 //Display a list of the current Mobs
 var mobList = function() {
-    for (i = 0; i < monsterArray.length; i++) {
-        document.getElementById("consoleDiv").innerHTML += "A " + monsterArray[i].mobName + "<br>";
+    for (i = 0; i < mobCount; i++) {
+        document.getElementById("consoleDiv").innerHTML += "A " + combatObj['mob'+ i].mobName + " with " +  combatObj['mob'+ i].mobHealth + " health<br>";
     }
 };
 
@@ -81,3 +104,40 @@ var createMob = function (mobType) {
 
 //Define the variable consoleMe which creates some shorthand for pushing copy to the console.
 var consoleMe = document.getElementById("consoleDiv");
+
+
+//CHARACTER SHEET
+updateChar = function() {
+    document.getElementById("statsDiv").innerHTML = "HEALTH : " + character.charHealth;
+};
+
+
+//Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
+function CreateMonster2(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
+    this.mobName = mobName;
+    this.mobStrength = mobStrength;
+    this.mobAgility = mobAgility;
+    this.mobAttack = mobAttack;
+    this.mobDefence = mobDefence;
+    this.mobHealth = mobHealth;
+    this.mobWeapon = mobWeapon;
+    monsterArray.push(this);
+}
+
+//Function to send a template to the CreateMonster constructor
+var createMob2 = function (mobType) {
+    new CreateMonster2(
+        mobType.mobName,
+        diceRoll(mobType.mobMinStrength, mobType.mobMaxStrength),
+        mobType.mobAgility,
+        mobType.mobAttack,
+        mobType.mobDefence,
+        diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
+        mobType.mobWeapon
+    )
+};
+
+
+
+
+

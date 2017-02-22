@@ -30,7 +30,7 @@ smallBite = {
 
 var leatherArmour = {
     name: "Leather Armour",
-    damResist: 3,
+    damResist: 9,
     defence: 3
 };
 
@@ -68,8 +68,8 @@ var weakGoblin = {
     mobAgility:5,
     mobAttack: 4,
     mobDefence: 3,
-    mobMaxHealth:6,
-    mobMinHealth:1,
+    mobMaxHealth:26,
+    mobMinHealth:6,
     mobWeapon:goblinClaws
 };
 
@@ -81,7 +81,7 @@ var caveViper = {
     mobAgility:9,
     mobAttack: 4,
     mobDefence: 3,
-    mobMaxHealth:3,
-    mobMinHealth:1,
+    mobMaxHealth:20,
+    mobMinHealth:5,
     mobWeapon:smallBite
 };
