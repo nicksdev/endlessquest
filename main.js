@@ -23,14 +23,14 @@ var mobCount;
 //Define the variable which returns some html copy using the error class (i.e. in red)
 errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
 
-//
+
 
 //Load all the following code first
 window.onload=function() {
 
-//Set the current room to room0
 currentRoom = room3b;
 
+roomStatus = "start";
 
 //Set combat status
 combatStatus = false;
@@ -53,7 +53,11 @@ var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= cons
 loadRoom = function(currentRoom) {
 //    window.currentRoom;
 //    window.currentRoom.combat();
-    window.currentRoom.start(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+
+
+    window.currentRoom[roomStatus](consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+
+//    window.currentRoom.start(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();
 };
 

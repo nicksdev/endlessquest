@@ -36,7 +36,7 @@ function getObjectLength(combatObj) {
 //mobHit
 
 function charAttackRoll() {
-    return (diceRoll(1,6))
+    return (diceRoll(1,6) + character.charAgility/3 + character.charWeapon.attack);
     //1d6 +
 }
 
@@ -52,25 +52,36 @@ function charDefenceRoll() {
 
 //Function for calculating mob damage
 function mobDamageRoll() {
-        return (monsterArray[i].mobStrength + diceRoll(monsterArray[i].mobWeapon.minDamage,monsterArray[i].mobWeapon.maxDamage) - character.charArmour.damResist);
+        return (combatObj[key].mobStrength + diceRoll(combatObj[key].mobWeapon.minDamage,combatObj[key].mobWeapon.maxDamage) - character.charArmour.damResist);
 }
 
 //Function for calculating mob attack
 function mobAttackRoll() {
-    return (diceRoll(1,20) + combatObj['mob'+ i].mobAttack + combatObj['mob'+ i].mobAgility);
+ //   mobList();
+    return (diceRoll(1,20) + combatObj[key].mobAttack + combatObj[key].mobAgility);
 }
 
 //Function for calculating mob defence
 function mobDefenceRoll() {
-    return (diceRoll(1,6) + monsterArray[i].mobDefence);
+    return (diceRoll(1,6) + combatObj[key].mobDefence);
 }
 
 //Display a list of the current Mobs
 var mobList = function() {
-    for (i = 0; i < mobCount; i++) {
-        document.getElementById("consoleDiv").innerHTML += "A " + combatObj['mob'+ i].mobName + " with " +  combatObj['mob'+ i].mobHealth + " health<br>";
+    for (key in combatObj) {
+        var val = combatObj[key];
+        document.getElementById("consoleDiv").innerHTML += "A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
     }
 };
+
+//EXPEIMENTAL - loads the mo
+var mobLoad= function() {
+    for (var key in combatObj) {
+        var val = combatObj[key];
+        document.getElementById("consoleDiv").innerHTML += "A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
+    }
+};
+
 
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
 function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {

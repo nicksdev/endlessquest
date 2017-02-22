@@ -30,7 +30,7 @@ smallBite = {
 
 var leatherArmour = {
     name: "Leather Armour",
-    damResist: 9,
+    damResist: 1,
     defence: 3
 };
 
@@ -46,7 +46,7 @@ var rustySword = {
 var character = {
     charName: "Robbie Badass",
     charStrength: 12,
-    charAgility: 12,
+    charAgility: 6,
     charHealth: 36,
     charAttack: function () {
         return (diceRoll(1,4) + (character.charAgility/3) + character.charWeapon.attack)
