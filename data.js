@@ -1,11 +1,4 @@
 
-
-
-//Monster Array
-
-var monsterArray = [];
-
-
 //WEAPON TEMPLATES
 
 goblinClaws = {
@@ -47,7 +40,7 @@ var character = {
     charName: "Robbie Badass",
     charStrength: 12,
     charAgility: 6,
-    charHealth: 36,
+    charHealth: 96,
     charAttack: function () {
         return (diceRoll(1,4) + (character.charAgility/3) + character.charWeapon.attack)
     },

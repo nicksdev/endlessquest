@@ -23,8 +23,6 @@ var mobCount;
 //Define the variable which returns some html copy using the error class (i.e. in red)
 errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
 
-
-
 //Load all the following code first
 window.onload=function() {
 
@@ -36,6 +34,7 @@ roomStatus = "start";
 combatStatus = false;
 
 roomVisited = false;
+
 
 
 //Clears the copy from the input boc
@@ -50,26 +49,18 @@ consoleMe = document.getElementById("consoleDiv");
 var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= consoleMe.scrollTop + 1;
 
 //Load a room
-loadRoom = function(currentRoom) {
-//    window.currentRoom;
-//    window.currentRoom.combat();
-
-
+loadRoom = function() {
     window.currentRoom[roomStatus](consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
-
-//    window.currentRoom.start(consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
     clearInput();
 };
 
 updateChar();
 
 
-
 // Display Intro
 introScenario(consoleMe, badcopy);
 
-// Capture Enter button for UserInput console
-// add an event listener to the userInput field which listens for ENTER key (keycode 13) which then runs some code
+// Capture Enter button for UserInput console add an event listener to the userInput field which listens for ENTER key (keycode 13) which then runs some code
     document.getElementById("userInput").addEventListener("keyup", function (event) {
         event.preventDefault();
         if (event.keyCode == 13) {
@@ -87,8 +78,6 @@ introScenario(consoleMe, badcopy);
             updateChar();
         }
     });
-
-
 };
 
 
