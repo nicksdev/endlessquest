@@ -1,4 +1,10 @@
 
+
+//Random Number Generator
+function diceRoll(minimum, maximum){
+    return Math.round( Math.random() * (maximum - minimum) + minimum);
+}
+
 // getObjectLength(combatObj) calculates the number of mobs currently in the combatObj Object Literal and passes this value to mobCount
 function getObjectLength(combatObj) {
     var combatObjSize = 0;
@@ -46,8 +52,8 @@ function mobDefenceRoll() {
 var mobList = function() {
     for (key in combatObj) {
         if (combatObj.hasOwnProperty(key))
-        //var val = combatObj[key];
-        document.getElementById("consoleDiv").innerHTML += "A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
+            var num = parseInt(key.charAt(3)) + 1;
+        document.getElementById("consoleDiv").innerHTML += num + ") A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
     }
 };
 

@@ -10,7 +10,21 @@ function displayInput()
 {
     var inputValue = document.getElementById("userInput");
     var consoleDisplay = "<div class='input'> <br>" + inputValue.value + "</div>";
+    console.log("Input Value . value = " + inputValue.value);
     document.getElementById("consoleDiv").innerHTML += consoleDisplay + "<br>";
+}
+
+//Log input for testing
+// function logInput() {
+//     var logValue = document.getElementById("userInput").value;
+//
+//     console.log(logValue);
+// }
+
+//Grabs input value and returns it to getInput
+function getInput() {
+    var inputValue = document.getElementById("userInput").value.toLowerCase();
+    return inputValue;
 }
 
 //Define the variable which returns some html copy using the error class (i.e. in red)
@@ -26,9 +40,10 @@ errorMessage = "<div class='error'>ERROR ERRRO ERROR</div>";
 //Load all the following code first
 window.onload=function() {
 
-currentRoom = room3b;
+currentRoom = room3c;
 
-roomStatus = "start";
+roomStatus = "intro";
+roomAction = '';
 
 //Set combat status
 combatStatus = false;
@@ -38,7 +53,8 @@ roomVisited = false;
 
 
 //Clears the copy from the input boc
-var clearInput = function() {
+clearInput = function() {
+    //console.log("clearInput() Function CLEARING INPUT");
     document.getElementById('userInput').value = "";
 };
 
@@ -50,7 +66,14 @@ var isScrolledToBottom = consoleMe.scrollHeight - consoleMe.clientHeight <= cons
 
 //Load a room
 loadRoom = function() {
-    window.currentRoom[roomStatus](consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+
+    if (roomAction.length > 0) {
+        console.log("Load Room RoomAction = " + roomAction);
+        window.currentRoom[roomStatus][roomAction](consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    } else {
+        window.currentRoom[roomStatus](consoleMe, badcopy, document.getElementById("userInput").value.toLowerCase());
+    }
+
     clearInput();
 };
 
@@ -66,6 +89,7 @@ introScenario(consoleMe, badcopy);
         if (event.keyCode == 13) {
 //Pushes input to the consoleDiv
             displayInput();
+
 //Load the room defined in currentRoom
             loadRoom(consoleMe,badcopy);
 

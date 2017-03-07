@@ -1,56 +1,48 @@
-OUTSTANDING TASKS:
-
-Refactor Rooms so common commands (help etc) are not types for each room.
-
-Combat (basics):
-
-- Define character (Str + HP's)
-- Define Inventory
-- Add weapon (with damage value)
-- Add monstor (Str + HP's)
-- Add monstor weapon (claws?) and damage
 
 
-
-+ Inventory and equipping items
-+ Global pre-calculated attack and defence values
+Rooms Setup:
 
 
-
-ROOM LOAD ISSUE
-
-everytime press enter, its loads the room function
-this means that if there is a command mistyped it runs the function again.
+name:
+intro: Copy containing an intro for when the user enters the room
+encounter: Copy and mob generation if there is combat in this room
+combat: function to run through the combat
+options: the options for actions that can be taken in a room
 
 
 
 
-monsters array as a dictionary
 
-mob1: <mobInstance>
 
-mob2: <mobInstance>
-
-mob3: WeakGoblin1
-        mobName:"Weak Goblin",
-        MaxStrength:8,
-        mobAgility:5,
-        mobAttack: 4,
-        mobDefence: 3,
-        mobMaxHealth:19,
-        mobWeapon:goblinClaws
+Call a room
+Create the options object
+Create the room object
 
 
 
-monsterArray [monsterObject1, monsterObject2, monsterObject3, monsterObject4]
 
 
 
-Dictionary:
 
-combat
 
-mob1:   monsterArray[1],
-mob2:   monsterArray[2],
-mob3:   monsterArray[3]
+var room0 = function() {
+    return {
+        roomName: "Roomname Here",
+        roomintro: "Intro Here",
+        roomOption: function() {
+            genOptions()
+        }
+    }
 
+};
+
+
+
+
+    document.getElementById("userInput").removeEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode == 13) {
+            document.getElementById("consoleDiv").innerHTML += "STARTING A NEW ROUND<p>";
+            rooms["combatTest"]["combat"]["combatRound"]();
+        }
+    } );
