@@ -1,4 +1,149 @@
 
+//Function to send a template to the CreateMonster constructor
+var createMob2 = function (mobType) {
+    new CreateMonster2(
+        mobType.mobName,
+        diceRoll(mobType.mobMinStrength, mobType.mobMaxStrength),
+        mobType.mobAgility,
+        mobType.mobAttack,
+        mobType.mobDefence,
+        diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
+        mobType.mobWeapon
+    )
+};
+
+//Function to send a template to the CreateMonster constructor
+var createMob = function (mobType) {
+    new CreateMonster(
+        mobType.mobName,
+        diceRoll(mobType.mobMinStrength, mobType.mobMaxStrength),
+        mobType.mobAgility,
+        mobType.mobAttack,
+        mobType.mobDefence,
+        diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
+        mobType.mobWeapon,
+        mobType.weaponDamMin,
+        mobType.weaponDamMax
+    )
+};
+
+//Display a list of the current Mobs
+var mobList = function() {
+    for (key in combatObj) {
+        if (combatObj.hasOwnProperty(key))
+            var num = parseInt(key.charAt(3)) + 1;
+        document.getElementById("consoleDiv").innerHTML += num + ") A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
+    }
+};
+
+//CHARACTER SHEET DISPLAY
+updateChar = function() {
+    document.getElementById("statsDiv").innerHTML = "HEALTH : " + character.charHealth;
+};
+
+//(function() {
+
+
+
+function callCombat() {
+    getObjectLength(combatObj);
+    if (mobCount > 0) {
+        combatRound();
+    } else {
+        roomStatus = "options";
+        document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!!<p>";
+        autoScroll();
+        rooms[roomFlag][roomStatus]();
+    }
+
+
+}
+
+function combatRound() {
+    document.getElementById("consoleDiv").innerHTML += "New Combat Round Starting from combatRound<p>";
+    mobAttack();
+
+    if (character.charHealth > 0) {
+        charAttack();
+        //combatRound();
+    } else {
+        document.getElementById("consoleDiv").innerHTML += "YOU HAVE DIED!!!!!!!<p>"
+    }
+    autoScroll();
+}
+
+function mobAttack() {
+
+    getObjectLength(combatObj);
+    //Mob Combat Sequence
+
+    // List attackers
+    document.getElementById("consoleDiv").innerHTML += "You are attacked by " + mobCount + " creatures <br>";
+    mobList();
+
+    for (var key in combatObj) {
+        if (combatObj.hasOwnProperty(key))
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatMob'>" + combatObj[key].mobName + " attacks you with " + combatObj[key].mobWeapon.name;
+        //Mob attack and char defence rolls to calculate if this attack is successful
+        var thisMobAttack = mobAttackRoll();
+        var thisCharDefence = charDefenceRoll();
+        var thisMobRound = thisMobAttack - thisCharDefence;
+
+        //if successful, Calculate mob hit and damage and update char health
+        if (thisMobRound > 0) {
+            thisDamage = mobDamageRoll();
+            if (thisDamage > 0) {
+                document.getElementById("consoleDiv").innerHTML += "<span class='combatHit'> and hits for " + thisDamage + " damage. <br>";
+                character.charHealth = character.charHealth - thisDamage;
+                updateChar();
+            } else {
+                document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and hits you but does no damage. <br></span></span>";
+            }
+        } else {
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and misses. <br></span></span>";
+
+        }
+
+    };
+    autoScroll();
+
+}
+
+function charAttack() {
+
+    for (var key in combatObj) {
+        if (combatObj.hasOwnProperty(key))
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatPlayer'>You attack " + combatObj[key].mobName + " with " + character.charWeapon.name;
+        //Begin a single character attack round
+        var thisCharAttack = charAttackRoll();
+        var thisMobDefence = mobDefenceRoll();
+        var thisCharRound = thisCharAttack - thisMobDefence;
+
+        //if successful, Calculate mob hit and damage and update mob health
+        if (thisCharRound > 0) {
+            var thisCharDamage = charDamageRoll();
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatHit'> and hit for " + thisCharDamage + " damage <br></span>";
+            combatObj[key].mobHealth = combatObj[key].mobHealth - thisCharDamage;
+
+            //If mob health less than zero, remove from the literal object
+            if (combatObj[key].mobHealth <= 0) {
+                document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is dead!<br>";
+                delete combatObj[key];
+            } else {
+                document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is still alive and has " + combatObj[key].mobHealth + " health!!! <br>";
+            }
+
+
+        } else {
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>  but you missed!<br></span>";
+            document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is still alive and has " + combatObj[key].mobHealth + " health!!! <br>";
+        }
+
+    };
+    autoScroll();
+
+}
+
 
 //Random Number Generator
 function diceRoll(minimum, maximum){
@@ -48,14 +193,7 @@ function mobDefenceRoll() {
     return (diceRoll(1,6) + combatObj[key].mobDefence);
 }
 
-//Display a list of the current Mobs
-var mobList = function() {
-    for (key in combatObj) {
-        if (combatObj.hasOwnProperty(key))
-            var num = parseInt(key.charAt(3)) + 1;
-        document.getElementById("consoleDiv").innerHTML += num + ") A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health<br>";
-    }
-};
+
 
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
 function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
@@ -71,25 +209,9 @@ function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, 
     monsterArray.push(this);
 }
 
-//Function to send a template to the CreateMonster constructor
-var createMob = function (mobType) {
-    new CreateMonster(
-        mobType.mobName,
-        diceRoll(mobType.mobMinStrength, mobType.mobMaxStrength),
-        mobType.mobAgility,
-        mobType.mobAttack,
-        mobType.mobDefence,
-        diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
-        mobType.mobWeapon,
-        mobType.weaponDamMin,
-        mobType.weaponDamMax
-    )
-};
 
-//CHARACTER SHEET DISPLAY
-updateChar = function() {
-    document.getElementById("statsDiv").innerHTML = "HEALTH : " + character.charHealth;
-};
+
+
 
 
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
@@ -104,20 +226,9 @@ function CreateMonster2(mobName, mobStrength, mobAgility, mobAttack, mobDefence,
     monsterArray.push(this);
 }
 
-//Function to send a template to the CreateMonster constructor
-var createMob2 = function (mobType) {
-    new CreateMonster2(
-        mobType.mobName,
-        diceRoll(mobType.mobMinStrength, mobType.mobMaxStrength),
-        mobType.mobAgility,
-        mobType.mobAttack,
-        mobType.mobDefence,
-        diceRoll(mobType.mobMinHealth, mobType.mobMaxHealth),
-        mobType.mobWeapon
-    )
-};
 
 
 
 
+//})();
 

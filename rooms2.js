@@ -11,21 +11,29 @@
             "startRoom": {
                 name: "Starting Room",
 
-                intro: "Welcome to Endless Quest, this is the introduction and welcome copy for the game",
+                intro: "Welcome to Endless Quest, this is the introduction and welcome copy for the game<p>",
 
                 encounter: function () {
-//                    console.log("start room encounter placeholder - pushing to options");
-                    loadOption("startRoom");
+                    console.log("Entering the " + roomFlag + " Encounter Space");
+                    document.getElementById("consoleDiv").innerHTML += "You can go " + Object.getOwnPropertyNames(rooms[roomFlag]["options"]()) + ".<p> Which way do you wish to go?";
+                    loadListener();
                 },
 
                 test: "startroom test",
 
                 options: function () {
+
+                   // roomStatus = "options";
+
                     return {
+
+                        test: console.log("OPTIONS AREA TEST VALUE"),
+
                         north: {
                             copy: "You Head North",
                             action: function () {
-                                loadRoom("combatTest");
+                         //       loadRoom("combatTest");
+                                console.log("YOU HEAD NORTH");
                             }
                         },
 

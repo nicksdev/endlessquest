@@ -14,35 +14,37 @@ options: the options for actions that can be taken in a room
 
 
 
-Call a room
-Create the options object
-Create the room object
+COMBAT LOGIC:
+
+start round:
+
+are there any mobs left alive?
+    > NO - you are victorious
+    > YES - new combatRound
+
+
+CombatRound:
+
+is chat alive?
+
+    Yes - Mob Attack
+
+        is char still alive?
+            Yes? CharAttack
+            No? You are dead
+
+
+    No - You are Dead
+
+
+    Mobs Attack
+    Is chat still alive?
+        > NO - you are dead
+        > Yes - Char Attack
+
+Char Attack
+    >goto start round
 
 
 
 
-
-
-
-
-var room0 = function() {
-    return {
-        roomName: "Roomname Here",
-        roomintro: "Intro Here",
-        roomOption: function() {
-            genOptions()
-        }
-    }
-
-};
-
-
-
-
-    document.getElementById("userInput").removeEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-            document.getElementById("consoleDiv").innerHTML += "STARTING A NEW ROUND<p>";
-            rooms["combatTest"]["combat"]["combatRound"]();
-        }
-    } );

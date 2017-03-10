@@ -1,70 +1,53 @@
-
-
-window.onload=function() {
-
-
-
-
-
-    var allRooms = function() {
+ var allRooms = function() {
         return {
-            "room0": {
-                name: "Room Zero",
-                test: "test",
-                intro: "Welcome to <roomname>",
-                options: function() {
-                    return "Options will appear here";
-                }
-            },
-            "room1": {
+
+            "testRoom": {
+
+                name: "Starting Room",
+
+                intro: "Welcome to Endless Quest, this is the introduction and welcome copy for the game<p>",
+
+                encounter: function () {
+                    console.log("Entering the " + roomFlag + " Encounter Space");
+                    document.getElementById("consoleDiv").innerHTML += "You can go " + Object.getOwnPropertyNames(rooms[roomFlag]["options"]()) + ".<p> Which way do you wish to go?";
+                    loadListener(roomStatus);
+                },
+
+                test: "startroom test",
+
+
+                options: function () {
+
+                    console.log("INITIALISING OPTIONS OBJECT");
+                    // roomStatus = "options";
+
+                    return {
+
+                        test: console.log("OPTIONS OBJECT TEST VALUE"),
+
+                        north: {
+                            copy: "You Head North",
+                            action: function () {
+                                //       loadRoom("combatTest");
+                                console.log("YOU HEAD NORTH");
+                            }
+                        },
+
+                        south: {
+                            copy: "You Head South",
+                            action: function () {
+                                console.log("SOUTH TAKE ACTION")
+                            }
+                        },
+                    };
+
+                },
 
             }
+
         }
     };
 
-    var rooms = allRooms();
-
-    console.log(rooms["room0"]["test"]);
-    console.log(rooms["room0"]["options"]());
 
 
-
-
-
-
-
-
-
-
-
-
-var room10 = {
-    options: function() {
-        console.log("asomosdfas sadfjakdsf");
-    }
-};
-
-room10.options();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+var rooms = allRooms();

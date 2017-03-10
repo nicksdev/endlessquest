@@ -3,6 +3,40 @@
 //element.addEventListener(event, function, useCapture);
 //element.removeEventListener("mousemove", myFunction);
 
+roomStatus = "";
+
+var eventListen = function (roomName) {
+
+    document.getElementById("userInput").addEventListener("keyup", function (event) {
+        event.preventDefault();
+
+        if (roomStatus = "options") {
+
+        } else {
+
+
+
+        };
+
+
+
+
+
+
+
+
+        if (event.keyCode == 13) {
+            console.log("CALLING selectOption");
+// This is being called each round and fails on on secondary rounds because there is no valid userAction input
+            rooms[roomName]["options"]()[userAction].action();
+        }
+    });
+
+
+};
+
+
+
 
 
 var event1 = function (event) {
@@ -36,14 +70,15 @@ var loadCombat = function (roomName) {
 
 var loadRound = function (roomName) {
     console.log("ENTERING LOADROUND FUNCTION");
+    eventListen(roomName)
 
-    document.getElementById("userInput").addEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-            document.getElementById("consoleDiv").innerHTML += "STARTING A NEW ROUND<p>";
-            rooms["combatTest"]["combat"]["combatRound"]();
-        }
-    });
+    // document.getElementById("userInput").addEventListener("keyup", function (event) {
+    //     event.preventDefault();
+    //     if (event.keyCode == 13) {
+    //         document.getElementById("consoleDiv").innerHTML += "STARTING A NEW ROUND<p>";
+    //         rooms["combatTest"]["combat"]["combatRound"]();
+    //     }
+    // });
 
 };
 
@@ -59,15 +94,16 @@ var loadOption = function (roomName) {
 
 var selectOption = function(roomName) {
     console.log("STARTING selectOption");
+    eventListen(roomName);
 
-    document.getElementById("userInput").addEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-            console.log("CALLING selectOption");
-// This is being called each round and fails on on secondary rounds because there is no valid userAction input
-            rooms[roomName]["options"]()[userAction].action();
-        }
-     });
+//     document.getElementById("userInput").addEventListener("keyup", function (event) {
+//         event.preventDefault();
+//         if (event.keyCode == 13) {
+//             console.log("CALLING selectOption");
+// // This is being called each round and fails on on secondary rounds because there is no valid userAction input
+//             rooms[roomName]["options"]()[userAction].action();
+//         }
+//      });
 };
 
 
