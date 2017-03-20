@@ -20,19 +20,27 @@
     loadListener = function() {
         document.getElementById("userInput").addEventListener("keyup", function (event) {
             event.preventDefault();
+            console.log("Listener roomStatus =  " + roomStatus);
             if (roomStatus === "options") {
+                console.log("IN THE OPTIONS EVENTLISTENER");
 
                 if (event.keyCode == 13) {
                     displayInput();
                     userAction = document.getElementById("userInput").value;
-                    console.log("Options Event Listener");
-                    // if (rooms.[roomFlag][roomStatus]hasOwnProperty())
-                    rooms[roomFlag][roomStatus]()[userAction]["action"]();
+                    // console.log("Options Event Listener");
+                    // console.log(Object.keys(rooms[roomFlag][roomStatus]()));
+                    if (rooms[roomFlag][roomStatus]().hasOwnProperty(userAction))
+                    {
+                        rooms[roomFlag][roomStatus]()[userAction]["action"]();
+
+                    }else{
+                        errorMessage();
+                        initRoom();
+                    }
                     clearInput();
                     autoScroll();
                 }
             } else if (roomStatus === "combat") {
-
                 console.log("COMBAT EVENT LISTENER")
                 rooms[roomFlag][roomStatus]();
 
@@ -54,17 +62,10 @@
         rooms[roomFlag][roomStatus]();
     };
 
-
 window.onload=function() {
     isScrolledToBottom = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight <= document.getElementById("consoleDiv").scrollTop + 1;
     loadListener();
     initRoom(roomFlag);
-
-
-
-
-
-
 
 
 //    loadRoom("startRoom");

@@ -5,8 +5,9 @@ Rooms Setup:
 
 name:
 intro: Copy containing an intro for when the user enters the room
+exits:
 encounter: Copy and mob generation if there is combat in this room
-combat: function to run through the combat
+combat: function to run through the combat (abstract this?)
 options: the options for actions that can be taken in a room
 
 

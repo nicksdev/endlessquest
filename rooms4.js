@@ -3,20 +3,17 @@ allRooms = function() {
 
 
 
-
-
-
-
         "startRoom": {
 
             intro: "Welcome to Endless Quest, this is the introduction and welcome copy for the game<p>",
 
             encounter: function () {
-                document.getElementById("consoleDiv").innerHTML += "You can go " + Object.getOwnPropertyNames(rooms[roomFlag]["options"]()) + ".<p> Which way do you wish to go?";
+                roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["options"]());
 
             },
 
             options: function () {
+                document.getElementById("consoleDiv").innerHTML += "You can go " + window.roomExits + ".<p> Which way do you wish to go?";
                 roomStatus = "options";
 
                 return {
@@ -41,8 +38,6 @@ allRooms = function() {
 
             },
 
-
-
         },
 
 
@@ -51,7 +46,7 @@ allRooms = function() {
             intro: "You have entered the combatRoom<p>",
 
             encounter: function () {
-
+                roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["options"]());
                 combatObj = {};
                 monsterArray = [];
                 createMob(weakGoblin);
@@ -62,7 +57,7 @@ allRooms = function() {
                     combatObj['mob' + i] = monsterArray[i];
                 }
 
-                console.log(monsterArray);
+                //console.log(monsterArray);
                 roomStatus = "combat";
                 rooms[roomFlag][roomStatus]();
 
@@ -75,25 +70,28 @@ allRooms = function() {
 
             options: function () {
                 roomStatus = "options";
-                document.getElementById("consoleDiv").innerHTML += "Which way do you wish to go?<p>";
+                document.getElementById("consoleDiv").innerHTML += "You can go " + window.roomExits + ".<p> Which way do you wish to go?";
                 autoScroll();
 
                 return {
 
-                    north: {
-                        copy: "You Head North",
+                    east: {
+                        copy: "You Head East",
                         action: function () {
-                            document.getElementById("consoleDiv").innerHTML += "You take the North Exit<p>";
-                            roomFlag = "combatRoom";
+                            document.getElementById("consoleDiv").innerHTML += "You take the East Exit<p>";
+                            roomFlag = "endRoom";
                             roomStatus = "intro";
                             initRoom(roomFlag);
                         }
                     },
 
-                    south: {
-                        copy: "You Head South",
+                    west: {
+                        copy: "You Head West",
                         action: function () {
-                            document.getElementById("consoleDiv").innerHTML += "You take the South Exit<p>";
+                            document.getElementById("consoleDiv").innerHTML += "You take the West Exit<p>";
+                            roomFlag = "endRoom";
+                            roomStatus = "intro";
+                            initRoom(roomFlag);
                         }
                     },
                 };
@@ -103,9 +101,50 @@ allRooms = function() {
         },
 
 
+        "endRoom": {
 
+            intro: "You have entered the endRoom<p>",
 
+            encounter: function () {
+                roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["options"]());
+            },
 
+            combat: function () {
+                roomStatus = "combat";
+                callCombat();
+            },
+
+            options: function () {
+                roomStatus = "options";
+                document.getElementById("consoleDiv").innerHTML += "You can go " + window.roomExits + ".<p> Which way do you wish to go?";
+                autoScroll();
+
+                return {
+
+                    up: {
+                        copy: "You Head East",
+                        action: function () {
+                            document.getElementById("consoleDiv").innerHTML += "You take the up Exit<p>";
+                            roomFlag = "startRoom";
+                            roomStatus = "intro";
+                            initRoom(roomFlag);
+                        }
+                    },
+
+                    down: {
+                        copy: "You Head West",
+                        action: function () {
+                            document.getElementById("consoleDiv").innerHTML += "You take the down Exit<p>";
+                            roomFlag = "startRoom";
+                            roomStatus = "intro";
+                            initRoom(roomFlag);
+                        }
+                    },
+                };
+
+            },
+
+        },
 
 
     }

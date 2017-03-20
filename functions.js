@@ -43,7 +43,9 @@ updateChar = function() {
 
 //(function() {
 
-
+function errorMessage() {
+    document.getElementById("consoleDiv").innerHTML += "<div class='error'>I'm sorry, I didn't understand that...<br> Please try again.<p></div>";
+}
 
 function callCombat() {
     getObjectLength(combatObj);
@@ -51,8 +53,9 @@ function callCombat() {
         combatRound();
     } else {
         roomStatus = "options";
-        document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!!<p>";
+        document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!!???<p>";
         autoScroll();
+        console.log(rooms[roomFlag][roomStatus]());
         rooms[roomFlag][roomStatus]();
     }
 
