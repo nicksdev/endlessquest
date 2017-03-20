@@ -16,42 +16,64 @@ displayInput = function () {
 autoScroll = function() {if (isScrolledToBottom)
     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;};
 
-
 initRoom = function() {
 
+    //Intitialise room exits
     rooms[roomFlag]["init"]();
-    document.getElementById("consoleDiv").innerHTML += rooms[roomFlag]["intro"] + roomExits;
+
+    //Display intro copy and possible exits
+    document.getElementById("consoleDiv").innerHTML += rooms[roomFlag][roomStatus] + roomExits;
+
+    //move to the body of the room
+    roomStatus = "body";
+
+    //Call the 'body' function
+    rooms[roomFlag][roomStatus]();
+
+
 
 };
 
 
 loadListener = function() {
-
-    document.getElementById("userInput").addEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode == 13) {
-
-            //Pushes user input to userAction Global variable
+    $("#userInput").bind("keypress", function(event) {
+        if(event.which == 13) {
+            event.preventDefault();
+            // TRIGGER YOUR FUNCTION
             userAction = document.getElementById("userInput").value;
-//            console.log("userAction = " + userAction);
-//Pushes input to the consoleDiv
-            displayInput();
+            // console.log(userAction);
+            // console.log(roomStatus);
+            // console.log(rooms[roomFlag][roomStatus]());
 
-//Resets the input field to be empty
+            if (rooms[roomFlag][roomStatus]().hasOwnProperty(userAction))
+            {
+               // console.log("THAT WORKED")
+               rooms[roomFlag][roomStatus]()[userAction]["action"]();
+
+            }else{
+                errorMessage();
+                initRoom();
+            }
+
+            displayInput();
             clearInput();
-            // Autoscroll to bottom of console Div
             autoScroll();
         }
-    })
+    });
 
+    $("#userInput").bind("keypress", function(event) {
+        if(event.which == 13) {
+            event.preventDefault();
+            console.log("This works too");
+        }
+    });
 };
-
 
 
 window.onload=function() {
     isScrolledToBottom = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight <= document.getElementById("consoleDiv").scrollTop + 1;
     loadListener();
-    initRoom(roomFlag);
+    initRoom();
 
 
 };
