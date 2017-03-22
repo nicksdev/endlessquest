@@ -45,6 +45,7 @@ updateChar = function() {
 
 function errorMessage() {
     document.getElementById("consoleDiv").innerHTML += "<div class='error'>I'm sorry, I didn't understand that...<br> Please try again.<p></div>";
+    document.getElementById("consoleDiv").innerHTML += rooms[roomFlag]["intro"] + roomExits;
 }
 
 function callCombat() {

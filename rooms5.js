@@ -1,8 +1,6 @@
 allRooms = function() {
     return {
 
-
-
         "startRoom": {
 
             intro: "Welcome to Endless Quest 5, this is the introduction and welcome copy for the game<p> You can go ",
@@ -14,25 +12,28 @@ allRooms = function() {
 
             exits: function() {
 
-                    return {
+                return {
 
-                        north: {
-                            copy: "You Head North",
-                            action: function () {
-                                document.getElementById("consoleDiv").innerHTML += "You take the North Exit<p>";
-                                roomFlag = "combatRoom";
-                                roomStatus = "intro";
-                                initRoom();
-                            }
-                        },
+                    west: {
+                        copy: "You Head West",
+                        action: function () {
+                            document.getElementById("consoleDiv").innerHTML += "You take the Western Exit<p>";
+                            roomFlag = "combatRoom";
+                            roomStatus = "intro";
+                            initRoom();
+                        }
+                    },
 
-                        south: {
-                            copy: "You Head South",
-                            action: function () {
-                                document.getElementById("consoleDiv").innerHTML += "You take the South Exit<p>";
-                            }
-                        },
-                    };
+                    north: {
+                        copy: "You Head North",
+                        action: function () {
+                            document.getElementById("consoleDiv").innerHTML += "You take the Northern Exit<p>";
+                            roomFlag = "room1";
+                            roomStatus = "intro";
+                            initRoom();
+                        }
+                    },
+                };
 
 
 
@@ -44,37 +45,45 @@ allRooms = function() {
 
         },
 
-
-
         "combatRoom": {
 
-            intro: "Welcome to Combat Room<p> You can go ",
+            intro: "Welcome to Combat Room<p> ",
 
             body: function() {
-                document.getElementById("consoleDiv").innerHTML += "Which way do you wish to go?<p>";
-                roomStatus = "exits";
+                roomStatus = "combat";
+                rooms[roomFlag][roomStatus]();
+
+            },
+
+            combat: function() {
+                callCombat();
+            },
+
+            encounter: function() {
+                combatObj = {};
+                monsterArray = [];
+                createMob(weakGoblin);
+                createMob(weakGoblin);
+                createMob(caveViper);
+                for (i = 0; i < monsterArray.length; i++) {
+                    combatObj['mob' + i] = monsterArray[i];
+                }
             },
 
             exits: function() {
 
                 return {
 
-                    north: {
-                        copy: "You Head North",
+                    east: {
+                        copy: "You Head East",
                         action: function () {
-                            document.getElementById("consoleDiv").innerHTML += "You take the North Exit<p>";
-                            roomFlag = "combatRoom";
+                            document.getElementById("consoleDiv").innerHTML += "You take the Eastern Exit<p>";
+                            roomFlag = "startRoom";
                             roomStatus = "intro";
                             initRoom();
                         }
                     },
 
-                    south: {
-                        copy: "You Head South",
-                        action: function () {
-                            document.getElementById("consoleDiv").innerHTML += "You take the South Exit<p>";
-                        }
-                    },
                 };
 
 
@@ -82,12 +91,13 @@ allRooms = function() {
             },
 
             init: function() {
+                console.log("Initialising combatRoom");
                 roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["exits"]());
+                rooms[roomFlag]["encounter"]();
+                console.log("combatRoom roomExits = " + roomExits);
             },
 
         },
-
-
 
 
     }
