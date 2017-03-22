@@ -50,12 +50,17 @@ allRooms = function() {
             intro: "Welcome to Combat Room<p> ",
 
             body: function() {
-                roomStatus = "combat";
-                rooms[roomFlag][roomStatus]();
-
+                if (window.combatStatus == "victory") {
+                    document.getElementById("consoleDiv").innerHTML += "Which way do you wish to go?<p> You can go " + roomExits;
+                    roomStatus = "exits";
+                } else {
+                    roomStatus = "combat";
+                    rooms[roomFlag][roomStatus]();
+                }
             },
 
             combat: function() {
+
                 callCombat();
             },
 
@@ -71,9 +76,7 @@ allRooms = function() {
             },
 
             exits: function() {
-
                 return {
-
                     east: {
                         copy: "You Head East",
                         action: function () {
@@ -83,23 +86,20 @@ allRooms = function() {
                             initRoom();
                         }
                     },
-
                 };
-
-
-
             },
 
             init: function() {
-                console.log("Initialising combatRoom");
+                // console.log("Initialising " + roomFlag + " " + roomStatus);
+                var combatStatus;
+                if (combatStatus == null) {
+                    // console.log("null so do doing nothing");
+                    combatStatus = "";
+                } else {}
                 roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["exits"]());
                 rooms[roomFlag]["encounter"]();
-                console.log("combatRoom roomExits = " + roomExits);
             },
-
         },
-
-
     }
 };
 

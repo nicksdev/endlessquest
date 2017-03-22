@@ -20,9 +20,9 @@
     loadListener = function() {
         document.getElementById("userInput").addEventListener("keyup", function (event) {
             event.preventDefault();
-            console.log("Listener roomStatus =  " + roomStatus);
+            // console.log("Listener roomStatus =  " + roomStatus);
             if (roomStatus === "options") {
-                console.log("IN THE OPTIONS EVENTLISTENER");
+                // console.log("IN THE OPTIONS EVENTLISTENER");
 
                 if (event.keyCode == 13) {
                     displayInput();
@@ -41,7 +41,7 @@
                     autoScroll();
                 }
             } else if (roomStatus === "combat") {
-                console.log("COMBAT EVENT LISTENER")
+                // console.log("COMBAT EVENT LISTENER")
                 rooms[roomFlag][roomStatus]();
 
             } else {

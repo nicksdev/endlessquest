@@ -53,14 +53,12 @@ function callCombat() {
     if (mobCount > 0) {
         combatRound();
     } else {
-        roomStatus = "options";
         document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!!???<p>";
+        combatStatus = "victory";
         autoScroll();
-        console.log(rooms[roomFlag][roomStatus]());
+        roomStatus = "body";
         rooms[roomFlag][roomStatus]();
     }
-
-
 }
 
 function combatRound() {
@@ -148,7 +146,6 @@ function charAttack() {
 
 }
 
-
 //Random Number Generator
 function diceRoll(minimum, maximum){
     return Math.round( Math.random() * (maximum - minimum) + minimum);
@@ -197,8 +194,6 @@ function mobDefenceRoll() {
     return (diceRoll(1,6) + combatObj[key].mobDefence);
 }
 
-
-
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
 function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
     this.mobName = mobName;
@@ -213,11 +208,6 @@ function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, 
     monsterArray.push(this);
 }
 
-
-
-
-
-
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
 function CreateMonster2(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
     this.mobName = mobName;
@@ -229,10 +219,6 @@ function CreateMonster2(mobName, mobStrength, mobAgility, mobAttack, mobDefence,
     this.mobWeapon = mobWeapon;
     monsterArray.push(this);
 }
-
-
-
-
 
 //})();
 

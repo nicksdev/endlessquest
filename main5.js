@@ -2,6 +2,7 @@
 roomFlag = "startRoom";
 roomStatus = "intro";
 combatFlag = "";
+// combatStatus = "";
 
 clearInput = function() {
     //console.log("clearInput() Function CLEARING INPUT");
@@ -39,7 +40,7 @@ loadListener = function() {
     $("#userInput").on("keypress", function(event) {
         if(event.which == 13) {
             event.preventDefault();
-            console.log($(this).val());
+            // console.log($(this).val());
             // TRIGGER YOUR FUNCTION
             userAction = $(this).val();
             // console.log("USER ACTION = " + userAction);
@@ -70,7 +71,7 @@ loadListener = function() {
 
             } else {
 
-                console.log("Do Nothing Listener. roomStatus = " + roomStatus);
+                // console.log("Do Nothing Listener. roomStatus = " + roomStatus);
 
                 //Do nothing
 
