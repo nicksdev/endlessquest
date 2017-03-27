@@ -111,7 +111,79 @@ function mobAttack() {
 
 }
 
+
+
+
+
+
+
+
+
+
+
 function charAttack() {
+
+    console.log(combatObj);
+    console.log("UserAction = " + userAction);
+    keyTemp = userAction - 1;
+    console.log("keyTemp = " + keyTemp);
+    var temp = "mob" + keyTemp;
+    console.log("Temp = " + temp);
+    //userAction = key;
+    console.log("Key = " + key);
+    // key = key - key + userAction;
+    // console.log("New Key = " + key);
+    key = temp;
+    console.log("Key = " + key);
+
+
+
+
+        if (combatObj.hasOwnProperty(key))
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatPlayer'>You attack " + combatObj[key].mobName + " with " + character.charWeapon.name;
+        //Begin a single character attack round
+        var thisCharAttack = charAttackRoll();
+        var thisMobDefence = mobDefenceRoll();
+        var thisCharRound = thisCharAttack - thisMobDefence;
+
+        //if successful, Calculate mob hit and damage and update mob health
+        if (thisCharRound > 0) {
+            var thisCharDamage = charDamageRoll();
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatHit'> and hit for " + thisCharDamage + " damage <br></span>";
+            combatObj[key].mobHealth = combatObj[key].mobHealth - thisCharDamage;
+
+            //If mob health less than zero, remove from the literal object
+            if (combatObj[key].mobHealth <= 0) {
+                document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is dead!<br>";
+                delete combatObj[key];
+            } else {
+                document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is still alive and has " + combatObj[key].mobHealth + " health!!! <br>";
+            }
+
+
+        } else {
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>  but you missed!<br></span>";
+            document.getElementById("consoleDiv").innerHTML += "The " + combatObj[key].mobName + " is still alive and has " + combatObj[key].mobHealth + " health!!! <br>";
+        }
+
+
+    autoScroll();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function charAttackBACKUP() {
 
     for (var key in combatObj) {
         if (combatObj.hasOwnProperty(key))

@@ -30,7 +30,7 @@ var leatherArmour = {
 var rustySword = {
     name: "Rusty Sword",
     minDamage: 1,
-    maxDamage: 6,
+    maxDamage: 1,
     attack: 3
 };
 
@@ -63,6 +63,18 @@ var weakGoblin = {
     mobDefence: 3,
     mobMaxHealth:26,
     mobMinHealth:6,
+    mobWeapon:goblinClaws
+};
+
+var strongGoblin = {
+    mobName:"Strong Goblin",
+    mobMaxStrength:15,
+    mobMinStrength:8,
+    mobAgility:5,
+    mobAttack: 4,
+    mobDefence: 3,
+    mobMaxHealth:36,
+    mobMinHealth:16,
     mobWeapon:goblinClaws
 };
 

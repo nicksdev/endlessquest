@@ -80,14 +80,16 @@ loadListener = function() {
     });
 
     $("#userInput").on("keypress", function(event) {
-        //Combat event listener - call Combat room object after any keypress
-        if(roomStatus == "combat") {
+        if (event.which >= 49 && event.which <= 57) {
+       // combat event listener - call Combat room object after any keypress
+        if (roomStatus == "combat") {
             event.preventDefault();
+            userAction = event.which - 48;
             displayInput();
             clearInput();
             autoScroll();
             rooms[roomFlag]["combat"]();
-
+        }
         }
     });
 };

@@ -70,7 +70,7 @@ allRooms = function() {
             encounter: function() {
                 combatObj = {};
                 monsterArray = [];
-                createMob(weakGoblin);
+                createMob(strongGoblin);
                 createMob(weakGoblin);
                 createMob(caveViper);
                 for (i = 0; i < monsterArray.length; i++) {
