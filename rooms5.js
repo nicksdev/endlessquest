@@ -7,7 +7,9 @@ allRooms = function() {
 
             body: function() {
                 document.getElementById("consoleDiv").innerHTML += "Which way do you wish to go?<p>";
+                autoScroll();
                 roomStatus = "exits";
+
             },
 
             exits: function() {
@@ -52,10 +54,11 @@ allRooms = function() {
             body: function() {
                 if (window.combatStatus == "victory") {
                     document.getElementById("consoleDiv").innerHTML += "Which way do you wish to go?<p> You can go " + roomExits;
+                    autoScroll();
                     roomStatus = "exits";
                 } else {
                     roomStatus = "combat";
-                    rooms[roomFlag][roomStatus]();
+
                 }
             },
 
@@ -90,12 +93,6 @@ allRooms = function() {
             },
 
             init: function() {
-                // console.log("Initialising " + roomFlag + " " + roomStatus);
-                var combatStatus;
-                if (combatStatus == null) {
-                    // console.log("null so do doing nothing");
-                    combatStatus = "";
-                } else {}
                 roomExits = Object.getOwnPropertyNames(rooms[roomFlag]["exits"]());
                 rooms[roomFlag]["encounter"]();
             },

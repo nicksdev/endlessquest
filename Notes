@@ -1,50 +1,16 @@
 
 
-Rooms Setup:
+
+NEXT STEPS:
 
 
-name:
-intro: Copy containing an intro for when the user enters the room
-exits:
-encounter: Copy and mob generation if there is combat in this room
-combat: function to run through the combat (abstract this?)
-options: the options for actions that can be taken in a room
-
+1) For multi mob combat, Char must decide which mob to attack
+2) Consider Char having more than one attack
+3) Inventory and Equipping System
 
 
 
 
-
-COMBAT LOGIC:
-
-start round:
-
-are there any mobs left alive?
-    > NO - you are victorious
-    > YES - new combatRound
-
-
-CombatRound:
-
-is chat alive?
-
-    Yes - Mob Attack
-
-        is char still alive?
-            Yes? CharAttack
-            No? You are dead
-
-
-    No - You are Dead
-
-
-    Mobs Attack
-    Is chat still alive?
-        > NO - you are dead
-        > Yes - Char Attack
-
-Char Attack
-    >goto start round
 
 
 

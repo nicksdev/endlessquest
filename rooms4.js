@@ -71,6 +71,7 @@ allRooms = function() {
             options: function () {
                 roomStatus = "options";
                 document.getElementById("consoleDiv").innerHTML += "You can go " + window.roomExits + ".<p> Which way do you wish to go?";
+                isScrolled();
                 autoScroll();
 
                 return {

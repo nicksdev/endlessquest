@@ -46,6 +46,7 @@ updateChar = function() {
 function errorMessage() {
     document.getElementById("consoleDiv").innerHTML += "<div class='error'>I'm sorry, I didn't understand that...<br> Please try again.<p></div>";
     document.getElementById("consoleDiv").innerHTML += rooms[roomFlag]["intro"] + roomExits;
+    autoScroll();
 }
 
 function callCombat() {
@@ -67,7 +68,6 @@ function combatRound() {
 
     if (character.charHealth > 0) {
         charAttack();
-        //combatRound();
     } else {
         document.getElementById("consoleDiv").innerHTML += "YOU HAVE DIED!!!!!!!<p>"
     }

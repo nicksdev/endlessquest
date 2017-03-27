@@ -2,6 +2,10 @@
 roomFlag = "startRoom";
 roomStatus = "intro";
 combatFlag = "";
+isScrolled = function() {
+    isScrolledToBottom = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight <= document.getElementById("consoleDiv").scrollTop + 1;
+};
+
 // combatStatus = "";
 
 clearInput = function() {
@@ -19,7 +23,6 @@ autoScroll = function() {if (isScrolledToBottom)
     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;};
 
 initRoom = function() {
-
     //Intitialise room exits
     rooms[roomFlag]["init"]();
 
@@ -31,8 +34,6 @@ initRoom = function() {
 
     //Call the 'body' function
     rooms[roomFlag][roomStatus]();
-
-
 
 };
 
@@ -70,9 +71,8 @@ loadListener = function() {
                 }
 
             } else {
-
+                autoScroll();
                 // console.log("Do Nothing Listener. roomStatus = " + roomStatus);
-
                 //Do nothing
 
             }
@@ -81,7 +81,7 @@ loadListener = function() {
 
     $("#userInput").on("keypress", function(event) {
         //Combat event listener - call Combat room object after any keypress
-        if(roomStatus== "combat") {
+        if(roomStatus == "combat") {
             event.preventDefault();
             displayInput();
             clearInput();
@@ -93,9 +93,7 @@ loadListener = function() {
 };
 
 window.onload=function() {
-    isScrolledToBottom = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight <= document.getElementById("consoleDiv").scrollTop + 1;
+    isScrolled();
     loadListener();
     initRoom();
-
-
 };
