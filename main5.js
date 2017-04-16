@@ -2,6 +2,7 @@
 roomFlag = "startRoom";
 roomStatus = "intro";
 combatFlag = "";
+
 isScrolled = function() {
     isScrolledToBottom = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight <= document.getElementById("consoleDiv").scrollTop + 1;
 };
@@ -27,7 +28,7 @@ initRoom = function() {
     rooms[roomFlag]["init"]();
 
     //Display intro copy and possible exits
-    document.getElementById("consoleDiv").innerHTML += rooms[roomFlag][roomStatus] + roomExits;
+    document.getElementById("consoleDiv").innerHTML += rooms[roomFlag][roomStatus] + "There are the following exits: " + roomExits;
 
     //move to the body of the room
     roomStatus = "body";
@@ -45,11 +46,7 @@ loadListener = function() {
             // TRIGGER YOUR FUNCTION
             userAction = $(this).val();
             // console.log("USER ACTION = " + userAction);
-            // console.log(userAction);
-            // console.log(roomFlag);
-            // console.log(roomStatus);
-            // console.log(rooms[roomFlag][roomStatus]());
-            // console.log(rooms[roomFlag][roomStatus]());
+
 
             if (roomStatus == "exits") {
 
@@ -92,6 +89,14 @@ loadListener = function() {
         }
         }
     });
+};
+
+roundInit = function() {
+    document.getElementById("consoleDiv").innerHTML += "You are in combat with <p> ";
+    mobList();
+    document.getElementById("consoleDiv").innerHTML += "Press the number of the Monster you wish to attack<p>";
+    autoScroll();
+    roomStatus = "combat";
 };
 
 window.onload=function() {

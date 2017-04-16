@@ -1,17 +1,47 @@
 
+function initRoom(roomName) {
+    loadDescription("room0","default");
+}
 
 
-NEXT STEPS:
-
-
-1) For multi mob combat, Char must decide which mob to attack
-2) Consider Char having more than one attack
-3) Inventory and Equipping System
-
-
+window.onload=function() {
+    loadListener();
 
 
 
 
+//    loadDescription("room0","default");
+    // loadDescription("room1","mobsDefeated");
+
+//    console.log(rooms["room0"]["hasMobs"]);
+
+initRoom(room0);
+initRoom(room1);
 
 
+    // if (rooms["room0"]["hasMobs"] === true) {
+    //
+    //     if (rooms["room0"]["mobsDefeated"] === true) {
+    //         loadDescription("room0","mobsDefeated");
+    //     } else {
+    //         loadDescription("room0","mobAttack");
+    //     }
+    //
+    //     console.log("THIS ROOM HAS MOBS");
+    //
+    //
+    //
+    // } else {
+    //     console.log("WHAT DO YOU WANT TO DO NOW?");
+    // }
+
+
+
+                     north: {
+                            copy: "You Head North",
+                            action: function () {
+                                document.getElementById("consoleDiv").innerHTML += "You take the Northern Exit<p>";
+                                roomFlag = "room1";
+                                roomStatus = "intro";
+                                initRoom();
+                            }

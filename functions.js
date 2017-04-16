@@ -62,8 +62,9 @@ function callCombat() {
     }
 }
 
-function combatRound() {
+function combatRoundOLD() {
     document.getElementById("consoleDiv").innerHTML += "New Combat Round Starting from combatRound<p>";
+
     mobAttack();
 
     if (character.charHealth > 0) {
@@ -74,14 +75,33 @@ function combatRound() {
     autoScroll();
 }
 
-function mobAttack() {
-
+function combatRound() {
     getObjectLength(combatObj);
+    document.getElementById("consoleDiv").innerHTML += "New Combat Round Starting from combatRound<p>";
+
+    charAttack();
+
+    if (mobCount > 0) {
+
+    mobAttack();
+
+    } else {
+        document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!<p>"
+    }
+    autoScroll();
+    roundInit();
+}
+
+function mobAttack() {
+    console.log("STARTING MOB ATTACK");
+    console.log("Defining Mobcount");
+    getObjectLength(combatObj);
+    console.log("Mobcount = " + mobCount);
     //Mob Combat Sequence
 
     // List attackers
     document.getElementById("consoleDiv").innerHTML += "You are attacked by " + mobCount + " creatures <br>";
-    mobList();
+    // mobList();
 
     for (var key in combatObj) {
         if (combatObj.hasOwnProperty(key))
@@ -95,14 +115,24 @@ function mobAttack() {
         if (thisMobRound > 0) {
             thisDamage = mobDamageRoll();
             if (thisDamage > 0) {
-                document.getElementById("consoleDiv").innerHTML += "<span class='combatHit'> and hits for " + thisDamage + " damage. <br>";
+                document.getElementById("consoleDiv").innerHTML += "<span class='combatHit'> and hits for " + thisDamage + " damage. <p>";
                 character.charHealth = character.charHealth - thisDamage;
                 updateChar();
+
+                if (character.charHealth > 0) {
+
+                } else {
+                    document.getElementById("consoleDiv").innerHTML += "YOU ARE DEAD!<p>"
+                    roomFlag = "startRoom";
+                    roomStatus = "intro";
+                }
+
+
             } else {
-                document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and hits you but does no damage. <br></span></span>";
+                document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and hits you but does no damage. <p></span></span>";
             }
         } else {
-            document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and misses. <br></span></span>";
+            document.getElementById("consoleDiv").innerHTML += "<span class='combatMiss'>" + " and misses. <p></span></span>";
 
         }
 
@@ -110,16 +140,6 @@ function mobAttack() {
     autoScroll();
 
 }
-
-
-
-
-
-
-
-
-
-
 
 function charAttack() {
 
@@ -170,18 +190,6 @@ function charAttack() {
     autoScroll();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 function charAttackBACKUP() {
 
@@ -258,6 +266,7 @@ function mobDamageRoll() {
 
 //Function for calculating mob attack
 function mobAttackRoll() {
+    console.log(combatObj);
     return (diceRoll(1,20) + combatObj[key].mobAttack + combatObj[key].mobAgility);
 }
 
