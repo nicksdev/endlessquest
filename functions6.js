@@ -1,21 +1,4 @@
-// initEqFunc = function() {
-//
-//         var loadRoom = function(roomName) {
-//             console.log(roomName);
-//             console.log(rooms);
-//         };
-//
-// //         function loadRoom(roomName) {
-// // //    console.log(rooms[roomName]["name"]);
-// //         console.log(roomName);
-// //         console.log(rooms);
-// //     };
-//
-//
-// };
-//
-//
-// initEqFunc();
+
 
 //Random Number Generator
 function diceRoll(minimum, maximum){
@@ -50,9 +33,6 @@ function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, 
     this.weaponDamMax = weaponDamMax;
     monsterArray.push(this);
 }
-
-
-
 
 
 
