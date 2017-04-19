@@ -50,11 +50,13 @@ function errorMessage() {
 }
 
 function callCombat() {
+    combatFlag = "on";
     getObjectLength(combatObj);
     if (mobCount > 0) {
         combatRound();
     } else {
         document.getElementById("consoleDiv").innerHTML += "YOU ARE VICTORIOUS!!???<p>";
+        combatFlag= "off";
         combatStatus = "victory";
         autoScroll();
         roomStatus = "body";

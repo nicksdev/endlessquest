@@ -1,81 +1,145 @@
- var userAction;
+var userAction;
+var combatFlag;
 
-displayInput = function() {
+
+// displayInput = function() {
+//     $('#userInput').on("keypress", function (event) {
+//         if (event.which == 13) {
+//             event.preventDefault();
+//             userInput = $(this).val();
+//             // console.log("USER INPUT = " + userInput);
+//             // document.getElementById("consoleDiv").innerHTML += userInput + "<br>";
+//             consolePush(userInput);
+//             document.getElementById('userInput').value = "";
+//             document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
+//         }
+//     })
+// };
+
+// actionListener = function(roomName) {
+//     $('#userInput').on("keyup", function (event) {
+//         if (event.which == 13) {
+//             event.preventDefault();
+//             userAction = $(this).val();
+//             if (rooms[roomName]["exits"]().hasOwnProperty(userAction)) {
+//                 consolePush(rooms[roomName]["exits"]()[userAction]["description"]);
+//                 initRoom(rooms[roomName]["exits"]()[userAction]["nextRoom"]);
+//             } else {
+//                 console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
+//                 document.getElementById('userInput').value = "";
+//
+//             }
+//
+//         }
+//     })
+// };
+
+
+
+mainListener = function(roomName) {
+
     $('#userInput').on("keypress", function (event) {
         if (event.which == 13) {
             event.preventDefault();
             userInput = $(this).val();
-            // console.log("USER INPUT = " + userInput);
-            // document.getElementById("consoleDiv").innerHTML += userInput + "<br>";
             consolePush(userInput);
             document.getElementById('userInput').value = "";
             document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
+
+                if (rooms[roomName]["exits"]().hasOwnProperty(userInput)) {
+                    consolePush(rooms[roomName]["exits"]()[userInput]["description"]);
+                    initRoom(rooms[roomName]["exits"]()[userInput]["nextRoom"]);
+                } else {
+                    console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
+                    document.getElementById('userInput').value = "";
+                }
+
+                if (combatFlag === "on") {
+                    console.log("combat Flag is on")
+                    console.log(userInput);
+
+                    charRound();
+
+                } else {
+                    console.log("Combat Flag not on");
+                }
+
         }
     })
 };
 
-actionListener = function(roomName) {
-    $('#userInput').on("keypress", function (event) {
-        if (event.which == 13) {
-            event.preventDefault();
-            userAction = userInput;
-            // console.log("USER ACTION = " + userAction);
-            if (rooms[roomName]["exits"]().hasOwnProperty(userAction)) {
-                consolePush(rooms[roomName]["exits"]()[userAction]["description"]);
-                initRoom(rooms[roomName]["exits"]()[userAction]["nextRoom"]);
-            } else {
-                console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
-            }
 
-        }
-    })
-};
+
+
+
+ // function loadListener(x) {
+ //
+ //     if (x === "on") {
+ //
+ //         $('#userInput').keyup(function(){
+ //             console.log("DEFINING PRESS INPUT");
+ //             console.log($(this).val());
+ //             console.log($('#userInput').val());
+ //             pressInput = $(this).val();
+ //             console.log("PressInput = " + pressInput);
+ //             document.getElementById('userInput').value = "";
+ //             charRound();
+ //
+ //         });
+ //
+ //
+ //     } else {
+ //         console.log("UNBINDING");
+ //         $('#userInput').unbind("keypress");
+ //
+ //     }
+ // }
 
 function selectTarget() {
+
     console.log("selectTarget()");
-    loadListener("on");
     consolePush("You are fighting the following enemies, select the opponent you wish to attack:");
     for (key in combatObj) {
         if (combatObj.hasOwnProperty(key))
             var num = parseInt(key.charAt(3)) + 1;
         consolePush( num + ") A " + combatObj[key].mobName + " with " +  combatObj[key].mobHealth + " health");
     }
+    console.log("ending selectTarget");
 
 
 }
 
 function charRound() {
-    console.log("charRound()");
-    console.log("KEY = " + key);
-    console.log(combatObj[key]);
-    key = "mob" + (pressInput -1);
-    consolePush("You attack " + pressInput + ") " + combatObj[key]["mobName"]);
+    select = "mob" + (userInput -1);
+    console.log("KEY = " + select);
+    consolePush("You attack " + userInput + ") " + combatObj[select]["mobName"]);
+    console.log(combatObj[select]["mobName"]);
     var thisCharAttack = charAttackRoll();
     var thisMobDefence = mobDefenceRoll();
     var thisCharRound = thisCharAttack - thisMobDefence;
 
     if (thisCharRound > 0) {
         var thisCharDamage = charDamageRoll();
-        combatObj[key]["mobHealth"] = combatObj[key]["mobHealth"] - thisCharDamage;
-        consolePush("You hit " + combatObj[key]["mobName"] + " for " + thisCharDamage + " damage.");
-        consolePush(combatObj[key]["mobName"] + " has " + combatObj[key]["mobHealth"] + " health remaining");
+        combatObj[select]["mobHealth"] = combatObj[select]["mobHealth"] - thisCharDamage;
+        consolePush("You hit " + combatObj[select]["mobName"] + " for " + thisCharDamage + " damage.");
+        consolePush(combatObj[select]["mobName"] + " has " + combatObj[select]["mobHealth"] + " health remaining");
 
-        if (combatObj[key]["mobHealth"] <= 0) {
-            consolePush("The " + combatObj[key].mobName + " is dead!");
-            delete combatObj[key];
+        if (combatObj[select]["mobHealth"] <= 0) {
+            consolePush("The " + combatObj[select].mobName + " is dead!");
+            delete combatObj[select];
             mobRound();
         } else {
             mobRound();
         }
 
     } else {
-        consolePush("You missed the " + combatObj[key]["mobName"]);
+        consolePush("You missed the " + combatObj[select]["mobName"]);
         mobRound();
     }
 }
 
 function mobRound() {
-    loadListener("off");
+    // loadListener("off");
     console.log("Starting mobRound");
     getObjectLength(combatObj);
     console.log("Total Mobs = " + mobCount);
@@ -99,6 +163,7 @@ function mobRound() {
             if (character.charHealth <= 0) {
                 //DEATH
                 console.log("YOU ARE DEAD!!!");
+                combatFlag = "off";
             } else {
 
             }
@@ -119,20 +184,23 @@ function mobRound() {
 //
 }
 
-function loadListener(x) {
-    if (x === "on") {
-        $('#userInput').on('input', function() {
-            console.log("DEFINING PRESS INPUT");
-            pressInput = $(this).val();
-            document.getElementById('userInput').value = "";
-            charRound();
-        });
-    } else {
-    }
-    $('#userInput').off('input', function() {
-        $(this).val();
-    });
-}
+// function loadListener(x) {
+//     if (x === "on") {
+//         $('#userInput').on('input', function() {
+//             console.log("DEFINING PRESS INPUT");
+//             pressInput = $(this).val();
+//             console.log("PressInput = " + pressInput);
+//             document.getElementById('userInput').value = "";
+//             charRound();
+//         });
+//     } else {
+//     }
+//     $('#userInput').off('input', function() {
+//         $(this).val();
+//     });
+// }
+
+
 
 function loadDescription(roomName,descriptionType) {
     consolePush(rooms[roomName]["description"]()[descriptionType]);
@@ -146,8 +214,9 @@ function consolePush(y) {
 }
 
 function initRoom(roomName) {
-    loadListener("off");
-    actionListener(roomName);
+    // loadListener("off");
+    // actionListener(roomName);
+    mainListener(roomName);
     loadDescription(roomName,"default");
 
 // Base Room Logic
@@ -177,6 +246,8 @@ function initRoom(roomName) {
 }
 
 function combatInit(roomName) {
+
+    combatFlag = "on";
     combatObj = {};
     monsterArray = [];
     mobTarget = "";
@@ -231,7 +302,6 @@ function combatRound(roomName) {
 
 window.onload=function() {
 
-    displayInput();
 
     //Set mobs in room1 to dead.
     // rooms["room1"]["mobsDefeated"] = true;
