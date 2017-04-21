@@ -4,20 +4,102 @@ function eqGame() {
 
     var combatFlag;
 
-    function combatStatus(flag, roomName) {
-        if (flag === "off") {
-            console.log("SETTING COMBAT FLAG TO OFF");
-            combatFlag = "off";
-            // mainListener(roomName);
-        } else if (flag === "on") {
-            console.log("SETTING COMBAT FLAG TO ON");
-            combatFlag = "on";
-            // mainListener(roomName);
-        } else {
-            console.log("COMBAT FLAG IS UNDEFINED");
-        }
-    }
 
+
+
+    actions =  {
+
+            inv: function(){
+                consolePush(character.inventory);
+            },
+
+            look: function(roomName){
+                consolePush("This room contains " + rooms[roomName]["items"]);
+            },
+
+            pickup: function (roomName, item) {
+                console.log("PICKUP FUNCTION");
+                itemPos = rooms[roomName]["items"].indexOf(userInputString);
+                if (itemPos > -1) {
+                    consolePush("You pickup " + userInputString);
+                    character.inventory.push(userInputString);
+                    console.log(character.inventory);
+                    //PENDING - remove from room items on pickup
+                    rooms[roomName]["items"].splice(itemPos, 1);
+                } else {
+                    consolePush("That item is not here");
+                }
+
+            },
+            drop: function (roomName) {
+                inventoryPos = character.inventory.indexOf(userInputString);
+                if (inventoryPos > -1) {
+                    console.log(character.inventory);
+                    consolePush("You drop " + userInputString);
+                    character.inventory.splice(inventoryPos, 1);
+                    console.log(character.inventory);
+                    rooms[roomName]["items"].push(userInputString);
+                    console.log(rooms[roomName]["items"]);
+
+                } else {
+                    consolePush("You don't have " + userInputString);
+                }
+            }
+
+
+    };
+
+
+
+
+
+    function combatStatus(flag, roomName) {
+            if (flag === "off") {
+                console.log("SETTING COMBAT FLAG TO OFF");
+                combatFlag = "off";
+                // mainListener(roomName);
+            } else if (flag === "on") {
+                console.log("SETTING COMBAT FLAG TO ON");
+                combatFlag = "on";
+                // mainListener(roomName);
+            } else {
+                console.log("COMBAT FLAG IS UNDEFINED");
+            }
+        }
+
+    // function actionSplit(x) {
+    //
+    //     //split userInput into array
+    //     tmp = userInput.split(" ");
+    //
+    //     //assign first word to userInputAction
+    //     userInputAction = tmp[0];
+    //
+    //     //create an array with first word removed
+    //     tmpString = tmp.slice(1, tmp.length);
+    //
+    //     //rejoin shortened array
+    //     userInputString = tmpString.join(" ");
+    //
+    //     // console.log(userInputString);
+    //
+    //
+    //
+    // }
+
+
+    function actionSplit(x) {
+
+        //split userInput into array
+        tmp = userInput.split(" ");
+
+        //assign first word to userInputAction and shortens userInput
+        userInputAction = tmp.shift();
+
+        //rejoin shortened array
+        userInputString = tmp.join(" ");
+
+    }
 
     function mainListener(roomName) {
 
@@ -30,6 +112,8 @@ function eqGame() {
                     event.preventDefault();
                     userInput = $(this).val();
                     consolePush(userInput);
+                    actionSplit(userInput);
+
                     document.getElementById('userInput').value = "";
                     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
 
@@ -37,6 +121,13 @@ function eqGame() {
                         consolePush(rooms[roomName]["exits"][userInput]["description"]);
                         roomName = rooms[roomName]["exits"][userInput]["nextRoom"];
                         initRoom(roomName);
+                    } else if  (actions.hasOwnProperty(userInputAction)) {
+                        console.log("RECOGNIZED ACTION");
+
+                        actions[userInputAction](roomName);
+
+
+
                     } else {
                         console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
                         document.getElementById('userInput').value = "";
@@ -110,6 +201,7 @@ function eqGame() {
     // }
 
 
+
     function selectTarget() {
 
         consolePush("You are fighting the following enemies, select the opponent you wish to attack:");
@@ -125,7 +217,7 @@ function eqGame() {
 
     function charRound(roomName) {
         console.log("Starting charRound()");
-        console.log(pressInput);
+        // console.log(pressInput);
         select = "mob" + (pressInput - 1);
         // console.log(select);
         // console.log(combatObj);
@@ -180,11 +272,11 @@ function eqGame() {
 
 
 
-        } else {
-            console.log(combatObj[select]["mobName"]);
-            console.log("PROPERTY DOES NOT EXIST, PLEASE TRY AGAIN");
-            selectTarget();
         }
+        // else {
+        //     console.log("PROPERTY DOES NOT EXIST, PLEASE TRY AGAIN");
+        //     selectTarget();
+        // }
 
 
 
@@ -230,8 +322,8 @@ function eqGame() {
         }
 
         selectTarget();
-//
-//
+
+
     }
 
     function loadDescription(roomName, descriptionType) {
@@ -250,6 +342,9 @@ function eqGame() {
         combatStatus("off",roomName);
         mainListener(roomName);
         loadDescription(roomName, "default");
+        if (rooms[roomName]["items"].length > 0) {
+            consolePush("This room contains " + rooms[roomName]["items"]);
+        }
 
 // Base Room Logic
         if (rooms[roomName]["hasMobs"] === true) {

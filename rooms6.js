@@ -12,7 +12,8 @@ rooms  = {
 
         hasMobs: false,
         mobsDefeated: false,
-        mobs: "",
+        mobs: [],
+        items: ["pencil", "knife"],
         exits: {
             north: {
                 description: "You take the Northern Exit",
@@ -34,6 +35,7 @@ rooms  = {
         hasMobs: true,
         mobsDefeated: false,
         mobs: [weakGoblin, caveViper],
+        items: [],
         exits:  {
             east: {
                 description: "You take the Eastern Exit",

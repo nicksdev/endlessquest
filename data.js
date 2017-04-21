@@ -48,7 +48,8 @@ var character = {
         return (diceRoll(1,4) + (character.charAgility/3) + character.charArmour.defence)
     },
     charWeapon: rustySword,
-    charArmour: leatherArmour
+    charArmour: leatherArmour,
+    inventory: ["paper", "string"]
 };
 
 //MONSTER TEMPLATES
