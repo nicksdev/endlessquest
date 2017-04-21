@@ -34,6 +34,7 @@ var rustySword = {
     attack: 3
 };
 
+
 //CHARACTER
 
 var character = {

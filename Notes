@@ -1,47 +1,12 @@
 
-function initRoom(roomName) {
-    loadDescription("room0","default");
-}
+TODO:
 
-
-window.onload=function() {
-    loadListener();
+Enable equipping items
 
 
 
 
-//    loadDescription("room0","default");
-    // loadDescription("room1","mobsDefeated");
 
-//    console.log(rooms["room0"]["hasMobs"]);
+DONE:
 
-initRoom(room0);
-initRoom(room1);
-
-
-    // if (rooms["room0"]["hasMobs"] === true) {
-    //
-    //     if (rooms["room0"]["mobsDefeated"] === true) {
-    //         loadDescription("room0","mobsDefeated");
-    //     } else {
-    //         loadDescription("room0","mobAttack");
-    //     }
-    //
-    //     console.log("THIS ROOM HAS MOBS");
-    //
-    //
-    //
-    // } else {
-    //     console.log("WHAT DO YOU WANT TO DO NOW?");
-    // }
-
-
-
-                     north: {
-                            copy: "You Head North",
-                            action: function () {
-                                document.getElementById("consoleDiv").innerHTML += "You take the Northern Exit<p>";
-                                roomFlag = "room1";
-                                roomStatus = "intro";
-                                initRoom();
-                            }
+Picking up and dropping off

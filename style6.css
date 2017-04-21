@@ -10,6 +10,12 @@
     overflow:auto;
 }
 
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+
 .charStats
 {
     height: 30px;

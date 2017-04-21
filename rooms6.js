@@ -1,5 +1,5 @@
 
-rooms  = {
+rooms = {
 
     "room0": {
         name: "Room 0 Name",
@@ -13,7 +13,7 @@ rooms  = {
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
-        items: ["pencil", "knife"],
+        items: ["silver sword", "chainmail armour"],
         exits: {
             north: {
                 description: "You take the Northern Exit",
@@ -50,4 +50,19 @@ rooms  = {
     },
 
 
+};
+
+
+equipment = {
+
+    "silver sword": {
+        minDamage: 3,
+        maxDamage: 10,
+        attack: 5
+    },
+
+    "chainmail armour": {
+        damResist: 2,
+        defence: 5
+    }
 };

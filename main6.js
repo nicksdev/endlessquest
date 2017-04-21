@@ -17,32 +17,32 @@ function eqGame() {
                 consolePush("This room contains " + rooms[roomName]["items"]);
             },
 
-            pickup: function (roomName, item) {
+
+            pickup: function(roomName) {
                 console.log("PICKUP FUNCTION");
+
                 itemPos = rooms[roomName]["items"].indexOf(userInputString);
+                console.log(itemPos);
                 if (itemPos > -1) {
-                    consolePush("You pickup " + userInputString);
+                    // add to inventory
                     character.inventory.push(userInputString);
-                    console.log(character.inventory);
-                    //PENDING - remove from room items on pickup
+                    // remove from room
                     rooms[roomName]["items"].splice(itemPos, 1);
                 } else {
-                    consolePush("That item is not here");
+                    consolePush(userInputString + " is not here");
                 }
-
             },
+
+
             drop: function (roomName) {
                 inventoryPos = character.inventory.indexOf(userInputString);
                 if (inventoryPos > -1) {
-                    console.log(character.inventory);
                     consolePush("You drop " + userInputString);
                     character.inventory.splice(inventoryPos, 1);
-                    console.log(character.inventory);
                     rooms[roomName]["items"].push(userInputString);
-                    console.log(rooms[roomName]["items"]);
 
                 } else {
-                    consolePush("You don't have " + userInputString);
+                    consolePush("You don't have <span class='capitalize'> " + userInputString + "</span>");
                 }
             }
 
@@ -67,27 +67,6 @@ function eqGame() {
             }
         }
 
-    // function actionSplit(x) {
-    //
-    //     //split userInput into array
-    //     tmp = userInput.split(" ");
-    //
-    //     //assign first word to userInputAction
-    //     userInputAction = tmp[0];
-    //
-    //     //create an array with first word removed
-    //     tmpString = tmp.slice(1, tmp.length);
-    //
-    //     //rejoin shortened array
-    //     userInputString = tmpString.join(" ");
-    //
-    //     // console.log(userInputString);
-    //
-    //
-    //
-    // }
-
-
     function actionSplit(x) {
 
         //split userInput into array
@@ -110,7 +89,7 @@ function eqGame() {
 
                 if (event.which == 13) {
                     event.preventDefault();
-                    userInput = $(this).val();
+                    userInput = $(this).val().toLowerCase();
                     consolePush(userInput);
                     actionSplit(userInput);
 
@@ -154,53 +133,6 @@ function eqGame() {
         });
 
     }
-
-
-    // function mainListener(roomName) {
-    //     $('#userInput').off();
-    //
-    //     if (combatFlag === "off") {
-    //         //default listener behavior
-    //         $('#userInput').on("keyup", function (event) {
-    //             if (event.which == 13) {
-    //                 event.preventDefault();
-    //                 userInput = $(this).val();
-    //                 consolePush(userInput);
-    //                 document.getElementById('userInput').value = "";
-    //                 document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
-    //
-    //                 if (rooms[roomName]["exits"].hasOwnProperty(userInput)) {
-    //                     consolePush(rooms[roomName]["exits"][userInput]["description"]);
-    //                     roomName = rooms[roomName]["exits"][userInput]["nextRoom"];
-    //                     initRoom(roomName);
-    //                 } else {
-    //                     console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
-    //                     document.getElementById('userInput').value = "";
-    //                 }
-    //             }
-    //         })
-    //     }
-    //
-    //     else if (combatFlag === "on") {
-    //         //combat listener behavior
-    //         console.log("PRESSLISTENER ENABLED");
-    //         $('#userInput').keyup(function () {
-    //
-    //             pressInput = $(this).val();
-    //             document.getElementById('userInput').value = "";
-    //             charRound(roomName);
-    //
-    //         })
-    //     }
-    //
-    //     else {
-    //         //undefined listener behavior
-    //         console.log("LISTENER BEHAVIOR UNDEFINED");
-    //     }
-    //
-    // }
-
-
 
     function selectTarget() {
 
@@ -343,7 +275,9 @@ function eqGame() {
         mainListener(roomName);
         loadDescription(roomName, "default");
         if (rooms[roomName]["items"].length > 0) {
-            consolePush("This room contains " + rooms[roomName]["items"]);
+
+            consolePush("On the floor you can see: <span class='capitalize'>" + rooms[roomName]["items"] + "</span>");
+
         }
 
 // Base Room Logic
