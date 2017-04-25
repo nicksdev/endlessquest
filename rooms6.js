@@ -13,7 +13,7 @@ rooms = {
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
-        items: ["silver sword", "chainmail armour"],
+        items: ["small oak chest","iron pot helm"],
         exits: {
             north: {
                 description: "You take the Northern Exit",
@@ -22,7 +22,6 @@ rooms = {
 
         }
     },
-
 
     "room1": {
         name: "Room 1 Name",
@@ -34,7 +33,7 @@ rooms = {
         },
         hasMobs: true,
         mobsDefeated: false,
-        mobs: [weakGoblin, caveViper],
+        mobs: ["weakGoblin", "caveViper"],
         items: [],
         exits:  {
             east: {
@@ -55,14 +54,105 @@ rooms = {
 
 equipment = {
 
+    // "full template": {
+    //     desc: "",
+    //     type: "",
+    //     use: <equip or consume>
+    //     minDamage:,
+    //     maxDamage:,
+    //     attack:,
+    //     defence:,
+    //     locked:,
+    //     trapped:,
+    //     contents:,
+    //     damResist: <not used>,
+    //     minValue:,
+    //     maxValue:
+    // },
+
+    "iron dagger": {
+        desc: "a small iron dagger with a short dull blade",
+        type: "weapon",
+        use: "equip",
+        minDamage: 1,
+        maxDamage: 2,
+        attack: 1
+    },
+
+    "sharp dagger": {
+        desc: "a long steel dagger with a wickedly sharp blade",
+        type: "weapon",
+        use: "equip",
+        minDamage: 1,
+        maxDamage: 3,
+        attack: 2
+    },
+
+    "rusty sword": {
+        desc: "two and half feet of heavy rusted metal",
+        type: "weapon",
+        use: "equip",
+        minDamage: 2,
+        maxDamage: 4,
+        attack: 3
+    },
+
     "silver sword": {
+        desc: "a light and slim blade with a silvered edge",
+        type: "weapon",
+        use: "equip",
         minDamage: 3,
         maxDamage: 10,
-        attack: 5
+        attack: 9
+    },
+
+    "leather armour": {
+        desc: "tough leather panels stitched together to provide some protection",
+        type: "chest",
+        use: "equip",
+        // damResist: 2,
+        defence: 2
     },
 
     "chainmail armour": {
-        damResist: 2,
+        desc: "fine iron link forged together to form a long mail shirt providing good protection",
+        type: "chest",
+        // damResist: 2,
         defence: 5
+    },
+
+    "wooden shield": {
+        desc: "a small round disc of wood with a handle on the back",
+        type: "shield",
+        use: "equip",
+        // damResist: 2,
+        defence: 2
+    },
+
+    "iron pot helm": {
+        desc: "a thin round cylinder of iron that fits over the top half of your head",
+        type: "head",
+        use: "equip",
+        // damResist: 2,
+        defence: 1
+    },
+
+    "small oak chest": {
+        desc: "a small chest made of oak",
+        type: "container",
+        use: "",
+        locked: false,
+        trapped: false,
+        contents: ["healing balm", "wooden shield"],
+    },
+
+    "healing balm": {
+        desc: "a perfumed ointment that is used for treating wounds",
+        type: "heal",
+        use: "consume",
+        minValue: 2,
+        maxValue: 8
     }
+
 };
+

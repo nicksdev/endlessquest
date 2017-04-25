@@ -19,22 +19,6 @@ smallBite = {
 //    speed: 3
 };
 
-//EQUIPMENT:
-
-var leatherArmour = {
-    name: "Leather Armour",
-    damResist: 1,
-    defence: 3
-};
-
-var rustySword = {
-    name: "Rusty Sword",
-    minDamage: 1,
-    maxDamage: 1,
-    attack: 3
-};
-
-
 //CHARACTER
 
 var character = {
@@ -43,52 +27,91 @@ var character = {
     charAgility: 6,
     charHealth: 96,
     charAttack: function () {
-        return (diceRoll(1,4) + (character.charAgility/3) + character.charWeapon.attack)
+        return (diceRoll(1,4) + (character.charAgility/3) + character.weapon.attack)
     },
     charDefence: function () {
         return (diceRoll(1,4) + (character.charAgility/3) + character.charArmour.defence)
     },
-    charWeapon: rustySword,
-    charArmour: leatherArmour,
-    inventory: ["paper", "string"]
+    equipment: {
+        weapon:"sharp dagger",
+        shield:"",
+        chest:"leather armour",
+        head:"",
+        legs:"",
+        feet:"",
+        ring:""
+    },
+    // weapon: "rusty sword",
+    // charArmour: leatherArmour,
+    inventory: ["iron dagger", "wooden shield"]
 };
 
 //MONSTER TEMPLATES
 
-//WeakGoblin Template
-var weakGoblin = {
-    mobName:"Weak Goblin",
-    mobMaxStrength:10,
-    mobMinStrength:3,
-    mobAgility:5,
-    mobAttack: 4,
-    mobDefence: 3,
-    mobMaxHealth:26,
-    mobMinHealth:6,
-    mobWeapon:goblinClaws
+
+mob = {
+
+    "weakGoblin": {
+        mobName: "Weak Goblin",
+        mobMaxStrength: 10,
+        mobMinStrength: 3,
+        mobAgility: 5,
+        mobAttack: 4,
+        mobDefence: 3,
+        mobMaxHealth: 26,
+        mobMinHealth: 6,
+        mobWeapon: goblinClaws
+    },
+
+    "caveViper": {
+        mobName:"Cave Viper",
+        mobMaxStrength:3,
+        mobMinStrength:2,
+        mobAgility:9,
+        mobAttack: 4,
+        mobDefence: 3,
+        mobMaxHealth:20,
+        mobMinHealth:5,
+        mobWeapon:smallBite
+    }
+
 };
 
-var strongGoblin = {
-    mobName:"Strong Goblin",
-    mobMaxStrength:15,
-    mobMinStrength:8,
-    mobAgility:5,
-    mobAttack: 4,
-    mobDefence: 3,
-    mobMaxHealth:36,
-    mobMinHealth:16,
-    mobWeapon:goblinClaws
-};
+
+//WeakGoblin Template
+// var weakGoblin = {
+//     mobName:"Weak Goblin",
+//     mobMaxStrength:10,
+//     mobMinStrength:3,
+//     mobAgility:5,
+//     mobAttack: 4,
+//     mobDefence: 3,
+//     mobMaxHealth:26,
+//     mobMinHealth:6,
+//     mobWeapon:goblinClaws
+// };
+
+// var strongGoblin = {
+//     mobName:"Strong Goblin",
+//     mobMaxStrength:15,
+//     mobMinStrength:8,
+//     mobAgility:5,
+//     mobAttack: 4,
+//     mobDefence: 3,
+//     mobMaxHealth:36,
+//     mobMinHealth:16,
+//     mobWeapon:goblinClaws
+// };
 
 //Cave Viper Template
-var caveViper = {
-    mobName:"Cave Viper",
-    mobMaxStrength:3,
-    mobMinStrength:2,
-    mobAgility:9,
-    mobAttack: 4,
-    mobDefence: 3,
-    mobMaxHealth:20,
-    mobMinHealth:5,
-    mobWeapon:smallBite
-};
+// var caveViper = {
+//     mobName:"Cave Viper",
+//     mobMaxStrength:3,
+//     mobMinStrength:2,
+//     mobAgility:9,
+//     mobAttack: 4,
+//     mobDefence: 3,
+//     mobMaxHealth:20,
+//     mobMinHealth:5,
+//     mobWeapon:smallBite
+// };

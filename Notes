@@ -1,12 +1,16 @@
 
 TODO:
 
-Enable equipping items
+Handle exceptions for taking from containers
+look (at, in, etc) - looks inside, searches etc. E.g. search dead mobs, look in chest
+have objects that cannot be picked up
+make all armour type armour and add a slot for its location.
+add ability to use an item or cast a spell in combat
+usable items, e.g. potion of healing, door key
+create profile on init from template.
+allow to save profile and load up again
+magic: mana, spells, etc
+classes: fighter, priest, wizard
 
 
 
-
-
-DONE:
-
-Picking up and dropping off
