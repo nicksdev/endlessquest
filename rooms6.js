@@ -1,6 +1,33 @@
 
 rooms = {
 
+
+    "lobby": {
+        name: "Room Lobby",
+        description:  {
+            default: "You are in the lobby, please choose a name by typing name yourname",
+            mobAttack: "error",
+            mobsDefeated: "error",
+            exits: "There is a door to the north."
+        },
+
+        hasMobs: false,
+        mobsDefeated: false,
+        mobs: [],
+        items: [""],
+        exits: {
+            north: {
+                description: "You go North",
+                nextRoom: "room0"
+            }
+
+        }
+    },
+
+
+
+
+
     "room0": {
         name: "Room 0 Name",
         description:  {
@@ -68,6 +95,8 @@ equipment = {
     //     damResist: <not used>,
     //     minValue:,
     //     maxValue:
+    //     moveable: false or undefined
+    //     useable: true or undefined
     // },
 
     "iron dagger": {
@@ -131,6 +160,7 @@ equipment = {
 
     "iron pot helm": {
         desc: "a thin round cylinder of iron that fits over the top half of your head",
+        equip: true,
         type: "head",
         use: "equip",
         // damResist: 2,
@@ -143,14 +173,16 @@ equipment = {
         use: "",
         locked: false,
         trapped: false,
-        contents: ["healing balm", "wooden shield"],
+        contents: ["wooden shield"],
+        moveable: false
     },
 
     "healing balm": {
         desc: "a perfumed ointment that is used for treating wounds",
-        type: "heal",
-        use: "consume",
-        minValue: 2,
+        type: "usable",
+        use: "heal",
+        charges: 2,
+        minValue: 3,
         maxValue: 8
     }
 

@@ -108,61 +108,6 @@ function getDef(a) {
     }
 }
 
-// function calcArm() {
 
-    // search equipment object for type: "armour"
-    // if found add defence to variable
-
-    // for (var property in object) {
-    //     if (object.hasOwnProperty(property)) {
-    //         // do stuff
-    //     }
-    // }
-    //
-    // if (equipment.hasOwnProperty("armour")) {
-    //     console.log(equipment.type);
-    //
-    // } else {
-    // console.log("Not Found...");
-    //
-
-
-
-    // for (var key in equipment) {
-    //     if (equipment.hasOwnProperty(key)) {
-    //         console.log(key + " -> " + equipment[key].defence);
-    //     }
-    // }
-
-    // var totArm;
-    //
-    // for (var key in equipment) {
-    //     if (equipment.hasOwnProperty(key)) {
-    //         console.log(key + " -> " + equipment[key].type);
-    //
-    //         if (equipment[key].type = "chest") {
-    //             console.log(equipment[key].defence);
-    //             totArm = totArm + equipment[key].defence;
-    //         }
-    //     }
-    // }
-    // console.log(totArm);
-    //
-
-
-    // }
-
-    //get a list of equipped items
-    //check the type of each of the equipped items
-    //if the type === armour, get the defence value and aggregate
-
-
-
-
-    // console.log(equipment["iron dagger"].desc);
-    // console.log(equipment);
-    // console.log(equipment["iron dagger"]);
-    // console.log(equipment.indexOf()[1]);
-    // console.log(equipment[1].type);
 
 

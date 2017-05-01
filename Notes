@@ -1,16 +1,34 @@
 
 TODO:
 
-Handle exceptions for taking from containers
-look (at, in, etc) - looks inside, searches etc. E.g. search dead mobs, look in chest
-have objects that cannot be picked up
-make all armour type armour and add a slot for its location.
-add ability to use an item or cast a spell in combat
-usable items, e.g. potion of healing, door key
-create profile on init from template.
-allow to save profile and load up again
-magic: mana, spells, etc
-classes: fighter, priest, wizard
+//Handle exceptions for taking from containers
+//look (at, in, etc) - looks inside, searches etc. E.g. search dead mobs, look in chest
+//have objects that cannot be picked up
+//make all armour type armour and add a slot for its location.
+//add inventory check function which checks the item is present in inventory
+//add ability to use an item
+//on 'equip' check use = equip
+//usable items, e.g. potion of healing, door key
+allow the user to choose an action when in combat (defaulting to attack at the moment). Could be use, flee, etc
+//User registration
+//create profile on init from template.
+have a max health check (check template) that should be a limit for heals
+//Allow to save game and load up again
+Fixup UI
+Searchable corpses, levelled lists loot
+
+
+
+
+//magic: mana, spells, etc
+//classes: fighter, priest, wizard
+
+
+VERSION 2: Angular 4 + typescript
+
+Lambda
+
+
 
 
 

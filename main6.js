@@ -38,7 +38,56 @@ function eqGame() {
         console.log("Total Defence = " + totalDef);
     }
 
+    function inventoryCheck(x) {
+        return character.inventory.indexOf(x)
+    }
+
+    function useCharge(item, charges) {
+        equipment[item].charges = equipment[item].charges - charges;
+        if (equipment[item].charges < 1) {
+            inventoryPos = character.inventory.indexOf(item);
+            if (inventoryPos > -1) {
+                consolePush("The " + item + " crumbles to dust, its power exhausted");
+                character.inventory.splice(inventoryPos, 1);
+            }
+        }
+    }
+
     actions =  {
+
+            name: function(roomName,userInputString){
+
+                if (roomName === "lobby") {
+                    character.charName = userInputString;
+                    consolePush("You are now called " + character.charName);
+
+
+                } else {
+                    consolePush("Your name is " + character.charName);
+                    consolePush("Your cant change your name");
+                }
+
+            },
+
+            save: function(roomName){
+                consolePush("Saving state...");
+                localStorage.clear();
+                localStorage.setItem("character", JSON.stringify(character));
+                localStorage.setItem("rooms", JSON.stringify(rooms));
+                localStorage.setItem("location", JSON.stringify(roomName));
+            },
+
+            load: function(){
+                consolePush("Loading state...");
+                var load1 = localStorage.getItem("character");
+                character = JSON.parse(load1);
+                var load2 = localStorage.getItem("rooms");
+                rooms = JSON.parse(load2);
+                var load3 = localStorage.getItem("location");
+                roomName = JSON.parse(load3);
+                initRoom(roomName);
+
+            },
 
             inv: function(){
                 consolePush("<div class='capitalize'>" + character.inventory + "</div>");
@@ -55,6 +104,7 @@ function eqGame() {
 
                 //weapon, shield, chest, head, legs, feet, ring
 
+                consolePush("Name: " + character.charName);
                 consolePush("Weapon: <span class='capitalize'>" + character.equipment.weapon + "</span>");
                 consolePush("Armour: " + character.equipment.chest);
 
@@ -72,30 +122,30 @@ function eqGame() {
                 itemPos = character.inventory.indexOf(userInputString);
                 roomPos = rooms[roomName]["items"].indexOf(userInputString);
                 console.log(roomPos);
-                if (itemPos || roomPos > -1) {
+                console.log(itemPos);
+                if (itemPos > -1 || roomPos > -1) {
                     consolePush("You examine the " + userInputString);
                     consolePush("@@figure out how to display this nicely. needs to handle SPECIAL items");
                     consolePush(equipment[userInputString]);
                     console.log(equipment[userInputString]);
-
                     consolePush("You see " + equipment[userInputString].desc);
-
                     switch(equipment[userInputString].type) {
+                        case 'weapon' : consolePush("You use it to hurt things");
+                        break;
                         case 'container':
-                            console.log("Its a container");
+                            consolePush("Its a container");
                             consolePush("Inside you see " + equipment[userInputString].contents)
                         break;
-                        case 'shield':  console.log("Its a shield");
+                        case 'shield':  consolePush("Its a shield");
                         break;
-                        case 'head' : console.log("Its for you head");
+                        case 'head' : consolePush("Its for you head");
                         break;
-                        default: console.log("You cant do that");
-
+                        case 'usable' : consolePush("You can use this item");
+                        break;
+                        default: consolePush("You cant do that");
                     }
-
-                //
-                // } else {
-                //     consolePush("I don't see that here.")
+                } else {
+                    consolePush("I don't see that here.")
                 }
 
             },
@@ -117,49 +167,36 @@ function eqGame() {
             },
 
             equip: function (roomName, userInputString) {
-
-                inventoryPos = character.inventory.indexOf(userInputString);
-                if (inventoryPos > -1) {
-                    //check inventory
-
-                    //id type
-                    typeCheck = equipment[userInputString].type;
-                    console.log(typeCheck);
-                    //check slot occupied
-
-                    //if slot full, remove current item
-                    console.log(character.equipment[typeCheck].length);
-                    slotCheck = character.equipment[typeCheck];
+            if (inventoryCheck(userInputString) > -1) {      //check inventory
+                if (equipment[userInputString].use === "equip") { //check item is equippable
+                    typeCheck = equipment[userInputString].type;  //check id type for swapping if occupied
+                    slotCheck = character.equipment[typeCheck];  //if slot full, remove current item
                     if (character.equipment[typeCheck].length > 1) {
-                        console.log("slot occupied");
                         actions.remove(roomName, slotCheck);
-                    } else {
-                        console.log("slot free");
                     }
-
-                    //add to slot
-                    character.equipment[typeCheck] = userInputString;
-                    character.inventory.splice(inventoryPos, 1);
+                    character.equipment[typeCheck] = userInputString; //equip to slot
+                    character.inventory.splice(inventoryCheck(userInputString), 1);  //remove from Inv
                     consolePush("You equip the " + userInputString);
-                    //remove from Inv
-                } else {
-                    consolePush("You dont have that item");
-                }
-
-            },
+                } else {consolePush("Equipping that item is not possible")}
+            } else {
+                consolePush("You dont have that item");
+            }
+        },
 
             pickup: function(roomName) {
-                console.log("PICKUP FUNCTION");
-
-                itemPos = rooms[roomName]["items"].indexOf(userInputString);
-                console.log(itemPos);
-                if (itemPos > -1) {
-                    // add to inventory
-                    character.inventory.push(userInputString);
-                    // remove from room
-                    rooms[roomName]["items"].splice(itemPos, 1);
+                if (equipment[userInputString].moveable === false)  {
+                    consolePush("You cant lift that");
                 } else {
-                    consolePush(userInputString + " is not here");
+                    itemPos = rooms[roomName]["items"].indexOf(userInputString);
+                    // console.log(itemPos);
+                    if (itemPos > -1) {
+                        // add to inventory
+                        character.inventory.push(userInputString);
+                        // remove from room
+                        rooms[roomName]["items"].splice(itemPos, 1);
+                    } else {
+                        consolePush(userInputString + " is not here");
+                    }
                 }
             },
 
@@ -175,72 +212,126 @@ function eqGame() {
                 }
             },
 
-            put: function (roomName) {},
+            put: function (roomName) {
+            //healing balm in small iron chest
+                a = userInputString.match(/^([a-z\s0-9]+) in ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
+                a.shift(); //strips the original string from the new array
 
-            take: function (roomName) {
+                if (rooms[roomName]["items"].indexOf(a[1]) > -1) {
+                    for (i = 0; i < rooms[roomName]["items"].length; i++) {
+                        n = a[1].search(rooms[roomName]["items"][i]);
+                        if (n > -1) {
+                            if (character.inventory.indexOf(a[0]) > -1) {
+                                for (j = 0; j < character.inventory.length; j++) {
+                                    p = a[0].search(equipment[a[1]].contents[j]);
+                                    if (p > -1) {
+                                        character.inventory.splice(p, 1); //remove item from inventory
+                                        equipment[a[1]].contents.push(a[0]);
+                                        consolePush("You put the " + a[0] + " in the " + a[1]);
 
-                console.log(userInputString);
-
-                for (i = 0; i < rooms[roomName]["items"].length; i++) {
-
-                    //look for the container in the room
-                    n = userInputString.search(rooms[roomName]["items"][i]);
-                    if (n > -1) {
-                        tmpContainer = userInputString.slice(n, n + rooms[roomName]["items"][i].length);
-                        console.log(tmpContainer);
-                        newString = userInputString.slice(0, userInputString.length - tmpContainer.length);
-
-                        console.log("PART 2");
-
-                        //look for the object in the container
-                        for (j = 0; j < equipment[tmpContainer]["contents"].length; j++) {
-                            m = newString.search(equipment[tmpContainer]["contents"][j]);
-                            if (m > -1) {
-                                containerItem = newString.slice(m, m + equipment[tmpContainer]["contents"][j].length);
-
-                                //remove containerItem from tmpContainer
-                                equipment[tmpContainer]["contents"].splice(m, 1);
-
-                                //add containerItem to Inventory
-                                character.inventory.push(containerItem);
-
+                                    }
+                                }
+                            } else {
+                                consolePush("The " + a[0] + " is not in your inventory");
                             }
-
                         }
-
                     }
-
+                } else {
+                    consolePush("The " + a[1] + " is not here");
                 }
+            },
 
+            take: function(roomName) {
+                a = userInputString.match(/^([a-z\s0-9]+) from ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
+                a.shift(); //strips the original string from the new array
+                if (rooms[roomName]["items"].indexOf(a[1]) > -1) {
+                    for (i = 0; i < rooms[roomName]["items"].length; i++) {
+                        n = a[1].search(rooms[roomName]["items"][i]);
+                        if (n > -1) {
+                            if (equipment[a[1]].contents.indexOf(a[0]) > -1) {
+                                for (j = 0; j < equipment[a[1]].contents.length; j++) {
+                                    p = a[0].search(equipment[a[1]].contents[j]);
+                                    if (p > -1) {
+                                        console.log(a[0] + " found inside " + a[1]);
+                                        equipment[a[1]].contents.splice(p, 1); //remove item from container
+                                        character.inventory.push(a[0]);
+                                    }
+                                }
+                            } else {
+                                consolePush("The " + a[0] + " is not in the " + a[1]);
+                            }
+                        }
+                    }
+                } else {
+                    consolePush("The " + a[1] + " is not here");
+                }
             },
 
             open: function (roomName) {},
 
             unlock: function (roomName) {},
 
+            use: function() {
+
+                if (inventoryCheck(userInputString) > -1) {
+
+                    switch(equipment[userInputString].use) {
+                        case 'heal':
+                            consolePush("You use the " + userInputString);
+                            h = diceRoll(equipment[userInputString].minValue,equipment[userInputString].maxValue);
+                            character.charHealth = character.charHealth + h;
+                            consolePush("You are healed for " + h + " health points");
+                            useCharge(userInputString,1);
+                            break;
+                        case 'equip':
+                            consolePush("You cant use the " + userInputString + ", try equipping it instead");
+                            break;
+                        default:
+                            console.log("That won't work");
+                    }
+
+                } else {
+                    consolePush("You cant do that");
+                }
+            },
+
+            test: function() {
+                console.log("Displaying GameState");
+                // console.log(gameState);
+                // consolePush(gameState);
+
+
+                // consolePush("gameState = ");
+                // for (var key in gameState) {
+                //     consolePush(key + ':' + gameState[key]);
+                // }
+
+
+                consolePush("LOCAL STORAGE = ");
+                for (var key in localStorage) {
+                    consolePush(key + ':' + localStorage[key]);
+                }
+
+
+            },
+
+            clear: function() {
+                consolePush("Clearing Local Storage...")
+                localStorage.clear();
+            }
 
     };
 
-    function getDef(a) {
-        //returns the defence value of the currently equipped armour TYPE
-        //used in charDef function
-        b = character.equipment[a];
-        if (b.length > 0){
-            return equipment[b].defence;
-        } else {
-            return 0;
-        }
-    }
+    function gameStart() {
+        consolePush("Welcome to Endless Quest, please choose a character name:");
 
-    function charDef() {
-            a = getDef("shield");
-            a = a + getDef("chest");
-            a = a + getDef("head");
-            a = a + getDef("legs");
-            a = a + getDef("feet");
-            a = a + getDef("ring");
-            // console.log(a);
-            return a;
+        characterName = userInput;
+
+        consolePush("You are called: " + characterName);
+
+
+
+
     }
 
     function combatStatus(flag, roomName) {
@@ -321,6 +412,7 @@ function eqGame() {
     }
 
     function charRound(roomName) {
+
         select = "mob" + (pressInput - 1);
         if (combatObj.hasOwnProperty(select)) {
             consolePush("You attack " + pressInput + ") " + combatObj[select]["mobName"]);
@@ -470,7 +562,9 @@ function eqGame() {
     }
 
     window.onload = function () {
-        initRoom("room0");
+        roomName = "lobby"
+        initRoom(roomName);
+
     };
 
 }

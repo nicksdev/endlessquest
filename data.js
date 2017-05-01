@@ -26,12 +26,6 @@ var character = {
     charStrength: 12,
     charAgility: 6,
     charHealth: 96,
-    charAttack: function () {
-        return (diceRoll(1,4) + (character.charAgility/3) + character.weapon.attack)
-    },
-    charDefence: function () {
-        return (diceRoll(1,4) + (character.charAgility/3) + character.charArmour.defence)
-    },
     equipment: {
         weapon:"sharp dagger",
         shield:"",
@@ -41,9 +35,7 @@ var character = {
         feet:"",
         ring:""
     },
-    // weapon: "rusty sword",
-    // charArmour: leatherArmour,
-    inventory: ["iron dagger", "wooden shield"]
+    inventory: ["healing balm", "iron dagger", "wooden shield"]
 };
 
 //MONSTER TEMPLATES
