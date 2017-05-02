@@ -22,10 +22,14 @@ smallBite = {
 //CHARACTER
 
 var character = {
-    charName: "Robbie Badass",
+    charName: "Not Chosen",
+    class: "template",
     charStrength: 12,
     charAgility: 6,
+    maxHealth: 96,
     charHealth: 96,
+    maxMana: 40,
+    charMana: 40,
     equipment: {
         weapon:"sharp dagger",
         shield:"",
@@ -35,7 +39,82 @@ var character = {
         feet:"",
         ring:""
     },
+    spells: ["firebolt"],
     inventory: ["healing balm", "iron dagger", "wooden shield"]
+};
+
+charClass = {
+
+    "warrior": {
+        charName: "Not Chosen",
+        class: "warrior",
+        charStrength: 10,
+        charAgility: 8,
+        maxHealth: 50,
+        charHealth: 50,
+        maxMana: 0,
+        charMana: 0,
+        equipment: {
+            weapon:"iron dagger",
+            shield:"",
+            chest:"cloth shirt",
+            head:"",
+            legs:"woolen leggings",
+            feet:"",
+            ring:""
+        },
+        spells: [],
+        inventory: []
+    },
+
+    "priest": {
+        charName: "Not Chosen",
+        class: "priest",
+        charStrength: 8,
+        charAgility: 6,
+        maxHealth: 40,
+        charHealth: 40,
+        maxMana: 20,
+        charMana: 20,
+        equipment: {
+            weapon:"small iron mace",
+            shield:"",
+            chest:"cloth shirt",
+            head:"",
+            legs:"woolen leggings",
+            feet:"",
+            ring:""
+        },
+        spells: ["glow heal"],
+        inventory: []
+    },
+
+    "wizard": {
+        charName: "Not Chosen",
+        class: "wizard",
+        charStrength: 4,
+        charAgility: 5,
+        maxHealth: 30,
+        charHealth: 30,
+        maxMana: 40,
+        charMana: 40,
+        equipment: {
+            weapon:"iron dagger",
+            shield:"",
+            chest:"plain robe",
+            head:"",
+            legs:"woolen leggings",
+            feet:"",
+            ring:""
+        },
+        spells: ["firebolt"],
+        inventory: []
+    },
+
+
+
+
+
 };
 
 //MONSTER TEMPLATES
@@ -69,6 +148,29 @@ mob = {
 
 };
 
+
+magic = {
+
+    "firebolt": {
+        desc: "fly's swiftly across the room and strikes the target",
+        type: "damage",
+        manaCost: 4,
+        minDamage: 2,
+        maxDamage: 5,
+        class: ["wizard"]
+    },
+
+    "glow heal": {
+        desc: "you feel a warmth spread throughout your body and your wounds feel lessened",
+        type: "heal",
+        manaCost: 4,
+        minDamage: 2,
+        maxDamage: 5,
+        class: ["priest"]
+    }
+
+
+};
 
 //WeakGoblin Template
 // var weakGoblin = {

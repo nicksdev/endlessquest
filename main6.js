@@ -5,6 +5,23 @@ function eqGame() {
     var combatFlag;
     var totalDef;
 
+    function charSelect() {
+        console.log("CharSelect Function");
+        console.log(userInputString);
+
+        switch(userInputString) {
+            case 'warrior' : consolePush("You are a WARRIOR");
+                break;
+            case 'priest':
+                consolePush("You are a PRIEST");
+                break;
+            case 'wizard':  consolePush("You are a WIZARD");
+                break;
+            default: consolePush("You cant do that");
+        }
+
+    }
+
     function listEquip() {
         equippedList = [];
         equippedList.push(character.equipment.weapon);
@@ -40,6 +57,29 @@ function eqGame() {
 
     function inventoryCheck(x) {
         return character.inventory.indexOf(x)
+    }
+
+    function mobHealthCheck(roomName) {
+        getObjectLength(combatObj);
+        if (combatObj[select]["mobHealth"] <= 0) {
+            consolePush("The " + combatObj[select].mobName + " is dead!");
+            delete combatObj[select];
+            getObjectLength(combatObj);
+            // console.log(mobCount);
+            if (mobCount > 0) {
+                mobRound();
+            } else {
+                consolePush("You are victorious!");
+                console.log("@@ ENDING COMBAT @@");
+                combatStatus("off");
+                rooms[roomName]["mobsDefeated"] = true;
+                console.log("mobs defeated below");
+                console.log(rooms[roomName]["mobsDefeated"]);
+                initRoom(roomName);
+            }
+        } else {
+            mobRound();
+        }
     }
 
     function useCharge(item, charges) {
@@ -107,7 +147,8 @@ function eqGame() {
                 consolePush("Name: " + character.charName);
                 consolePush("Weapon: <span class='capitalize'>" + character.equipment.weapon + "</span>");
                 consolePush("Armour: " + character.equipment.chest);
-
+                consolePush("Health: " + character.charHealth);
+                consolePush("Mana: " + character.charMana);
                 consolePush("Agility: " + character.charAgility);
                 consolePush("Defense: " + totalDef);
             },
@@ -216,7 +257,7 @@ function eqGame() {
             //healing balm in small iron chest
                 a = userInputString.match(/^([a-z\s0-9]+) in ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
                 a.shift(); //strips the original string from the new array
-
+                // console.log(a);
                 if (rooms[roomName]["items"].indexOf(a[1]) > -1) {
                     for (i = 0; i < rooms[roomName]["items"].length; i++) {
                         n = a[1].search(rooms[roomName]["items"][i]);
@@ -296,21 +337,6 @@ function eqGame() {
             },
 
             test: function() {
-                console.log("Displaying GameState");
-                // console.log(gameState);
-                // consolePush(gameState);
-
-
-                // consolePush("gameState = ");
-                // for (var key in gameState) {
-                //     consolePush(key + ':' + gameState[key]);
-                // }
-
-
-                consolePush("LOCAL STORAGE = ");
-                for (var key in localStorage) {
-                    consolePush(key + ':' + localStorage[key]);
-                }
 
 
             },
@@ -322,17 +348,85 @@ function eqGame() {
 
     };
 
-    function gameStart() {
-        consolePush("Welcome to Endless Quest, please choose a character name:");
+    combatActions = {
 
-        characterName = userInput;
+        attack: function(roomName, userInputString) {
+            consolePush("You attack " + userInputString);
+            // pressInput = userInputString;
+            // userInputString = pressInput;
+            attackRound(roomName,userInputString);
+        },
 
-        consolePush("You are called: " + characterName);
+        flee: function(roomName, userInputString) {
+            consolePush("You attempt to flee");
+            x = diceRoll(1,10);
+            // console.log("x = " + x);
+            if (x > 5) {
+                consolePush("You flee " + userInputString);
 
+                if (rooms[roomName]["exits"].hasOwnProperty(userInputString)) {
+                    consolePush(rooms[roomName]["exits"][userInputString]["description"]);
+                    roomName = rooms[roomName]["exits"][userInputString]["nextRoom"];
+                    initRoom(roomName);
+                } else {
+                    consolePush("There is no exit that way");
+                    mobRound();
+                }
 
+            } else {
+                consolePush("You fail to flee")
+                mobRound();
+            }
+        },
 
+        use: function() {
+            consolePush("You attempt to use something");
+        },
 
-    }
+        cast: function() {
+
+            a = userInputString.match(/^([a-z\s0-9]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
+            a.shift(); //strips the original string from the new array
+            castSpell = a[0];
+            select = "mob" + (a[1] - 1);
+
+            if (character.spells.indexOf(castSpell) > -1) {
+
+                if (magic[castSpell].manaCost < character.charMana){
+
+                    if (magic[castSpell].type === "damage") {
+
+                        thisDamage = diceRoll(magic[castSpell].minDamage,magic[castSpell].maxDamage);
+                        consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
+                        character.charMana = character.charMana - magic[castSpell].manaCost;
+                        consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
+
+                        combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
+                        consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
+                        mobHealthCheck();
+                    }
+                    else {
+                        consolePush("Unknown Spell Type")
+                    }
+
+                }
+                else {
+                    consolePush("You don't have enough mana for that spell")
+                }
+            }
+            else {
+                consolePush("You don't know that spell")
+            }
+        },
+
+        test: function() {
+
+        console.log(magic["firebolt"].minDamage);
+        console.log(magic["firebolt"].maxDamage);
+
+        },
+
+    };
 
     function combatStatus(flag, roomName) {
             if (flag === "off") {
@@ -359,6 +453,7 @@ function eqGame() {
         //rejoin shortened array
         userInputString = tmp.join(" ");
 
+
     }
 
     function mainListener(roomName) {
@@ -381,20 +476,77 @@ function eqGame() {
                     } else if  (actions.hasOwnProperty(userInputAction)) {
                         console.log("RECOGNIZED ACTION");
                         actions[userInputAction](roomName,userInputString);
-                    } else {
+                    }
+                    else if  (rooms[roomName]["special"].hasOwnProperty(userInputAction)) {
+                        eval(rooms[roomName]["special"][userInputAction] + "()");
+
+                    }
+                    else {
                         // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
                         // document.getElementById('userInput').value = "";
                     }
                 }
             }
+
             else if (combatFlag === "on") {
-                // console.log("PRESSLISTENER ENABLED");
-                pressInput = $(this).val();
-                document.getElementById('userInput').value = "";
-                charRound(roomName);
+
+
+
+
+
+
+
+
+
+
+
+                if (event.which == 13) {
+                    event.preventDefault();
+                    userInput = $(this).val().toLowerCase();
+                    consolePush(userInput);
+                    actionSplit(userInput);
+                    document.getElementById('userInput').value = "";
+                    document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
+                    if (combatActions.hasOwnProperty(userInputAction)) {
+                        console.log("RECOGNIZED COMBAT ACTION");
+                        combatActions[userInputAction](roomName,userInputString);
+                    } else {
+                        // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED COMBAT ACTION");
+                        document.getElementById('userInput').value = "";
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
 
 
             }
+
+
+
+            // else if (combatFlag === "on") {
+            //     // console.log("PRESSLISTENER ENABLED");
+            //     pressInput = $(this).val();
+            //     document.getElementById('userInput').value = "";
+            //     charRound(roomName);
+            // }
+
+
+
+
+
+
+
+
+
             else {
                 console.log("LISTENER BEHAVIOR UNDEFINED");
             }
@@ -402,6 +554,9 @@ function eqGame() {
     }
 
     function selectTarget() {
+        document.getElementById('userInput').value = "";
+        userInput = "";
+        console.log("Calling selectTarget");
         consolePush("You are fighting the following enemies, select the opponent you wish to attack:");
 
         for (key in combatObj) {
@@ -411,56 +566,61 @@ function eqGame() {
         }
     }
 
-    function charRound(roomName) {
-
-        select = "mob" + (pressInput - 1);
+    function attackRound(roomName, userInputString) {
+        select = "mob" + (userInputString - 1);
         if (combatObj.hasOwnProperty(select)) {
-            consolePush("You attack " + pressInput + ") " + combatObj[select]["mobName"]);
+            consolePush("You attack " + userInputString + ") " + combatObj[select]["mobName"]);
             var thisCharAttack = charAttackRoll();
             var thisMobDefence = mobDefenceRoll();
             var thisCharRound = thisCharAttack - thisMobDefence;
-
+            var thisCharDamage = charDamageRoll();
             if (thisCharRound > 0) {
-                var thisCharDamage = charDamageRoll();
-                combatObj[select]["mobHealth"] = combatObj[select]["mobHealth"] - thisCharDamage;
                 consolePush("You hit " + combatObj[select]["mobName"] + " for " + thisCharDamage + " damage.");
+                combatObj[select]["mobHealth"] = combatObj[select]["mobHealth"] - thisCharDamage;
                 consolePush(combatObj[select]["mobName"] + " has " + combatObj[select]["mobHealth"] + " health remaining");
+                mobHealthCheck(roomName);
+                // if (combatObj[select]["mobHealth"] <= 0) {
+                //     consolePush("The " + combatObj[select].mobName + " is dead!");
+                //     delete combatObj[select];
+                //     getObjectLength(combatObj);
+                //     // console.log(mobCount);
+                //     if (mobCount > 0) {
+                //         mobRound();
+                //     } else {
+                //         consolePush("You are victorious!");
+                //         console.log("@@ ENDING COMBAT @@");
+                //         combatStatus("off");
+                //         rooms[roomName]["mobsDefeated"] = true;
+                //         console.log("mobs defeated below");
+                //         console.log(rooms[roomName]["mobsDefeated"]);
+                //         initRoom(roomName);
+                //     }
+                // } else {
+                //     mobRound();
+                // }
 
-                if (combatObj[select]["mobHealth"] <= 0) {
-                    consolePush("The " + combatObj[select].mobName + " is dead!");
-                    delete combatObj[select];
-                    getObjectLength(combatObj);
-                    // console.log(mobCount);
-
-                    if (mobCount > 0) {
-                        mobRound();
-                    } else {
-                        consolePush("You are victorious!");
-                        console.log("@@ ENDING COMBAT @@");
-                        combatStatus("off");
-                        rooms[roomName]["mobsDefeated"] = true;
-                        console.log("mobs defeated below");
-                        console.log(rooms[roomName]["mobsDefeated"]);
-                        initRoom(roomName);
-
-
-
-
-                    }
-
-                } else {
-                    mobRound();
-                }
-
-            }
-            else {
+            } else {
                 consolePush("You missed the " + combatObj[select]["mobName"]);
                 mobRound();
             }
+    } else {
+            consolePush("I don't see that here, try again");
+            attackRound();
         }
     }
 
+    function magicRound(roomName, castSpell, targetMob) {
+        //is it a damage spell? (other types massdamage, heal, etc
+
+
+
+
+
+
+    }
+
     function mobRound() {
+        userInput = "";
         getObjectLength(combatObj);
         consolePush("You are attacked by " + mobCount + " creatures <br>");
         for (key in combatObj) {
@@ -469,9 +629,6 @@ function eqGame() {
             thisMobAttack = mobAttackRoll();
             thisCharDefence = charDefenceRoll();
             thisMobRound = thisMobAttack - thisCharDefence;
-
-
-
 
             if (thisMobRound > 0) {
                 thisDamage = mobDamageRoll();
@@ -511,6 +668,7 @@ function eqGame() {
 
     function initRoom(roomName) {
         // console.log("********* INITIALISING ROOM " + roomName);
+        // userInput=null;
         combatStatus("off",roomName);
         mainListener(roomName);
         loadDescription(roomName, "default");
@@ -520,7 +678,6 @@ function eqGame() {
 
 // Base Room Logic
         if (rooms[roomName]["hasMobs"] === true) {
-
             if (rooms[roomName]["mobsDefeated"] === true) {
                 loadDescription(roomName, "mobsDefeated");
                 loadDescription(roomName, "exits");
@@ -530,12 +687,14 @@ function eqGame() {
                 combatInit(roomName);
             }
 
-
         } else {
             loadDescription(roomName, "exits");
-            // console.log("TRIGGER ACTION CHOICES");
-
         }
+
+        // if (rooms[roomName]["special"].length > 0) {
+        //     //If room has a special object, call it as a function
+        //     eval(rooms[roomName]["special"] + "()");
+        // }
 
     }
 

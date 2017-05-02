@@ -9,19 +9,24 @@ TODO:
 //add ability to use an item
 //on 'equip' check use = equip
 //usable items, e.g. potion of healing, door key
-allow the user to choose an action when in combat (defaulting to attack at the moment). Could be use, flee, etc
-//User registration
+//allow the user to choose an action when in combat (defaulting to attack at the moment). Could be use, flee, etc
+//Customise Name
 //create profile on init from template.
 have a max health check (check template) that should be a limit for heals
 //Allow to save game and load up again
 Fixup UI
 Searchable corpses, levelled lists loot
-
+check class when equipping stuff
+add effects, i.e. poisen over time or temp stat boosts
+mass effect spells
+spell scrolls
 
 
 
 //magic: mana, spells, etc
-//classes: fighter, priest, wizard
+
+character creation
+classes: fighter, priest, wizard
 
 
 VERSION 2: Angular 4 + typescript
