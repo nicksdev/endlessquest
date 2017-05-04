@@ -9,6 +9,7 @@ function diceRoll(minimum, maximum){
 var createMob = function (mobType) {
     new CreateMonster(
         mob[mobType].mobName,
+        mob[mobType].mobXP,
         diceRoll(mob[mobType].mobMinStrength, mob[mobType].mobMaxStrength),
         mob[mobType].mobAgility,
         mob[mobType].mobAttack,
@@ -21,8 +22,9 @@ var createMob = function (mobType) {
 };
 
 //Monster Constructor. When called it creates a monstor object and pushes it to the monsters array
-function CreateMonster(mobName, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
+function CreateMonster(mobName, mobXP, mobStrength, mobAgility, mobAttack, mobDefence, mobHealth, mobWeapon, weaponDamMin, weaponDamMax) {
     this.mobName = mobName;
+    this.mobXP = mobXP;
     this.mobStrength = mobStrength;
     this.mobAgility = mobAgility;
     this.mobAttack = mobAttack;

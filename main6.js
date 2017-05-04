@@ -11,14 +11,70 @@ function eqGame() {
 
         switch(userInputString) {
             case 'warrior' : consolePush("You are a WARRIOR");
-                break;
+            character = charClass.warrior;
+            break;
             case 'priest':
-                consolePush("You are a PRIEST");
-                break;
+            consolePush("You are a PRIEST");
+            character = charClass.priest;
+            break;
             case 'wizard':  consolePush("You are a WIZARD");
-                break;
+            character = charClass.wizard;
+            break;
             default: consolePush("You cant do that");
         }
+
+    }
+
+    function checkLevelUp() {
+        x = character.charLevel + 1;
+        if (character.charXp >= xptable[x]) {
+            console.log("Calling levelUp()");
+            levelUp();
+        }
+    }
+
+    function addSpell(type){
+        //Create array of all spells of the selected type, which user does not already have
+        spellArray = [];
+        //INDEXOF LOOKUP OF CLASS ARRAY FOR CONDITIONALs
+        for (var key in magic) {
+                if (magic[key]["class"].indexOf(type) > -1 && magic[key].levelReq <= character.charLevel && character.spells.indexOf(magic[key]["name"]) < 0) {   //check global spell list for spells that contain class type (eg Wizard or Priest)
+                    spellArray.push(magic[key]["name"]);
+                }
+        }
+        //Display array
+        consolePush("You can choose one of the following spells: " + spellArray);
+        //see actions[choose]..
+        }
+
+    function levelUp() {
+
+        character.charLevel++;
+        consolePush("You have gained a level and are now Level " + character.charLevel);
+
+        if (character.class === "warrior") {
+            character.charStrength = character.charStrength + 2;
+            character.charAgility++;
+            character.charHealth = character.charHealth + 15;
+        }
+        else if (character.class === "priest") {
+            character.charStrength++;
+            character.charAgility++;
+            character.charHealth = character.charHealth + 10;
+            character.charMana = character.charMana + 5;
+            addSpell(priest);
+        }
+        else if (character.class === "wizard") {
+            character.charAgility++;
+            character.charHealth = character.charHealth + 5;
+            character.charMana = character.charMana + 10;
+            addSpell(wizard);
+
+        }
+        else {
+            console.log("Something went wrong with levelUp()");
+        }
+
 
     }
 
@@ -55,14 +111,50 @@ function eqGame() {
         console.log("Total Defence = " + totalDef);
     }
 
-    function inventoryCheck(x) {
-        return character.inventory.indexOf(x)
+    function inventoryCheck(name) {
+        if (character.inventory.indexOf(name) > -1) {
+            // console.log("inventoryCheck passed");
+            return true;
+        } else {
+            // console.log("inventoryCheck failed");
+            consolePush("You don't have that item in your inventory");
+            return false;
+        }
+
+        // return character.inventory.indexOf(name)
+    }
+
+    function levelCheck(name) {
+
+        if (name.levelReq <= character.charLevel) {
+            // console.log("levelCheck passed");
+            return true;
+        } else {
+            // console.log("levelCheck failed");
+            consolePush("Your level is not high enough for " + name.name);
+            return false;
+        }
+
+    }
+
+    function classCheck(name) {
+
+        if(name.class.indexOf(character.class) > -1) {
+            // console.log("classCheck passed");
+            return true;
+        } else {
+            // console.log("classCheck failed");
+            consolePush("A " + character.class + " cannot equip a " + name.name);
+            return false;
+        }
+
     }
 
     function mobHealthCheck(roomName) {
         getObjectLength(combatObj);
         if (combatObj[select]["mobHealth"] <= 0) {
             consolePush("The " + combatObj[select].mobName + " is dead!");
+            consolePush("You get " + combatObj[select].mobXP + " experience");
             delete combatObj[select];
             getObjectLength(combatObj);
             // console.log(mobCount);
@@ -73,8 +165,8 @@ function eqGame() {
                 console.log("@@ ENDING COMBAT @@");
                 combatStatus("off");
                 rooms[roomName]["mobsDefeated"] = true;
-                console.log("mobs defeated below");
-                console.log(rooms[roomName]["mobsDefeated"]);
+                // console.log("mobs defeated below");
+                // console.log(rooms[roomName]["mobsDefeated"]);
                 initRoom(roomName);
             }
         } else {
@@ -94,6 +186,24 @@ function eqGame() {
     }
 
     actions =  {
+
+            choose: function(spellArray, userInputString){
+
+                if (window.spellArray === undefined) {
+                    consolePush(window.userInput + " isn't something you can do right now");
+
+                } else {
+
+                    if (window.spellArray.indexOf(userInputString) > -1) {
+                        character.spells.push(userInputString);
+                        consolePush(userInputString + " has been added to your spellbook");
+                        window.spellArray = [];
+                    } else {
+                        consolePush("I don't recognise that choice..");
+                    }
+                }
+
+            },
 
             name: function(roomName,userInputString){
 
@@ -145,12 +255,17 @@ function eqGame() {
                 //weapon, shield, chest, head, legs, feet, ring
 
                 consolePush("Name: " + character.charName);
+                consolePush("Class: " + character.class);
+                consolePush("Level: " + character.charLevel);
                 consolePush("Weapon: <span class='capitalize'>" + character.equipment.weapon + "</span>");
                 consolePush("Armour: " + character.equipment.chest);
                 consolePush("Health: " + character.charHealth);
                 consolePush("Mana: " + character.charMana);
                 consolePush("Agility: " + character.charAgility);
                 consolePush("Defense: " + totalDef);
+
+
+
             },
 
             list: function() {
@@ -208,7 +323,9 @@ function eqGame() {
             },
 
             equip: function (roomName, userInputString) {
-            if (inventoryCheck(userInputString) > -1) {      //check inventory
+            if (inventoryCheck(userInputString) === true && levelCheck(equipment[userInputString]) === true && classCheck(equipment[userInputString]) === true) {      //check inventory
+                // levelCheck(equipment[userInputString]);
+                // classCheck(equipment[userInputString]);
                 if (equipment[userInputString].use === "equip") { //check item is equippable
                     typeCheck = equipment[userInputString].type;  //check id type for swapping if occupied
                     slotCheck = character.equipment[typeCheck];  //if slot full, remove current item
@@ -220,7 +337,7 @@ function eqGame() {
                     consolePush("You equip the " + userInputString);
                 } else {consolePush("Equipping that item is not possible")}
             } else {
-                consolePush("You dont have that item");
+                // consolePush("You dont have that item");
             }
         },
 
@@ -314,29 +431,31 @@ function eqGame() {
 
             use: function() {
 
-                if (inventoryCheck(userInputString) > -1) {
-
-                    switch(equipment[userInputString].use) {
-                        case 'heal':
-                            consolePush("You use the " + userInputString);
-                            h = diceRoll(equipment[userInputString].minValue,equipment[userInputString].maxValue);
-                            character.charHealth = character.charHealth + h;
-                            consolePush("You are healed for " + h + " health points");
-                            useCharge(userInputString,1);
-                            break;
-                        case 'equip':
-                            consolePush("You cant use the " + userInputString + ", try equipping it instead");
-                            break;
-                        default:
-                            console.log("That won't work");
+                if (levelCheck(equipment[userInputString]) === true) {
+                    if (inventoryCheck(userInputString) > -1) {
+                        switch (equipment[userInputString].use) {
+                            case 'heal':
+                                consolePush("You use the " + userInputString);
+                                h = diceRoll(equipment[userInputString].minValue, equipment[userInputString].maxValue);
+                                character.charHealth = character.charHealth + h;
+                                consolePush("You are healed for " + h + " health points");
+                                useCharge(userInputString, 1);
+                                break;
+                            case 'equip':
+                                consolePush("You cant use the " + userInputString + ", try equipping it instead");
+                                break;
+                            default:
+                                console.log("That won't work");
+                        }
+                    } else {
+                        consolePush("You cant do that");
                     }
-
-                } else {
-                    consolePush("You cant do that");
                 }
             },
 
             test: function() {
+
+
 
 
             },
@@ -344,7 +463,11 @@ function eqGame() {
             clear: function() {
                 consolePush("Clearing Local Storage...")
                 localStorage.clear();
-            }
+            },
+
+            spellbook: function() {
+                consolePush(character.spells);
+            },
 
     };
 
@@ -390,32 +513,31 @@ function eqGame() {
             castSpell = a[0];
             select = "mob" + (a[1] - 1);
 
-            if (character.spells.indexOf(castSpell) > -1) {
+            if (levelCheck(magic[castSpell]) === true) {
+                if (character.spells.indexOf(castSpell) > -1) {
+                    // levelCheck(magic[castSpell]);
+                    if (magic[castSpell].manaCost < character.charMana) {
+                        if (magic[castSpell].type === "damage") {
+                            thisDamage = diceRoll(magic[castSpell].minDamage, magic[castSpell].maxDamage);
+                            consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
+                            character.charMana = character.charMana - magic[castSpell].manaCost;
+                            consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
 
-                if (magic[castSpell].manaCost < character.charMana){
-
-                    if (magic[castSpell].type === "damage") {
-
-                        thisDamage = diceRoll(magic[castSpell].minDamage,magic[castSpell].maxDamage);
-                        consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
-                        character.charMana = character.charMana - magic[castSpell].manaCost;
-                        consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
-
-                        combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
-                        consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
-                        mobHealthCheck();
+                            combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
+                            consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
+                            mobHealthCheck();
+                        }
+                        else {
+                            consolePush("Unknown Spell Type")
+                        }
                     }
                     else {
-                        consolePush("Unknown Spell Type")
+                        consolePush("You don't have enough mana for that spell")
                     }
-
                 }
                 else {
-                    consolePush("You don't have enough mana for that spell")
+                    consolePush("You don't know that spell")
                 }
-            }
-            else {
-                consolePush("You don't know that spell")
             }
         },
 
@@ -579,26 +701,6 @@ function eqGame() {
                 combatObj[select]["mobHealth"] = combatObj[select]["mobHealth"] - thisCharDamage;
                 consolePush(combatObj[select]["mobName"] + " has " + combatObj[select]["mobHealth"] + " health remaining");
                 mobHealthCheck(roomName);
-                // if (combatObj[select]["mobHealth"] <= 0) {
-                //     consolePush("The " + combatObj[select].mobName + " is dead!");
-                //     delete combatObj[select];
-                //     getObjectLength(combatObj);
-                //     // console.log(mobCount);
-                //     if (mobCount > 0) {
-                //         mobRound();
-                //     } else {
-                //         consolePush("You are victorious!");
-                //         console.log("@@ ENDING COMBAT @@");
-                //         combatStatus("off");
-                //         rooms[roomName]["mobsDefeated"] = true;
-                //         console.log("mobs defeated below");
-                //         console.log(rooms[roomName]["mobsDefeated"]);
-                //         initRoom(roomName);
-                //     }
-                // } else {
-                //     mobRound();
-                // }
-
             } else {
                 consolePush("You missed the " + combatObj[select]["mobName"]);
                 mobRound();
@@ -669,6 +771,7 @@ function eqGame() {
     function initRoom(roomName) {
         // console.log("********* INITIALISING ROOM " + roomName);
         // userInput=null;
+        checkLevelUp();
         combatStatus("off",roomName);
         mainListener(roomName);
         loadDescription(roomName, "default");

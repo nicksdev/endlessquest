@@ -12,26 +12,67 @@ TODO:
 //allow the user to choose an action when in combat (defaulting to attack at the moment). Could be use, flee, etc
 //Customise Name
 //create profile on init from template.
-have a max health check (check template) that should be a limit for heals
 //Allow to save game and load up again
-Fixup UI
-Searchable corpses, levelled lists loot
-check class when equipping stuff
+//magic: mana, spells, etc
+//check class when equipping stuff
+//XP and levelup function
+//add level requirement to equiping
+//character creation
+//classes: fighter, priest, wizard
+
 add effects, i.e. poisen over time or temp stat boosts
 mass effect spells
 spell scrolls
+container traps function
+out of combat casting
+Searchable corpses, levelled lists loot
+have a max health check (check template) that should be a limit for heals
+persistant bonuses from equipped items (e.g. sword of +2 strength or dagger of +5 damage)
+introduce concept of turns (both in and out of combat)
 
 
 
-//magic: mana, spells, etc
+Fixup UI
 
-character creation
-classes: fighter, priest, wizard
 
 
 VERSION 2: Angular 4 + typescript
 
 Lambda
+
+
+
+
+CASTING LOGIC:
+
+use cases:
+
+in combat:
+
+cast <damage spell> on <target>
+cast <mob effect spell> on <target>
+cast <mass damage spell>
+cast <mob mass effect spell>
+cast <self effect spell>
+
+effect: damage, heal, buff, debuff
+target: mob, all, self
+duration:
+
+
+
+out of combat:
+cast <self effect spell>
+
+
+
+
+
+
+
+
+
+
 
 
 
