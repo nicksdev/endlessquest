@@ -1,0 +1,53 @@
+
+
+
+cast a spell
+if spell is has a duration then create an object value [array] containing the following info:
+(some of this may be grabbed from the spells table)
+spell name
+duration
+round it was cast
+expiry
+type
+amount (of initial value - useful for buff spell expiry)
+target
+
+
+When a persistant spell is in effect there are a number of use cases:
+
+heal (over time):
+for each round that the effect is running, recast the heal effect on self
+
+buff:
+do nothing beyond the initial buff cast until expiry
+
+damage (over time):
+for each round that the effect is running, recast the damage effect on the target until expiry or target death.
+
+
+On expiry of the spell:
+
+heal:
+do nothing
+
+buff:
+debuff for the same amount as the original buff
+
+damage:
+do nothing
+
+* For all of the above scenarious on expiry the spell should be removed from the table
+
+Cooldown:
+if the spell has a cooldown this should be stored in its own table and a check should be made on cast.
+
+table should consist of:
+spell name
+debuff expiry time
+
+
+
+
+
+
+

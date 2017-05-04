@@ -4,6 +4,135 @@ function eqGame() {
 
     var combatFlag;
     var totalDef;
+    var counter = 0;
+
+
+
+    function commandCast(spell) {
+
+        //applyEffect(effect,target,amount)
+
+        // console.log(magic[spell]["effect"]);
+        // console.log(magic[spell]["target"]);
+        // console.log(magic[spell]["minDamage"]);
+        // console.log(magic[spell]["maxDamage"]);
+        // console.log(magic[spell]);
+
+        // amount = diceRoll(magic[spell]["minDamage"], magic[spell]["maxDamage"]);
+
+        if (magic[spell]["effect"] === "heal") {
+            applyEffect(magic[spell]["effect"], magic[spell]["target"], amount);
+        } else if (magic[spell]["effect"] === "buff") {
+            console.log("COMMENCING OVERTIME BUFF PROCESS");
+
+        }
+
+
+
+        else {
+            console.log("commandCast() unknown effect");
+
+        }
+
+    }
+
+    function overTime(duration,spell,amount) {
+        console.log("&& casting overtime &&");
+        //creates a timeEffect object pair {currentTime,endTime} which provides an id for the spell and an expiry
+        timeEffect[counter] = counter + duration;
+        effectStore[spell] = [counter,amount];
+        console.log(effectStore);
+
+        //create an effectStore object pair {spellname,counter} this provides a uniqueid for the spell to link to timeEffect
+        // effectStore[spell] = counter;
+
+
+
+    }
+
+    function effectChecker() {
+        console.log(timeEffect);
+        for(var i in timeEffect){
+            timeEffectKey = i; //counter at creation (unique id)
+            timeEffectValue = timeEffect[i]; //expiry time for a unique id
+            console.log(timeEffectValue);
+            for(var i in effectStore){
+                effectStoreKey = i; //Name of spell being tracked
+                effectStoreValue = effectStore[i][0]; //counter when spell was cast (unique id)
+                effectStoreAmount = effectStore[i][1]; //stores the value of the initial cast
+                switch(magic[i]["effect"]) {
+                    case 'heal' :
+                        // console.log("effectStoreKey = " + effectStoreKey);
+                        // console.log("effectStoreValue = " + effectStoreValue);
+                        // console.log(timeEffectKey + " and " + effectStoreValue);
+                        // console.log(timeEffectKey - effectStoreValue);
+                        if (timeEffectKey - effectStoreValue === 0 && timeEffectValue > counter) {
+                            consolePush("Casting: " + effectStoreKey);
+                            commandCast(effectStoreKey);
+                            console.log(timeEffectValue);
+                            console.log(counter);
+                        } else {
+                            console.log("*****DELETEING KEY******");
+                            //remove spell from effectStore
+                            //delete thisIsObject[key];
+                            delete effectStore[effectStoreKey];
+                            console.log(effectStore);
+                        }
+                        break;
+
+                    case 'buff':
+
+
+                        if (timeEffectKey - effectStoreValue === 0 && timeEffectValue > counter) {
+
+                            console.log("@@ BUFF PERSISTS @@");
+
+                        } else {
+                            console.log("*****REMOVING BUFF******");
+
+
+
+
+                            console.log("*****DELETEING KEY******");
+                            //remove spell from effectStore
+                            //delete thisIsObject[key];
+                            delete effectStore[effectStoreKey];
+                            console.log(effectStore);
+
+
+
+                        }
+
+                        break;
+
+                    case 'damage':
+
+
+                        break;
+                    default: consolePush("effectChecker() unknown effect");
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+        }
+    }
 
     function charSelect() {
         console.log("CharSelect Function");
@@ -185,7 +314,137 @@ function eqGame() {
         }
     }
 
+    function applyEffect(effect,target,amount,special) {
+
+        switch(effect) {
+            case 'heal' :
+                character.charHealth += amount;
+                consolePush("You are healed for " + amount + " health points");
+                break;
+
+            case 'buff':
+                console.log("SPELLTYPE = BUFF");
+                //buff/self/10
+                console.log("before : " + character[special]);
+                character[special] += amount;
+                console.log("after : " + character[special]);
+                consolePush("Your strength increases by 10 points");
+
+
+
+
+
+                break;
+
+            case 'damage':
+                if (target === "mob") {
+                //damage single mob
+                } else if (target === "all") {
+                // damage all mobs
+                } else {
+                consolePush("unknown effect: " + effect);
+            };
+                break;
+            default: consolePush("You cant do that");
+        }
+
+    }
+
     actions =  {
+
+
+            cast: function() {
+
+                console.log(magic[userInputString].target);
+                console.log(magic[userInputString]);
+
+                // if (magic[userInputString].target === self {
+                //     apply effect to self
+                // } else {
+                //     consolePush("You cant cast that out of combat");
+                // }
+                //applyEffect("heal","self",diceRoll(1,6));
+                // console.log(magic[userInputString]["effect"]);
+                // console.log(magic[userInputString]["target"]);
+                // console.log(magic[userInputString]["minDamage"]);
+                // console.log(magic[userInputString]["maxDamage"]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                switch(magic[userInputString].effect) {
+                    case 'heal' :
+                        console.log("SPELLTYPE = HEAL");
+                        amount = diceRoll(magic[userInputString]["minDamage"],magic[userInputString]["maxDamage"]);
+                        applyEffect(magic[userInputString]["effect"],magic[userInputString]["target"],amount);
+                        if (magic[userInputString]["duration"] > 0) {
+                            // console.log("INITIALISING OVERTIME");
+                            // console.log(magic[userInputString]["duration"]);
+                            // console.log(userInputString);
+                            overTime(magic[userInputString]["duration"],userInputString,amount);
+                        }
+                        break;
+                    case 'buff':
+                        console.log("SPELLTYPE = BUFF");
+                        special = magic[userInputString]["special"];
+                        amount = diceRoll(magic[userInputString]["minDamage"],magic[userInputString]["maxDamage"]);
+                        applyEffect(magic[userInputString]["effect"],magic[userInputString]["target"],amount,special);
+                        if (magic[userInputString]["duration"] > 0) {
+                            console.log("INITIALISING OVERTIME");
+                            console.log(magic[userInputString]["duration"]);
+                            console.log(userInputString);
+                            overTime(magic[userInputString]["duration"],userInputString,amount);
+                        }
+
+
+
+                        break;
+                    case 'damage':  consolePush("Its a shield");
+                        break;
+                    default: consolePush("You cant do that");
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            },
+
+            class: function(userInputString) {
+                charSelect(userInputString);
+            },
 
             choose: function(spellArray, userInputString){
 
@@ -261,6 +520,7 @@ function eqGame() {
                 consolePush("Armour: " + character.equipment.chest);
                 consolePush("Health: " + character.charHealth);
                 consolePush("Mana: " + character.charMana);
+                consolePush("Strength: " + character.charStrength);
                 consolePush("Agility: " + character.charAgility);
                 consolePush("Defense: " + totalDef);
 
@@ -453,10 +713,19 @@ function eqGame() {
                 }
             },
 
+            testspell: function() {
+                overTime(2,"hearth heal");
+            },
+
+            test2: function() {
+                console.log(magic["hearth heal"]["duration"]);
+            },
+
             test: function() {
 
-
-
+                console.log(effectStore);
+                console.log(timeEffect);
+                console.log(window.spell[amount]);
 
             },
 
@@ -581,7 +850,6 @@ function eqGame() {
     function mainListener(roomName) {
 
         $('#userInput').on("keyup", function (event) {
-
             if (combatFlag === "off") {
                 // console.log("PRESSLISTENER DISABLED");
                 if (event.which == 13) {
@@ -592,17 +860,25 @@ function eqGame() {
                     document.getElementById('userInput').value = "";
                     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
                     if (rooms[roomName]["exits"].hasOwnProperty(userInput)) {
+                        counter++;
+                        effectChecker();
+                        console.log("COUNTER: " + counter);
                         consolePush(rooms[roomName]["exits"][userInput]["description"]);
                         roomName = rooms[roomName]["exits"][userInput]["nextRoom"];
                         initRoom(roomName);
                     } else if  (actions.hasOwnProperty(userInputAction)) {
                         console.log("RECOGNIZED ACTION");
+                        counter++;
+                        effectChecker();
+                        console.log("COUNTER: " + counter);
                         actions[userInputAction](roomName,userInputString);
                     }
-                    else if  (rooms[roomName]["special"].hasOwnProperty(userInputAction)) {
-                        eval(rooms[roomName]["special"][userInputAction] + "()");
-
-                    }
+                    // else if  (rooms[roomName]["special"].hasOwnProperty(userInputAction)) {
+                    //     eval(rooms[roomName]["special"][userInputAction] + "()");
+                    //     counter++;
+                    //     effectChecker();
+                    //     console.log("COUNTER: " + counter);
+                    //}
                     else {
                         // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
                         // document.getElementById('userInput').value = "";
@@ -631,6 +907,9 @@ function eqGame() {
                     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
                     if (combatActions.hasOwnProperty(userInputAction)) {
                         console.log("RECOGNIZED COMBAT ACTION");
+                        counter++;
+                        effectChecker();
+                        console.log(counter);
                         combatActions[userInputAction](roomName,userInputString);
                     } else {
                         // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED COMBAT ACTION");

@@ -21,7 +21,7 @@ var character = {
         feet:"",
         ring:""
     },
-    spells: ["firebolt","glow heal"],
+    spells: ["firebolt","glow heal","hearth heal","giant strength"],
     inventory: ["healing balm", "wizards hat","silver sword"]
 };
 
@@ -369,7 +369,39 @@ magic = {
         minDamage: 2,
         maxDamage: 5,
         class: ["priest"]
-    }
+    },
+
+    "hearth heal": {
+        name: "hearth heal",
+        desc: "you feel a regular pulse of warmth move through your body healing your wounds bit by bit as time passes",
+        effect: "heal",
+        target: "self",
+        duration: 3,
+        cooldown: 20,
+        levelReq: 1,
+        manaCost: 4,
+        minDamage: 1,
+        maxDamage: 10,
+        class: ["priest", "warrior", "wizard"]
+    },
+
+    "giant strength": {
+    name: "giant strength",
+    desc: "you become stronger",
+    effect: "buff",
+    special: "charStrength",
+    target: "self",
+    duration: 3,
+    cooldown: 20,
+    levelReq: 1,
+    manaCost: 4,
+    minDamage: 10,
+    maxDamage: 10,
+    class: ["priest", "warrior", "wizard"]
+},
+
+
+
 
 
 };
@@ -384,6 +416,8 @@ xptable = {
 
 };
 
+timeEffect = {};
+effectStore= {};
 
 
 //WEAPON TEMPLATES

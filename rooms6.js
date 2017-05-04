@@ -36,14 +36,14 @@ rooms = {
     "registration": {
         name: "Room Registration",
         description:  {
-            default: "You are in the reg room. Choose your class, are you a Wizard, a Priest or a Warrior? <br> e.g. type choose warrior",
+            default: "You are in the reg room. Choose your class, are you a Wizard, a Priest or a Warrior? <br> e.g. type class warrior",
             mobAttack: "error",
             mobsDefeated: "error",
             exits: "There is a door to the west."
         },
-        special: {
-            choose: "charSelect",
-            },
+        // special: {
+        //     choose: "charSelect",
+        //     },
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
@@ -102,6 +102,10 @@ rooms = {
             },
             west: {
                 description: "You take the Western Exit",
+                nextRoom: "room0"
+            },
+            south: {
+                description: "You take the Southern Exit",
                 nextRoom: "room0"
             }
         }

@@ -57,7 +57,8 @@ cast <self effect spell>
 
 effect: damage, heal, buff, debuff
 target: mob, all, self
-duration:
+duration: number of rounds for effect
+cooldown: number of rounds until recast
 
 
 
@@ -65,7 +66,68 @@ out of combat:
 cast <self effect spell>
 
 
+examples (OOC)
 
+cast hearth heal
+<actionString> <userInputString>
+
+if (magic[userInputString].target === self {
+    apply effect to self
+} else {
+    consolePush("You cant cast that out of combat");
+}
+
+
+
+
+
+In Combat:
+
+regex: <cast> <spell> on <target>
+
+if (magic[spell].target === self) {
+    apply effect to self
+} else if (magic[spell].target === mob) {
+    apply effect to <target>
+} else if (magic[spell].target === all) {
+    apply effect to all mobs
+}
+
+
+
+
+OVER TIME CASTING:
+
+cast the spell
+remember the spell
+check to see if duration for spell is active
+if active, recast the spell
+
+
+
+timeEffect = KEY:<counter value when cast> : VALUE:<counter value when expires>
+
+effectStore = <spell name> : <counter value when cast>
+
+
+iterate through effectstore:
+    if effectstore.value = timeEffect.key
+        cast effectStore <spell name>
+
+
+if (character.spells.indexOf(castSpell) > -1)
+
+
+                (BELOW PASSES TIMEEFFECT AND RETURNS :VALUE)
+                for (var key in timeEffect) {
+                    console.log(timeEffect[key]);
+                }
+
+
+
+was spell : counter    <effectStoreKey> : <effectStoreValue>
+
+new: spell : [counter, amount]
 
 
 
