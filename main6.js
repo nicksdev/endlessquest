@@ -11,7 +11,42 @@ function eqGame() {
         character[stat] = character[stat] - value;
     }
 
-    function applyEffect(userInputString,amount) {
+    function endCombat() {
+        console.log("endCombat() has ended combat");
+        //remove mobs
+        //add corpses
+        //combatFlag off
+        //check for level up
+        checkLevelUp();
+
+
+    }
+
+    function mobDeath(target) {
+        consolePush(target["mobName"] + " is dead");
+        consolePush("You get " + target["mobXP"] + " experience");
+        character.charXp += target["mobXP"];
+        delete combatObj[select];
+        getObjectLength(combatObj);
+
+        if (mobCount < 1) {
+            consolePush("You are victorious!!!!!!");
+            endCombat();
+        }
+    }
+
+    function mobDamage(target,amount) {
+        target["mobHealth"] -= amount;
+
+        if (target["mobHealth"] <= 0) {
+            mobDeath(target);
+        } else {
+            consolePush(target["mobName"] + " has " + target["mobHealth"] + " remaining");
+        }
+    }
+
+    function applyEffect(userInputString,amount,target) {
+        console.log(userInputString);
         effect = magic[userInputString]["effect"];
 
         if (magic[userInputString]["cooldown"] > 0) {
@@ -23,18 +58,26 @@ function eqGame() {
         // console.log("amount = " + amount);
 
         switch(effect) {
-                    case 'heal' :
-                        character.charHealth += amount;
-                        consolePush("You are healed for " + amount + " health points");
-                        break;
+            case 'heal' :
+                character.charHealth += amount;
+                consolePush("You are healed for " + amount + " health points");
+                break;
 
             case 'buff':
-                        x = magic[userInputString]["special"];
-                        character[x] = character[x] + amount;
-                        console.log("Boosting " + x);
-                        break;
-                    //
-                    // case 'damage':
+                x = magic[userInputString]["special"];
+                character[x] = character[x] + amount;
+                console.log("Boosting " + x);
+                break;
+
+            case 'damage':
+
+                console.log("applyEffect Damage on " + target["mobName"]);
+                consolePush("You hit " + target["mobName"] + " with " + userInputString + " for " + amount + " damage");
+                console.log(target["mobHealth"]);
+
+                mobDamage(target,amount);
+
+
                     //     if (target === "mob") {
                     //         //damage single mob
                     //     } else if (target === "all") {
@@ -42,9 +85,9 @@ function eqGame() {
                     //     } else {
                     //         consolePush("unknown effect: " + effect);
                     //     }
-                    //     break;
+                 break;
 
-                    default: consolePush("You cant do that");
+            default: consolePush("Unknown effect in applyEffect()");
                 }
 
 
@@ -297,12 +340,21 @@ function eqGame() {
         }
     }
 
-
-
     actions =  {
 
 
             cast: function() {
+
+
+                // a = userInputString.match(/^([a-z\s0-9]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
+                // a.shift(); //strips the original string from the new array
+                // castSpell = a[0];
+                // select = "mob" + (a[1] - 1);
+
+
+
+
+
 
 
 
@@ -669,19 +721,26 @@ function eqGame() {
                 if (character.spells.indexOf(castSpell) > -1) {
                     // levelCheck(magic[castSpell]);
                     if (magic[castSpell].manaCost < character.charMana) {
-                        if (magic[castSpell].type === "damage") {
-                            thisDamage = diceRoll(magic[castSpell].minDamage, magic[castSpell].maxDamage);
-                            consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
-                            character.charMana = character.charMana - magic[castSpell].manaCost;
-                            consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
-
-                            combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
-                            consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
-                            mobHealthCheck();
-                        }
-                        else {
-                            consolePush("Unknown Spell Type")
-                        }
+                        amount = diceRoll(magic[castSpell]["min"],magic[castSpell]["max"]);
+                        applyEffect(castSpell,amount,combatObj[select]);
+                        // if (magic[castSpell].type === "damage") {
+                        //     thisDamage = diceRoll(magic[castSpell].minDamage, magic[castSpell].maxDamage);
+                        //     consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
+                        //     character.charMana = character.charMana - magic[castSpell].manaCost;
+                        //     consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
+                        //
+                        //     combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
+                        //     consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
+                        //     mobHealthCheck();
+                        //
+                        //
+                        //
+                        //
+                        //
+                        // }
+                        // else {
+                        //     consolePush("Unknown Spell Type")
+                        // }
                     }
                     else {
                         consolePush("You don't have enough mana for that spell")
@@ -691,12 +750,12 @@ function eqGame() {
                     consolePush("You don't know that spell")
                 }
             }
+            mobRound();
         },
 
         test: function() {
 
-        console.log(magic["firebolt"].minDamage);
-        console.log(magic["firebolt"].maxDamage);
+
 
         },
 
@@ -803,7 +862,6 @@ function eqGame() {
         userInput = "";
         console.log("Calling selectTarget");
         consolePush("You are fighting the following enemies, select the opponent you wish to attack:");
-
         for (key in combatObj) {
             if (combatObj.hasOwnProperty(key))
                 var num = parseInt(key.charAt(3)) + 1;
@@ -832,16 +890,6 @@ function eqGame() {
             consolePush("I don't see that here, try again");
             attackRound();
         }
-    }
-
-    function magicRound(roomName, castSpell, targetMob) {
-        //is it a damage spell? (other types massdamage, heal, etc
-
-
-
-
-
-
     }
 
     function mobRound() {
@@ -894,7 +942,7 @@ function eqGame() {
     function initRoom(roomName) {
         // console.log("********* INITIALISING ROOM " + roomName);
         // userInput=null;
-        checkLevelUp();
+        // checkLevelUp();
         combatStatus("off",roomName);
         mainListener(roomName);
         loadDescription(roomName, "default");

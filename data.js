@@ -308,56 +308,15 @@ magic = {
     "firebolt": {
         name: "firebolt",
         desc: "fly's swiftly across the room and strikes the target",
-        type: "damage",
-        levelReq: 1,
+        effect: "damage",
+        target: "self",
+        duration: 0,
+        cooldown: 0,
+        levelReq: 0,
         manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["wizard"]
-    },
-
-    "firebolt2": {
-        name: "firebolt2",
-        desc: "fly's swiftly across the room and strikes the target",
-        type: "damage",
-        levelReq: 1,
-        manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["wizard","priest"]
-    },
-
-    "firebolt3": {
-        name: "firebolt3",
-        desc: "fly's swiftly across the room and strikes the target",
-        type: "damage",
-        levelReq: 5,
-        manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["wizard","priest"]
-    },
-
-    "firebolt4": {
-        name: "firebolt4",
-        desc: "fly's swiftly across the room and strikes the target",
-        type: "damage",
-        levelReq: 5,
-        manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["wizard","priest"]
-    },
-
-    "firebolt5": {
-        name: "firebolt5",
-        desc: "fly's swiftly across the room and strikes the target",
-        type: "damage",
-        levelReq: 5,
-        manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["wizard"]
+        min: 20,
+        max: 50,
+        class: ["priest", "warrior", "wizard"]
     },
 
     "glow heal": {
