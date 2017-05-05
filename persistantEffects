@@ -5,6 +5,7 @@ cast a spell
 if spell is has a duration then create an object value [array] containing the following info:
 (some of this may be grabbed from the spells table)
 spell name
+unique id
 duration
 round it was cast
 expiry

@@ -6,8 +6,8 @@ var character = {
     class: "warrior",
     charLevel: 1,
     charXp: 0,
-    charStrength: 10,
-    charAgility: 10,
+    strength: 10,
+    agility: 10,
     maxHealth: 50,
     charHealth: 50,
     maxMana: 50,
@@ -32,8 +32,8 @@ charClass = {
         class: "warrior",
         charLevel: 1,
         charXp: 0,
-        charStrength: 10,
-        charAgility: 8,
+        strength: 10,
+        agility: 8,
         maxHealth: 50,
         charHealth: 50,
         maxMana: 0,
@@ -56,8 +56,8 @@ charClass = {
         class: "priest",
         charLevel: 1,
         charXp: 0,
-        charStrength: 8,
-        charAgility: 6,
+        strength: 8,
+        agility: 6,
         maxHealth: 40,
         charHealth: 40,
         maxMana: 20,
@@ -80,8 +80,8 @@ charClass = {
         class: "wizard",
         charLevel: 1,
         charXp: 0,
-        charStrength: 4,
-        charAgility: 5,
+        strength: 4,
+        agility: 5,
         maxHealth: 30,
         charHealth: 30,
         maxMana: 40,
@@ -362,26 +362,30 @@ magic = {
 
     "glow heal": {
         name: "glow heal",
-        desc: "you feel a warmth spread throughout your body and your wounds feel lessened",
-        type: "heal",
+        desc: "your wounds heal a bit",
+        effect: "heal",
+        target: "self",
+        duration: 0,
+        cooldown: 20,
         levelReq: 1,
         manaCost: 4,
-        minDamage: 2,
-        maxDamage: 5,
-        class: ["priest"]
+        min: 1,
+        max: 10,
+        class: ["priest", "warrior", "wizard"]
     },
 
     "hearth heal": {
         name: "hearth heal",
         desc: "you feel a regular pulse of warmth move through your body healing your wounds bit by bit as time passes",
         effect: "heal",
+        special: "none",
         target: "self",
-        duration: 3,
-        cooldown: 20,
+        duration: 4,
+        cooldown: 10,
         levelReq: 1,
         manaCost: 4,
-        minDamage: 1,
-        maxDamage: 10,
+        min: 1,
+        max: 10,
         class: ["priest", "warrior", "wizard"]
     },
 
@@ -389,14 +393,14 @@ magic = {
     name: "giant strength",
     desc: "you become stronger",
     effect: "buff",
-    special: "charStrength",
+    special: "strength",
     target: "self",
-    duration: 3,
+    duration: 10,
     cooldown: 20,
     levelReq: 1,
-    manaCost: 4,
-    minDamage: 10,
-    maxDamage: 10,
+    manaCost: 10,
+    min: 10,
+    max: 10,
     class: ["priest", "warrior", "wizard"]
 },
 
@@ -416,9 +420,8 @@ xptable = {
 
 };
 
-timeEffect = {};
-effectStore= {};
-
+spellEffect = {};
+cooldownStore = {};
 
 //WEAPON TEMPLATES
 

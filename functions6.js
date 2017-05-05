@@ -52,15 +52,15 @@ function CreateMonster(mobName, mobXP, mobStrength, mobAgility, mobAttack, mobDe
 // }
 
 function charAttackRoll() {
-    return (diceRoll(1,6) + character.charAgility/3 + equipment[heldWeapon].attack);
+    return (diceRoll(1,6) + character.agility/3 + equipment[heldWeapon].attack);
 }
 
 function charDefenceRoll() {
-    return (diceRoll(1,20) + character.charAgility + charDef());
+    return (diceRoll(1,20) + character.agility + charDef());
 }
 
 function charDamageRoll() {
-    return (diceRoll(equipment[heldWeapon].minDamage, equipment[heldWeapon].maxDamage) + (character.charStrength / 3));
+    return (diceRoll(equipment[heldWeapon].minDamage, equipment[heldWeapon].maxDamage) + (character.strength / 3));
 }
 
 function mobAttackRoll() {
