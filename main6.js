@@ -93,13 +93,6 @@ function eqGame() {
 
     }
 
-    function coolDownCheck(effect) {
-
-        if (effect in cooldownStore) {
-            return true;
-        }
-    }
-
     function applyPersistent() {
 
         console.log("Applying persistent effect");
@@ -266,6 +259,59 @@ function eqGame() {
         console.log("Total Defence = " + totalDef);
     }
 
+    //rooms[roomName]["mobsDefeated"]
+
+    function levelCheck(effect) {
+        if (magic[effect]["levelReq"] <= character.charLevel) {
+            return true;
+        } else {
+            consolePush("Your level is not high enough for " + effect);
+            return false;
+        }
+    }
+
+    function spellBookCheck(effect) {
+        if (character.spells.indexOf(effect) > -1) {
+            return true;
+        } else {
+            consolePush(effect + " is not in your spellbook");
+            return false;
+        }
+    }
+
+    function manaCheck(effect) {
+        if (magic[effect]["manaCost"] <= character.charMana) {
+            return true;
+        } else {
+            consolePush("You don't have enough mana for " + effect);
+            return false;
+        }
+    }
+
+    function coolDownCheck(effect) {
+        console.log(effect);
+        if (effect in cooldownStore) {
+            consolePush("Failed, " + effect + " is on cooldown");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //class check (shouldn't need for casting as spells from wrong class cant be learned)
+    function classCheck(name) {
+
+        if(name.class.indexOf(character.class) > -1) {
+            // console.log("classCheck passed");
+            return true;
+        } else {
+            // console.log("classCheck failed");
+            consolePush("A " + character.class + " cannot equip a " + name.name);
+            return false;
+        }
+
+    }
+
     function inventoryCheck(name) {
         if (character.inventory.indexOf(name) > -1) {
             // console.log("inventoryCheck passed");
@@ -279,31 +325,6 @@ function eqGame() {
         // return character.inventory.indexOf(name)
     }
 
-    function levelCheck(name) {
-
-        if (name.levelReq <= character.charLevel) {
-            // console.log("levelCheck passed");
-            return true;
-        } else {
-            // console.log("levelCheck failed");
-            consolePush("Your level is not high enough for " + name.name);
-            return false;
-        }
-
-    }
-
-    function classCheck(name) {
-
-        if(name.class.indexOf(character.class) > -1) {
-            // console.log("classCheck passed");
-            return true;
-        } else {
-            // console.log("classCheck failed");
-            consolePush("A " + character.class + " cannot equip a " + name.name);
-            return false;
-        }
-
-    }
 
     function mobHealthCheck(roomName) {
         getObjectLength(combatObj);
@@ -346,34 +367,40 @@ function eqGame() {
             cast: function() {
 
 
-                // a = userInputString.match(/^([a-z\s0-9]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
-                // a.shift(); //strips the original string from the new array
-                // castSpell = a[0];
-                // select = "mob" + (a[1] - 1);
+                a = userInputString.match(/^(.*?)($| on (.*?)$)/); //breaks userInputString into array 'a'
+                a.shift(); //strips the original string from the new array
+                castSpell = a[0];
+                select = "mob" + (a[2] - 1);
+                // console.log(a);
 
 
 
 
 
+                // if (levelCheck(castSpell) === true && spellBookCheck(castSpell) && manaCheck(castSpell) === true && coolDownCheck(castSpell) === true) {
+                if (levelCheck(castSpell) && spellBookCheck(castSpell) && manaCheck(castSpell) && coolDownCheck(castSpell) === true) {
+
+
+                        //casting....
+                        amount = diceRoll(magic[castSpell]["min"], magic[castSpell]["max"]);
+                        applyEffect(castSpell,amount,combatObj[select]);
+
+                        if (magic[castSpell]["duration"] > 0) {
+                            console.log("Calling persistent effect");
+                            applyPersistent();
+                        }
 
 
 
-                if (coolDownCheck(userInputString) === true) {
-                    consolePush("Failed, that spell is on cooldown");
-                } else {
-
-                    //casting....
-                    amount = diceRoll(magic[userInputString]["min"], magic[userInputString]["max"]);
-                    applyEffect(userInputString, amount);
-
-                    if (magic[userInputString]["duration"] > 0) {
-                        console.log("Calling persistent effect");
-                        applyPersistent();
-                    }
 
                 }
 
 
+
+
+
+
+                mobRound();
             },
 
             class: function(userInputString) {
@@ -712,7 +739,7 @@ function eqGame() {
 
         cast: function() {
 
-            a = userInputString.match(/^([a-z\s0-9]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
+            a = userInputString.match(/^([a-z\s0-9_]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
             a.shift(); //strips the original string from the new array
             castSpell = a[0];
             select = "mob" + (a[1] - 1);
@@ -860,7 +887,7 @@ function eqGame() {
     function selectTarget() {
         document.getElementById('userInput').value = "";
         userInput = "";
-        console.log("Calling selectTarget");
+        // console.log("Calling selectTarget");
         consolePush("You are fighting the following enemies, select the opponent you wish to attack:");
         for (key in combatObj) {
             if (combatObj.hasOwnProperty(key))
@@ -976,7 +1003,7 @@ function eqGame() {
         // console.log("********* INITIALISING COMBAT " + roomName);
         heldWeapon = character.equipment.weapon;
         // totalDef = charDef();
-        combatStatus("on",roomName);
+        // combatStatus("on",roomName);
 
         combatObj = {};
         monsterArray = [];

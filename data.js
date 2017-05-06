@@ -21,7 +21,7 @@ var character = {
         feet:"",
         ring:""
     },
-    spells: ["firebolt","glow heal","hearth heal","giant strength"],
+    spells: ["glow heal","hearth heal","giant strength","firebolt"],
     inventory: ["healing balm", "wizards hat","silver sword"]
 };
 
@@ -311,7 +311,7 @@ magic = {
         effect: "damage",
         target: "self",
         duration: 0,
-        cooldown: 0,
+        cooldown: 3,
         levelReq: 0,
         manaCost: 4,
         min: 20,
