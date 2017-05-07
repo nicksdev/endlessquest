@@ -46,16 +46,13 @@ function eqGame() {
     }
 
     function applyEffect(userInputString,amount,target) {
-        console.log(userInputString);
         effect = magic[userInputString]["effect"];
 
         if (magic[userInputString]["cooldown"] > 0) {
-            //add cooldown recod to table
+            //add cooldown record to table
             cooldownStore[userInputString] = magic[userInputString]["cooldown"] + counter;
         }
 
-        // console.log("effect = " + effect);
-        // console.log("amount = " + amount);
 
         switch(effect) {
             case 'heal' :
@@ -71,20 +68,16 @@ function eqGame() {
 
             case 'damage':
 
-                console.log("applyEffect Damage on " + target["mobName"]);
-                consolePush("You hit " + target["mobName"] + " with " + userInputString + " for " + amount + " damage");
-                console.log(target["mobHealth"]);
+                if (anyMobsCheck() === true) {
+                    console.log(target);
+                    console.log("applyEffect Damage on " + target["mobName"]);
+                    consolePush("You hit " + target["mobName"] + " with " + userInputString + " for " + amount + " damage");
+                    console.log(target["mobHealth"]);
+                    mobDamage(target,amount);
+                } else {
+                    consolePush("There is nothing to use that on, the effect fizzles..")
+                }
 
-                mobDamage(target,amount);
-
-
-                    //     if (target === "mob") {
-                    //         //damage single mob
-                    //     } else if (target === "all") {
-                    //         // damage all mobs
-                    //     } else {
-                    //         consolePush("unknown effect: " + effect);
-                    //     }
                  break;
 
             default: consolePush("Unknown effect in applyEffect()");
@@ -259,42 +252,56 @@ function eqGame() {
         console.log("Total Defence = " + totalDef);
     }
 
-    //rooms[roomName]["mobsDefeated"]
-
     function levelCheck(effect) {
-        if (magic[effect]["levelReq"] <= character.charLevel) {
+        // console.log(effect);
+        // console.log(effect["name"]);
+        // console.log(effect["levelReq"]);
+        if (effect["levelReq"] <= character.charLevel) {
             return true;
         } else {
-            consolePush("Your level is not high enough for " + effect);
+            consolePush("Your level is not high enough for " + effect["name"]);
             return false;
         }
     }
 
     function spellBookCheck(effect) {
-        if (character.spells.indexOf(effect) > -1) {
+        if (character.spells.indexOf(effect["name"]) > -1) {
             return true;
         } else {
-            consolePush(effect + " is not in your spellbook");
+            consolePush(effect["name"] + " is not in your spellbook");
             return false;
         }
     }
 
     function manaCheck(effect) {
-        if (magic[effect]["manaCost"] <= character.charMana) {
+        if (effect["manaCost"] <= character.charMana) {
             return true;
         } else {
-            consolePush("You don't have enough mana for " + effect);
+            consolePush("You don't have enough mana for " + effect["name"]);
             return false;
         }
     }
 
     function coolDownCheck(effect) {
-        console.log(effect);
-        if (effect in cooldownStore) {
-            consolePush("Failed, " + effect + " is on cooldown");
+        if (effect["name"] in cooldownStore) {
+            consolePush("Failed, " + effect["name"] + " is on cooldown");
             return false;
         } else {
             return true;
+        }
+    }
+
+    function anyMobsCheck() {
+        if (typeof(combatObj) !== "undefined") {
+            for (var key in combatObj) {
+                if (combatObj.hasOwnProperty(key)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
         }
     }
 
@@ -325,7 +332,6 @@ function eqGame() {
         // return character.inventory.indexOf(name)
     }
 
-
     function mobHealthCheck(roomName) {
         getObjectLength(combatObj);
         if (combatObj[select]["mobHealth"] <= 0) {
@@ -350,57 +356,99 @@ function eqGame() {
         }
     }
 
-    function useCharge(item, charges) {
-        equipment[item].charges = equipment[item].charges - charges;
-        if (equipment[item].charges < 1) {
-            inventoryPos = character.inventory.indexOf(item);
+    function useCharge(item, chargesExp) {
+        item["charges"] = item["charges"] - chargesExp;
+
+        if (item["charges"] < 1) {
+            inventoryPos = character.inventory.indexOf(item["name"]);
             if (inventoryPos > -1) {
-                consolePush("The " + item + " crumbles to dust, its power exhausted");
+                consolePush("The " + item["name"] + " crumbles to dust, its power exhausted");
                 character.inventory.splice(inventoryPos, 1);
             }
-        }
+        } else (
+            consolePush("You have " + item["charges"] + " charges left")
+        )
     }
 
     actions =  {
-
-
             cast: function() {
-
-
                 a = userInputString.match(/^(.*?)($| on (.*?)$)/); //breaks userInputString into array 'a'
                 a.shift(); //strips the original string from the new array
                 castSpell = a[0];
                 select = "mob" + (a[2] - 1);
-                // console.log(a);
 
 
 
-
-
-                // if (levelCheck(castSpell) === true && spellBookCheck(castSpell) && manaCheck(castSpell) === true && coolDownCheck(castSpell) === true) {
-                if (levelCheck(castSpell) && spellBookCheck(castSpell) && manaCheck(castSpell) && coolDownCheck(castSpell) === true) {
-
-
+                if (levelCheck(magic[castSpell]) && spellBookCheck(magic[castSpell]) && manaCheck(magic[castSpell]) && coolDownCheck(magic[castSpell]) === true) {
                         //casting....
                         amount = diceRoll(magic[castSpell]["min"], magic[castSpell]["max"]);
+
+                    if (anyMobsCheck() === true) {
+
                         applyEffect(castSpell,amount,combatObj[select]);
 
                         if (magic[castSpell]["duration"] > 0) {
                             console.log("Calling persistent effect");
                             applyPersistent();
                         }
+                        mobRound();
 
+                    } else {
 
+                        applyEffect(castSpell,amount);
 
-
+                        if (magic[castSpell]["duration"] > 0) {
+                            console.log("Calling persistent effect");
+                            applyPersistent();
+                        }
+                    }
                 }
 
+            },
+
+            flee: function(roomName, userInputString) {
+
+                if (anyMobsCheck() === true) {
+
+                    consolePush("You attempt to flee");
+                    x = diceRoll(1,10);
+                    // console.log("x = " + x);
+                    if (x > 5) {
+                        consolePush("You flee " + userInputString);
+
+                        if (rooms[roomName]["exits"].hasOwnProperty(userInputString)) {
+                            consolePush(rooms[roomName]["exits"][userInputString]["description"]);
+                            roomName = rooms[roomName]["exits"][userInputString]["nextRoom"];
+                            initRoom(roomName);
+                        } else {
+                            consolePush("There is no exit that way");
+                            mobRound();
+                        }
+
+                    } else {
+                        consolePush("You fail to flee")
+                        mobRound();
+                    }
 
 
+                } else {
+                    consolePush("There is nothing to flee from...")
+                }
+        },
+
+            attack: function(roomName, userInputString) {
+
+                if (anyMobsCheck() === true) {
+
+                    // consolePush("You attack " + userInputString);
+                    // pressInput = userInputString;
+                    // userInputString = pressInput;
+                    attackRound(roomName, userInputString);
 
 
-
-                mobRound();
+                } else {
+                    consolePush("There is nothing to attack...")
+                }
             },
 
             class: function(userInputString) {
@@ -651,26 +699,46 @@ function eqGame() {
             unlock: function (roomName) {},
 
             use: function() {
+                a = userInputString.match(/^(.*?)($| on (.*?)$)/); //breaks userInputString into array 'a'
+                a.shift(); //strips the original string from the new array
+                castEffect = a[0];
+                select = "mob" + (a[2] - 1);
 
-                if (levelCheck(equipment[userInputString]) === true) {
-                    if (inventoryCheck(userInputString) > -1) {
-                        switch (equipment[userInputString].use) {
-                            case 'heal':
-                                consolePush("You use the " + userInputString);
-                                h = diceRoll(equipment[userInputString].minValue, equipment[userInputString].maxValue);
-                                character.charHealth = character.charHealth + h;
-                                consolePush("You are healed for " + h + " health points");
-                                useCharge(userInputString, 1);
-                                break;
-                            case 'equip':
-                                consolePush("You cant use the " + userInputString + ", try equipping it instead");
-                                break;
-                            default:
-                                console.log("That won't work");
-                        }
+                if(levelCheck(equipment[castEffect]) && inventoryCheck(equipment[castEffect]["name"]) === true) {
+                    //using item
+                    amount = diceRoll(equipment[castEffect]["min"], equipment[castEffect]["max"]);
+                    if (anyMobsCheck() === true) {
+
+                        applyEffect(equipment[castEffect]["spell"],amount,combatObj[select]);
+                        useCharge(equipment[castEffect],magic[equipment[castEffect]["spell"]]["chargeuse"]);
+
+
+                        //usable items can't yet give persistant effects
+                        // if (magic[castSpell]["duration"] > 0) {
+                        //     console.log("Calling persistent effect");
+                        //     applyPersistent();
+                        // }
+
+
+                        mobRound();
+
                     } else {
-                        consolePush("You cant do that");
+
+                        applyEffect(equipment[castEffect]["spell"],amount);
+                        console.log(equipment[castEffect]["charges"]);
+                        useCharge(equipment[castEffect],magic[equipment[castEffect]["spell"]]["chargeuse"]);
+
+
+                        //usable items can't yet give persistant effects
+                        // if (magic[castSpell]["duration"] > 0) {
+                        //     console.log("Calling persistent effect");
+                        //     applyPersistent();
+                        // }
+
+
                     }
+                } else {
+                    console.log("Checks failed");
                 }
             },
 
@@ -686,8 +754,7 @@ function eqGame() {
 
             test: function() {
 
-            console.log(cooldownStore);
-
+            anyMobsCheck();
 
             },
 
@@ -699,92 +766,6 @@ function eqGame() {
             spellbook: function() {
                 consolePush(character.spells);
             },
-
-    };
-
-    combatActions = {
-
-        attack: function(roomName, userInputString) {
-            consolePush("You attack " + userInputString);
-            // pressInput = userInputString;
-            // userInputString = pressInput;
-            attackRound(roomName,userInputString);
-        },
-
-        flee: function(roomName, userInputString) {
-            consolePush("You attempt to flee");
-            x = diceRoll(1,10);
-            // console.log("x = " + x);
-            if (x > 5) {
-                consolePush("You flee " + userInputString);
-
-                if (rooms[roomName]["exits"].hasOwnProperty(userInputString)) {
-                    consolePush(rooms[roomName]["exits"][userInputString]["description"]);
-                    roomName = rooms[roomName]["exits"][userInputString]["nextRoom"];
-                    initRoom(roomName);
-                } else {
-                    consolePush("There is no exit that way");
-                    mobRound();
-                }
-
-            } else {
-                consolePush("You fail to flee")
-                mobRound();
-            }
-        },
-
-        use: function() {
-            consolePush("You attempt to use something");
-        },
-
-        cast: function() {
-
-            a = userInputString.match(/^([a-z\s0-9_]+) on ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
-            a.shift(); //strips the original string from the new array
-            castSpell = a[0];
-            select = "mob" + (a[1] - 1);
-
-            if (levelCheck(magic[castSpell]) === true) {
-                if (character.spells.indexOf(castSpell) > -1) {
-                    // levelCheck(magic[castSpell]);
-                    if (magic[castSpell].manaCost < character.charMana) {
-                        amount = diceRoll(magic[castSpell]["min"],magic[castSpell]["max"]);
-                        applyEffect(castSpell,amount,combatObj[select]);
-                        // if (magic[castSpell].type === "damage") {
-                        //     thisDamage = diceRoll(magic[castSpell].minDamage, magic[castSpell].maxDamage);
-                        //     consolePush("You cast " + castSpell + " on " + combatObj[select].mobName);
-                        //     character.charMana = character.charMana - magic[castSpell].manaCost;
-                        //     consolePush("The " + castSpell + " " + magic[castSpell].desc + " for " + thisDamage + " damage");
-                        //
-                        //     combatObj[select].mobHealth = combatObj[select].mobHealth - thisDamage;
-                        //     consolePush(combatObj[select].mobName + " has " + combatObj[select].mobHealth + " health remaining");
-                        //     mobHealthCheck();
-                        //
-                        //
-                        //
-                        //
-                        //
-                        // }
-                        // else {
-                        //     consolePush("Unknown Spell Type")
-                        // }
-                    }
-                    else {
-                        consolePush("You don't have enough mana for that spell")
-                    }
-                }
-                else {
-                    consolePush("You don't know that spell")
-                }
-            }
-            mobRound();
-        },
-
-        test: function() {
-
-
-
-        },
 
     };
 
@@ -828,6 +809,7 @@ function eqGame() {
                     actionSplit(userInput);
                     document.getElementById('userInput').value = "";
                     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
+
                     if (rooms[roomName]["exits"].hasOwnProperty(userInput)) {
                         counter++;
                         effectCheck();
@@ -842,40 +824,17 @@ function eqGame() {
                         console.log("COUNTER: " + counter);
                         actions[userInputAction](roomName,userInputString);
                     }
-                    // else if  (rooms[roomName]["special"].hasOwnProperty(userInputAction)) {
-                    //     eval(rooms[roomName]["special"][userInputAction] + "()");
-                    //     counter++;
-                    //     effectChecker();
-                    //     console.log("COUNTER: " + counter);
-                    //}
                     else {
-                        // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED ACTION");
+
+                        //
+                        //
+                        // consolePush("I'm sorry, you cant do that");
+                        // console.log("bad input")
                         // document.getElementById('userInput').value = "";
                     }
+
+
                 }
-            }
-
-            else if (combatFlag === "on") {
-
-                if (event.which == 13) {
-                    event.preventDefault();
-                    userInput = $(this).val().toLowerCase();
-                    consolePush(userInput);
-                    actionSplit(userInput);
-                    document.getElementById('userInput').value = "";
-                    document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
-                    if (combatActions.hasOwnProperty(userInputAction)) {
-                        console.log("RECOGNIZED COMBAT ACTION");
-                        counter++;
-                        effectCheck();
-                        console.log(counter);
-                        combatActions[userInputAction](roomName,userInputString);
-                    } else {
-                        // console.log("PRINT ERROR MESSAGE: UNRECOGNIZED COMBAT ACTION");
-                        document.getElementById('userInput').value = "";
-                    }
-                }
-
             }
 
             else {

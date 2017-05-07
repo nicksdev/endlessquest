@@ -41,9 +41,6 @@ rooms = {
             mobsDefeated: "error",
             exits: "There is a door to the west."
         },
-        // special: {
-        //     choose: "charSelect",
-        //     },
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
@@ -68,7 +65,6 @@ rooms = {
             mobsDefeated: "error",
             exits: "The passage continues into the darkness to the north."
         },
-        special: "",
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
@@ -90,7 +86,6 @@ rooms = {
             mobsDefeated: "The pair of goblin corpses lie on the floor in the corner of the room",
             exits: "You can go East or West, which way do you wish to go?"
         },
-        special: "",
         hasMobs: true,
         mobsDefeated: false,
         mobs: ["weakGoblin", "caveViper"],

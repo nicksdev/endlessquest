@@ -22,7 +22,7 @@ var character = {
         ring:""
     },
     spells: ["glow heal","hearth heal","giant strength","firebolt"],
-    inventory: ["healing balm", "wizards hat","silver sword"]
+    inventory: ["healing balm", "wizards hat","silver sword","fire wand"]
 };
 
 charClass = {
@@ -112,16 +112,15 @@ equipment = {
     //     type: "",
     //     use: <equip or consume>
     //     levelReq: number, can be 0;
-    //     minDamage:,
-    //     maxDamage:,
+    //     spell: if usable, call this spell effect
     //     attack:,
     //     defence:,
     //     locked:,
     //     trapped:,
     //     contents:,
     //     damResist: <not used>,
-    //     minValue:,
-    //     maxValue:
+    //     min:,
+    //     max:
     //     moveable: false or undefined
     //     useable: true or undefined
     //     class: wizard, warrior, priest
@@ -293,17 +292,44 @@ equipment = {
         name: "healing balm",
         desc: "a perfumed ointment that is used for treating wounds",
         type: "usable",
-        levelReq: 3,
-        use: "heal",
-        charges: 2,
-        minValue: 3,
-        maxValue: 8,
+        levelReq: 0,
+        spell: "healeffect",
+        charges: 3,
+        min: 3,
+        max: 8,
+        class: ["wizard","warrior","priest"]
+    },
+
+    "fire wand": {
+        name: "fire wand",
+        desc: "a wand that shoots bolts of fire",
+        type: "usable",
+        levelReq: 0,
+        spell: "firebolt",
+        charges: 3,
+        min: 3,
+        max: 8,
         class: ["wizard","warrior","priest"]
     }
 
 };
 
 magic = {
+
+    "healeffect": {
+        name: "heal",
+        desc: "your wounds heal a bit",
+        effect: "heal",
+        target: "self",
+        duration: 0,
+        cooldown: 0,
+        levelReq: 0,
+        manaCost: 0,
+        chargeuse: 1,
+        min: 4,
+        max: 8,
+        class: ["priest", "warrior", "wizard"]
+    },
 
     "firebolt": {
         name: "firebolt",
@@ -314,6 +340,7 @@ magic = {
         cooldown: 3,
         levelReq: 0,
         manaCost: 4,
+        chargeuse: 1,
         min: 20,
         max: 50,
         class: ["priest", "warrior", "wizard"]
