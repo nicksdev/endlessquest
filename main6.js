@@ -2,7 +2,7 @@
 
 function eqGame() {
 
-    var combatFlag;
+    // var combatFlag;
     var totalDef;
     var counter = 0;
     // var uniqueId = 100;
@@ -105,41 +105,7 @@ function eqGame() {
             ]
     }
 
-    function effectCheck() {
-        for (var key in spellEffect) {
-            if (spellEffect.hasOwnProperty(key)) {
-                effect = spellEffect[key][1];
 
-                switch(effect) {
-                    case 'heal' :
-                        if (counter <= spellEffect[key][0]) {
-                            commandCast(key);
-                        } else {
-                            delete spellEffect[key];
-                        }
-                        break;
-
-                    case 'buff' :
-                        if (counter <= spellEffect[key][0]) {
-                            //do nothing
-                        } else {
-                            removeBuff(spellEffect[key][2],spellEffect[key][3]);
-                            delete spellEffect[key];
-                        }
-                        break;
-
-                    default: consolePush("Unknown effect in effectCheck()");
-                }
-            }
-        }
-
-        for (var key in cooldownStore) {
-            console.log(cooldownStore[key]);
-            if (cooldownStore[key] < counter) {
-                delete cooldownStore[key];
-            }
-        }
-    }
 
     function commandCast(effect) {
         amount = diceRoll(magic[effect]["min"],magic[effect]["max"]);
@@ -166,12 +132,25 @@ function eqGame() {
 
     }
 
-    function checkLevelUp() {
-        x = character.charLevel + 1;
-        if (character.charXp >= xptable[x]) {
-            console.log("Calling levelUp()");
-            levelUp();
+    function calcDef() {
+        totalDef = 0;
+        listEquip();
+        for (i = 0; i < equippedList.length; i++) {
+            if (equipment.hasOwnProperty(equippedList[i])) {
+                // console.log(equipment[equippedList[i]]);
+                // console.log(i);
+                // console.log("Found " + equippedList[i]);
+                // console.log(equipment[equippedList[i]].type);
+                // console.log(Object.keys(equippedList[i]));
+                if (equipment[equippedList[i]].hasOwnProperty('defence')) {
+                    // console.log("true");
+                    // console.log(equippedList[i]);
+                    // console.log(equipment[equippedList[i]].defence);
+                    totalDef = totalDef + equipment[equippedList[i]].defence;
+                }
+            }
         }
+        console.log("Total Defence = " + totalDef);
     }
 
     function addSpell(type){
@@ -219,6 +198,14 @@ function eqGame() {
 
     }
 
+
+
+
+
+
+
+    //LIST FUNCTIONS
+
     function listEquip() {
         equippedList = [];
         equippedList.push(character.equipment.weapon);
@@ -231,25 +218,69 @@ function eqGame() {
         // console.log(equippedList);
     }
 
-    function calcDef() {
-        totalDef = 0;
-        listEquip();
-        for (i = 0; i < equippedList.length; i++) {
-                if (equipment.hasOwnProperty(equippedList[i])) {
-                    // console.log(equipment[equippedList[i]]);
-                    // console.log(i);
-                    // console.log("Found " + equippedList[i]);
-                    // console.log(equipment[equippedList[i]].type);
-                    // console.log(Object.keys(equippedList[i]));
-                    if (equipment[equippedList[i]].hasOwnProperty('defence')) {
-                        // console.log("true");
-                        // console.log(equippedList[i]);
-                        // console.log(equipment[equippedList[i]].defence);
-                        totalDef = totalDef + equipment[equippedList[i]].defence;
-                    }
-                }
+    function listItems(roomName) {
+        var itemsArray = [];
+        for(var key in rooms[roomName]["items"]) {
+            var value = rooms[roomName]["items"][key];
+            // console.log(value);
+            itemsArray.push(value.name);
         }
-        console.log("Total Defence = " + totalDef);
+        if(rooms[roomName]["items"].hasOwnProperty(key)) {
+            consolePush("On the floor you can see: " + itemsArray);
+        }
+
+    }
+
+    function listInv() {
+        console.log(character.inventory);
+        invArray = [];
+        for(var key in character.inventory) {
+            var value = character.inventory[key];
+            // console.log(value);
+            invArray.push(value.name);
+        }
+        if(character.inventory.hasOwnProperty(key)) {
+            consolePush("You are carrying: " + invArray);
+        } else {
+            consolePush("Your inventory is empty")
+        }
+
+
+    }
+
+    //CHECK FUNCTIONS
+
+    function objCheck(obj) {
+        //checks in an object is empty (empty returns false
+        console.log("objCheck checking " + obj)
+        for(var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                // console.log("true");
+                return true;
+            } else {
+                consolePush("I don't see that here");
+                return false;
+            }
+        }
+
+    }
+
+    function moveableCheck(obj) {
+
+        if (obj["moveable"] === "yes") {
+            return true;
+        } else {
+            consolePush("You can't move that");
+            return false;
+        }
+    }
+
+    function checkLevelUp() {
+        x = character.charLevel + 1;
+        if (character.charXp >= xptable[x]) {
+            console.log("Calling levelUp()");
+            levelUp();
+        }
     }
 
     function levelCheck(effect) {
@@ -262,6 +293,32 @@ function eqGame() {
             consolePush("Your level is not high enough for " + effect["name"]);
             return false;
         }
+    }
+
+    function classCheck(name) {
+        //class check (shouldn't need for casting as spells from wrong class cant be learned)
+        if(name.class.indexOf(character.class) > -1) {
+            // console.log("classCheck passed");
+            return true;
+        } else {
+            // console.log("classCheck failed");
+            consolePush("A " + character.class + " cannot equip a " + name.name);
+            return false;
+        }
+
+    }
+
+    function inventoryCheck(name) {
+        if (character.inventory.indexOf(name) > -1) {
+            // console.log("inventoryCheck passed");
+            return true;
+        } else {
+            // console.log("inventoryCheck failed");
+            consolePush("You don't have that item in your inventory");
+            return false;
+        }
+
+        // return character.inventory.indexOf(name)
     }
 
     function spellBookCheck(effect) {
@@ -305,31 +362,23 @@ function eqGame() {
         }
     }
 
-    //class check (shouldn't need for casting as spells from wrong class cant be learned)
-    function classCheck(name) {
-
-        if(name.class.indexOf(character.class) > -1) {
-            // console.log("classCheck passed");
+    function typeCheck(name,type) {
+        //see equipCheck for checking if equipable
+        if(name === type) {
             return true;
         } else {
-            // console.log("classCheck failed");
-            consolePush("A " + character.class + " cannot equip a " + name.name);
+            consolePush("That item is not usable");
             return false;
         }
-
     }
 
-    function inventoryCheck(name) {
-        if (character.inventory.indexOf(name) > -1) {
-            // console.log("inventoryCheck passed");
+    function equipCheck(name) {
+        if (name.match(/^(head|chest|legs|hands|shield|ring|amulet|weapon)$/)) {
             return true;
         } else {
-            // console.log("inventoryCheck failed");
-            consolePush("You don't have that item in your inventory");
+            consolePush("That item cannot be equipped");
             return false;
         }
-
-        // return character.inventory.indexOf(name)
     }
 
     function mobHealthCheck(roomName) {
@@ -345,7 +394,7 @@ function eqGame() {
             } else {
                 consolePush("You are victorious!");
                 console.log("@@ ENDING COMBAT @@");
-                combatStatus("off");
+                // combatStatus("off");
                 rooms[roomName]["mobsDefeated"] = true;
                 // console.log("mobs defeated below");
                 // console.log(rooms[roomName]["mobsDefeated"]);
@@ -353,6 +402,42 @@ function eqGame() {
             }
         } else {
             mobRound();
+        }
+    }
+
+    function effectCheck() {
+        for (var key in spellEffect) {
+            if (spellEffect.hasOwnProperty(key)) {
+                effect = spellEffect[key][1];
+
+                switch(effect) {
+                    case 'heal' :
+                        if (counter <= spellEffect[key][0]) {
+                            commandCast(key);
+                        } else {
+                            delete spellEffect[key];
+                        }
+                        break;
+
+                    case 'buff' :
+                        if (counter <= spellEffect[key][0]) {
+                            //do nothing
+                        } else {
+                            removeBuff(spellEffect[key][2],spellEffect[key][3]);
+                            delete spellEffect[key];
+                        }
+                        break;
+
+                    default: consolePush("Unknown effect in effectCheck()");
+                }
+            }
+        }
+
+        for (var key in cooldownStore) {
+            console.log(cooldownStore[key]);
+            if (cooldownStore[key] < counter) {
+                delete cooldownStore[key];
+            }
         }
     }
 
@@ -508,12 +593,12 @@ function eqGame() {
             },
 
             inv: function(){
-                consolePush("<div class='capitalize'>" + character.inventory + "</div>");
+                listInv();
             },
 
             look: function(roomName){
                 loadDescription(roomName, "default");
-                consolePush("This room contains " + "<div class='capitalize'>" + rooms[roomName]["items"] + "</div>");
+                listItems(roomName);
                 loadDescription(roomName, "exits");
             },
 
@@ -545,10 +630,10 @@ function eqGame() {
             exam: function(roomName,userInputString){
                 console.log("Examining " + userInputString);
                 itemPos = character.inventory.indexOf(userInputString);
-                roomPos = rooms[roomName]["items"].indexOf(userInputString);
-                console.log(roomPos);
+                //roomPos = rooms[roomName]["items"].indexOf(userInputString);
+                //console.log(roomPos);
                 console.log(itemPos);
-                if (itemPos > -1 || roomPos > -1) {
+                if (itemPos > -1 || objCheck(rooms[roomName]["items"]) === true) {
                     consolePush("You examine the " + userInputString);
                     consolePush("@@figure out how to display this nicely. needs to handle SPECIAL items");
                     consolePush(equipment[userInputString]);
@@ -592,40 +677,49 @@ function eqGame() {
             },
 
             equip: function (roomName, userInputString) {
-            if (inventoryCheck(userInputString) === true && levelCheck(equipment[userInputString]) === true && classCheck(equipment[userInputString]) === true) {      //check inventory
-                // levelCheck(equipment[userInputString]);
-                // classCheck(equipment[userInputString]);
-                if (equipment[userInputString].use === "equip") { //check item is equippable
+
+                if (inventoryCheck(userInputString) === true && levelCheck(equipment[userInputString]) === true && classCheck(equipment[userInputString]) && equipCheck(equipment[userInputString]["type"]) === true) {
+
                     typeCheck = equipment[userInputString].type;  //check id type for swapping if occupied
                     slotCheck = character.equipment[typeCheck];  //if slot full, remove current item
+
                     if (character.equipment[typeCheck].length > 1) {
                         actions.remove(roomName, slotCheck);
                     }
+
                     character.equipment[typeCheck] = userInputString; //equip to slot
                     character.inventory.splice(inventoryCheck(userInputString), 1);  //remove from Inv
                     consolePush("You equip the " + userInputString);
-                } else {consolePush("Equipping that item is not possible")}
-            } else {
-                // consolePush("You dont have that item");
-            }
+                }
+
         },
 
             pickup: function(roomName) {
-                if (equipment[userInputString].moveable === false)  {
-                    consolePush("You cant lift that");
-                } else {
-                    itemPos = rooms[roomName]["items"].indexOf(userInputString);
-                    // console.log(itemPos);
-                    if (itemPos > -1) {
-                        // add to inventory
-                        character.inventory.push(userInputString);
-                        // remove from room
-                        rooms[roomName]["items"].splice(itemPos, 1);
-                    } else {
-                        consolePush(userInputString + " is not here");
+                //check object is in the room
+                //check object is movable
+                //remove object from room inventory
+                //add object to character inventory
+
+                if (objCheck(rooms[roomName]["items"]) && moveableCheck(equipment[userInputString]) === true) {
+                    console.log("PICKUP CHECKS PASSED");
+
+                    for (var key in rooms[roomName]["items"]) {
+                        // console.log(rooms[roomName]["items"][key]["name"]);
+                        // console.log(userInputString);
+                        if (rooms[roomName]["items"][key]["name"] === userInputString) {
+                            console.log("MATCH");
+
+                            // add to inventory
+                            character.inventory[key] = rooms[roomName]["items"][key];
+
+                            //remove from room
+                            delete rooms[roomName]["items"][key]
+                        }
                     }
                 }
             },
+
+            
 
             drop: function (roomName) {
                 inventoryPos = character.inventory.indexOf(userInputString);
@@ -704,7 +798,9 @@ function eqGame() {
                 castEffect = a[0];
                 select = "mob" + (a[2] - 1);
 
-                if(levelCheck(equipment[castEffect]) && inventoryCheck(equipment[castEffect]["name"]) === true) {
+
+
+                if(levelCheck(equipment[castEffect]) && inventoryCheck(equipment[castEffect]["name"]) && typeCheck(equipment[castEffect]["type"],"usable") === true) {
                     //using item
                     amount = diceRoll(equipment[castEffect]["min"], equipment[castEffect]["max"]);
                     if (anyMobsCheck() === true) {
@@ -748,14 +844,38 @@ function eqGame() {
             },
 
             test2: function() {
-
-
+                console.log(rooms[roomName]["items"]);
+                listItems(roomName);
             },
 
-            test: function() {
+            test: function(roomName,userInputString) {
 
-            anyMobsCheck();
 
+                // console.log(rooms[roomName]["items"]);
+                // //console.log(rooms[roomName]["items"][userInputString]);
+                // console.log(rooms[roomName]["items"]["name"]);
+
+
+                for(var key in rooms[roomName]["items"]) {
+                    console.log(rooms[roomName]["items"][key]);
+                    //console.log(userInputString);
+                    if (rooms[roomName]["items"][key]["name"] === userInputString) {
+                        console.log("MATCH")
+                    }
+
+                    // console.log(rooms[roomName]["items"][key]["name"]);
+                    // var userInputString = rooms[roomName]["items"]["name"];
+                    // console.log(key);
+                    // invArray.push(value.name);
+
+
+                }
+
+
+
+            //     // checkParent(rooms[roomName]["items"],"iteml0001");
+            //     checkParent(rooms[roomName]["items"],"name","iron dagger");
+            //
             },
 
             clear: function() {
@@ -769,19 +889,22 @@ function eqGame() {
 
     };
 
-    function combatStatus(flag, roomName) {
-            if (flag === "off") {
-                // console.log("SETTING COMBAT FLAG TO OFF");
-                combatFlag = "off";
-                // mainListener(roomName);
-            } else if (flag === "on") {
-                // console.log("SETTING COMBAT FLAG TO ON");
-                combatFlag = "on";
-                // mainListener(roomName);
-            } else {
-                // console.log("COMBAT FLAG IS UNDEFINED");
-            }
-        }
+
+
+
+    // function combatStatus(flag, roomName) {
+    //         if (flag === "off") {
+    //             // console.log("SETTING COMBAT FLAG TO OFF");
+    //             combatFlag = "off";
+    //             // mainListener(roomName);
+    //         } else if (flag === "on") {
+    //             // console.log("SETTING COMBAT FLAG TO ON");
+    //             combatFlag = "on";
+    //             // mainListener(roomName);
+    //         } else {
+    //             // console.log("COMBAT FLAG IS UNDEFINED");
+    //         }
+    //     }
 
     function actionSplit(x) {
 
@@ -794,52 +917,42 @@ function eqGame() {
         //rejoin shortened array
         userInputString = tmp.join(" ");
 
-
     }
 
     function mainListener(roomName) {
-
+        $('#userInput').unbind('keyup');
         $('#userInput').on("keyup", function (event) {
-            if (combatFlag === "off") {
-                // console.log("PRESSLISTENER DISABLED");
-                if (event.which == 13) {
+                if (event.which === 13) {
                     event.preventDefault();
                     userInput = $(this).val().toLowerCase();
                     consolePush(userInput);
                     actionSplit(userInput);
                     document.getElementById('userInput').value = "";
                     document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
-
-                    if (rooms[roomName]["exits"].hasOwnProperty(userInput)) {
-                        counter++;
-                        effectCheck();
-                        console.log("COUNTER: " + counter);
-                        consolePush(rooms[roomName]["exits"][userInput]["description"]);
-                        roomName = rooms[roomName]["exits"][userInput]["nextRoom"];
-                        initRoom(roomName);
-                    } else if  (actions.hasOwnProperty(userInputAction)) {
-                        console.log("RECOGNIZED ACTION");
-                        counter++;
-                        effectCheck();
-                        console.log("COUNTER: " + counter);
-                        actions[userInputAction](roomName,userInputString);
+                    if (rooms[roomName]["exits"].hasOwnProperty(userInput) || actions.hasOwnProperty(userInputAction) === true) {
+                        if (rooms[roomName]["exits"].hasOwnProperty(userInput)) {
+                            counter++;
+                            effectCheck();
+                            console.log("COUNTER: " + counter);
+                            consolePush(rooms[roomName]["exits"][userInput]["description"]);
+                            roomName = rooms[roomName]["exits"][userInput]["nextRoom"];
+                            initRoom(roomName);
+                        }
+                        else if  (actions.hasOwnProperty(userInputAction)) {
+                            console.log("RECOGNIZED ACTION");
+                            counter++;
+                            effectCheck();
+                            console.log("COUNTER: " + counter);
+                            actions[userInputAction](roomName,userInputString);
+                        }
+                        else {
+                            console.log("!!!!!!THIS SHOULD NEVER BE CALLED!!!!!");
+                        }
                     }
                     else {
-
-                        //
-                        //
-                        // consolePush("I'm sorry, you cant do that");
-                        // console.log("bad input")
-                        // document.getElementById('userInput').value = "";
+                        consolePush("I'm sorry, I don't understand that...");
                     }
-
-
                 }
-            }
-
-            else {
-                console.log("LISTENER BEHAVIOR UNDEFINED");
-            }
         });
     }
 
@@ -898,7 +1011,7 @@ function eqGame() {
                 if (character.charHealth <= 0) {
                     //DEATH
                     consolePush("YOU ARE DEAD!!!");
-                    combatStatus("off");
+
 
                 } else {
 
@@ -920,7 +1033,7 @@ function eqGame() {
     }
 
     function consolePush(y) {
-        document.getElementById("consoleDiv").innerHTML += y + "<p>";
+        document.getElementById("consoleDiv").innerHTML += y + "<br>";
         document.getElementById('userInput').value = "";
         document.getElementById("consoleDiv").scrollTop = document.getElementById("consoleDiv").scrollHeight - document.getElementById("consoleDiv").clientHeight;
     }
@@ -929,33 +1042,29 @@ function eqGame() {
         // console.log("********* INITIALISING ROOM " + roomName);
         // userInput=null;
         // checkLevelUp();
-        combatStatus("off",roomName);
+        // combatStatus("off",roomName);
         mainListener(roomName);
         loadDescription(roomName, "default");
-        if (rooms[roomName]["items"].length > 0) {
-            consolePush("On the floor you can see: <span class='capitalize'>" + rooms[roomName]["items"] + "</span>");
-        }
+        listItems(roomName);
+        // if (rooms[roomName]["items"].length > 0) {
+        //     consolePush("On the floor you can see: <span class='capitalize'>" + rooms[roomName]["items"] + "</span>");
+        // }
 
 // Base Room Logic
         if (rooms[roomName]["hasMobs"] === true) {
             if (rooms[roomName]["mobsDefeated"] === true) {
                 loadDescription(roomName, "mobsDefeated");
                 loadDescription(roomName, "exits");
-
-            } else {
+            }
+            else {
                 loadDescription(roomName, "mobAttack");
                 combatInit(roomName);
             }
 
-        } else {
+        }
+        else {
             loadDescription(roomName, "exits");
         }
-
-        // if (rooms[roomName]["special"].length > 0) {
-        //     //If room has a special object, call it as a function
-        //     eval(rooms[roomName]["special"] + "()");
-        // }
-
     }
 
     function combatInit(roomName) {

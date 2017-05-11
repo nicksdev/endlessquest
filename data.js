@@ -22,7 +22,35 @@ var character = {
         ring:""
     },
     spells: ["glow heal","hearth heal","giant strength","firebolt"],
-    inventory: ["healing balm", "wizards hat","silver sword","fire wand"]
+    inventory: {
+        "item0001": {
+            name: "healing balm",
+        },
+        "item0002": {
+            name: "wizards hat",
+        },
+        "item0003": {
+            name: "silver sword",
+        },
+        "item0004": {
+            name: "fire wand",
+        },
+
+
+
+
+    },
+
+
+
+
+
+
+
+
+
+
+       // ["healing balm", "wizards hat","silver sword","fire wand"]
 };
 
 charClass = {
@@ -109,8 +137,9 @@ equipment = {
 
     // "full template": {
     //     desc: "",
-    //     type: "",
-    //     use: <equip or consume>
+    //     type: "", weapon, chest, usable, container
+    //     (usable items MUST be flagged usable)
+    //     (equipable items must be: head, weapon, chest, legs, hands, shield, ring, amulet
     //     levelReq: number, can be 0;
     //     spell: if usable, call this spell effect
     //     attack:,
@@ -135,7 +164,23 @@ equipment = {
         minDamage: 1,
         maxDamage: 2,
         attack: 1,
-        class: ["wizard","warrior"]
+        class: ["wizard","warrior"],
+        moveable: "yes"
+    },
+
+
+
+    "iron dagger OLD": {
+        name: "iron dagger",
+        desc: "a small iron dagger with a short dull blade",
+        type: "weapon",
+        levelReq: 0,
+        use: "equip",
+        minDamage: 1,
+        maxDamage: 2,
+        attack: 1,
+        class: ["wizard","warrior"],
+        moveable: true
     },
 
 
@@ -148,7 +193,8 @@ equipment = {
         minDamage: 1,
         maxDamage: 3,
         attack: 1,
-        class: ["priest","warrior"]
+        class: ["priest","warrior"],
+        moveable: true
     },
 
     "sharp dagger": {
@@ -160,7 +206,8 @@ equipment = {
         minDamage: 10,
         maxDamage: 30,
         attack: 2,
-        class: ["wizard","warrior"]
+        class: ["wizard","warrior"],
+        moveable: true
     },
 
     "rusty sword": {
@@ -172,19 +219,21 @@ equipment = {
         minDamage: 2,
         maxDamage: 4,
         attack: 3,
-        class: ["warrior"]
+        class: ["warrior"],
+        moveable: true
     },
 
     "silver sword": {
         name: "silver sword",
         desc: "a light and slim blade with a silvered edge",
         type: "weapon",
-        levelReq: 4,
+        levelReq: 1,
         use: "equip",
         minDamage: 3,
         maxDamage: 10,
         attack: 9,
-        class: ["warrior"]
+        class: ["warrior"],
+        moveable: true
     },
 
     "cloth shirt": {
@@ -195,7 +244,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 1,
-        class: ["priest","warrior","wizard"]
+        class: ["priest","warrior","wizard"],
+        moveable: true
     },
 
     "plain robe": {
@@ -206,7 +256,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 2,
-        class: ["priest","warrior","wizard"]
+        class: ["priest","warrior","wizard"],
+        moveable: true
     },
 
     "wizards hat": {
@@ -217,7 +268,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 1,
-        class: ["wizard"]
+        class: ["wizard"],
+        moveable: true
     },
 
     "woolen leggings": {
@@ -228,7 +280,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 1,
-        class: ["priest","warrior","wizard"]
+        class: ["priest","warrior","wizard"],
+        moveable: true
     },
 
 
@@ -240,7 +293,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 3,
-        class: ["priest","warrior"]
+        class: ["priest","warrior"],
+        moveable: true
     },
 
     "chainmail armour": {
@@ -250,7 +304,8 @@ equipment = {
         levelReq: 6,
         // damResist: 2,
         defence: 7,
-        class: ["warrior"]
+        class: ["warrior"],
+        moveable: true
     },
 
     "wooden shield": {
@@ -261,7 +316,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 2,
-        class: ["priest","warrior"]
+        class: ["priest","warrior"],
+        moveable: true
     },
 
     "iron pot helm": {
@@ -273,7 +329,8 @@ equipment = {
         use: "equip",
         // damResist: 2,
         defence: 1,
-        class: ["priest","warrior"]
+        class: ["priest","warrior"],
+        moveable: true
     },
 
     "small oak chest": {
@@ -297,7 +354,8 @@ equipment = {
         charges: 3,
         min: 3,
         max: 8,
-        class: ["wizard","warrior","priest"]
+        class: ["wizard","warrior","priest"],
+        moveable: true
     },
 
     "fire wand": {
@@ -309,7 +367,8 @@ equipment = {
         charges: 3,
         min: 3,
         max: 8,
-        class: ["wizard","warrior","priest"]
+        class: ["wizard","warrior","priest"],
+        moveable: true
     }
 
 };

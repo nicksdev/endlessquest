@@ -20,24 +20,28 @@ TODO:
 //character creation
 //classes: fighter, priest, wizard
 
-fix 'use' so that it call applyEffect()
+//fix 'use' so that it call applyEffect()
 
 //add effects, i.e. poisen over time or temp stat boosts
-mass effect spells
-spell scrolls
-container traps function
+*mass effect spells
+*spell scrolls
+*container traps function
 //out of combat casting
 Searchable corpses, levelled lists loot
+    - need to make room items an object rather than an array
+
+
 have a max health check (check template) that should be a limit for heals
 persistant bonuses from equipped items (e.g. sword of +2 strength or dagger of +5 damage)
 //introduce concept of turns (both in and out of combat)
-magic levels and multiplyers (e.g. 3rd level firebolt with a 1.5 multiplyer = 1st level dam * 1.5 * 1.5 i.e. 10x1.5=15*1.5=22.5)
+*magic levels and multiplyers (e.g. 3rd level firebolt with a 1.5 multiplyer = 1st level dam * 1.5 * 1.5 i.e. 10x1.5=15*1.5=22.5)
 
 
-
+add remove function (unequip)
 
 ASSUMPTIONS:
-- only unique items have charges
+- only unique items have charges (as charges are tracked on the global instance)
+- equipped items can't be 'used'
 
 
 
@@ -76,12 +80,6 @@ if room has mobs combatInit()
 
         combatFlag switches between combat and non-combat input functions.
         merge 'cast' and combatFlag can be removed
-
-
-
-
-
-
 
 
 

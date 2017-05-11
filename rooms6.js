@@ -14,7 +14,28 @@ rooms = {
         hasMobs: false,
         mobsDefeated: false,
         mobs: [],
-        items: [""],
+        items: {
+
+            // "iteml0001": {
+            //     name: "iron dagger",
+            //     //desc: "item2desc"
+            // },
+
+
+            "iteml0001": {
+                name: "iron dagger",
+            },
+            "item0002": {
+                name: "wizards hat",
+            },
+            "iteml0002": {
+                name: "small oak chest"
+            }
+
+
+
+        },
+
         exits: {
             north: {
                 description: "You go North",
@@ -74,7 +95,6 @@ rooms = {
                 description: "You take the Northern Exit",
                 nextRoom: "room1"
             }
-
         }
     },
 
