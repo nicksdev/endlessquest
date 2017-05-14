@@ -4,7 +4,7 @@ rooms = {
 
     "lobby": {
         name: "Room Lobby",
-        description:  {
+        description: {
             default: "You are in the lobby, please choose a name by typing name yourname",
             mobAttack: "error",
             mobsDefeated: "error",
@@ -15,40 +15,38 @@ rooms = {
         mobsDefeated: false,
         mobs: [],
         items: {
-
-            // "iteml0001": {
-            //     name: "iron dagger",
-            //     //desc: "item2desc"
-            // },
-
-
             "iteml0001": {
                 name: "iron dagger",
             },
             "item0002": {
                 name: "wizards hat",
             },
-            "iteml0002": {
-                name: "small oak chest"
-            }
-
-
-
-        },
-
-        exits: {
-            north: {
-                description: "You go North",
-                nextRoom: "room0"
+            "item0003": {
+                name: "small oak chest",
+                // contents: {
+                //     "item0201": {
+                //         type: "shield",
+                //         name: "wooden shield",
+                //     },
+                //     "item0202": {
+                //         type: "chest",
+                //         name: "plain robe",
+                //     },
+                // },
             },
+        },
+        exits: {
+                north: {
+                    description: "You go North",
+                    nextRoom: "room0"
+                },
 
-            east: {
-                description: "You go East",
-                nextRoom: "registration"
-            }
+                east: {
+                    description: "You go East",
+                    nextRoom: "registration"
+                }
 
-
-        }
+            },
     },
 
 

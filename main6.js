@@ -200,7 +200,30 @@ function eqGame() {
 
 
 
+    function equipItem() {
+        console.log("Equipping " + userInputString);
+        for (key in character["inventory"]) {
+            console.log(character["inventory"][key]["name"]);
+            if (character["inventory"][key]["name"] === userInputString) {
+                console.log("REMOVING " + character["inventory"][key]["type"]);
+                removeItem(character["inventory"][key]["type"]);
 
+                console.log("Item found = equipping");
+                character["equipment"][key] = character["inventory"][key];
+                delete character["inventory"][key];
+            }
+        }
+    }
+
+
+    function removeItem(type) {
+        for (var key in character["equipment"]) {
+            if (character["equipment"][key]["type"] === type) {
+                character["inventory"][key] = character["equipment"][key];
+                delete character["equipment"][key];
+            }
+        }
+    }
 
 
 
@@ -215,8 +238,14 @@ function eqGame() {
         equippedList.push(character.equipment.legs);
         equippedList.push(character.equipment.feet);
         equippedList.push(character.equipment.ring);
-        // console.log(equippedList);
+        console.log(equippedList);
     }
+
+
+
+
+
+
 
     function listItems(roomName) {
         var itemsArray = [];
@@ -248,21 +277,131 @@ function eqGame() {
 
     }
 
+    function itemName(obj,type,value) {
+        for (var key in obj) {
+            if (obj[key][type] === value) {
+                return obj[key]["name"];
+            }
+        }
+        return "";
+    }
+
     //CHECK FUNCTIONS
 
-    function objCheck(obj) {
-        //checks in an object is empty (empty returns false
-        console.log("objCheck checking " + obj)
+    function objCheck(obj, userInputString) {
+        //checks to see if something exists in an object
+        console.log(obj);
         for(var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                // console.log("true");
+            if (obj[key]["name"] === userInputString) {
+                console.log("CONTAINS OBJ");
                 return true;
             } else {
-                consolePush("I don't see that here");
+                console.log("NO OBJ");
                 return false;
             }
         }
 
+
+    }
+
+    function valueCheck(obj,property,value) {
+        //checks to see if an items specific value matches a string
+        for (var key in obj) {
+            if (obj[key]["name"] === userInputString) {
+                if (obj[key][property] === value) {
+                    console.log("VALUE MATCHED");
+                    return true;
+
+                } else {
+                    console.log("VALUE NOT MATCHED");
+                    return false;
+                }
+            }
+        }
+        console.log("Name not Matched");
+        // return false;
+    }
+
+    function levelCheck(effect) {
+        // console.log(effect);
+        // console.log(effect["name"]);
+        // console.log(effect["levelReq"]);
+        if (effect["levelReq"] <= character.charLevel) {
+            console.log("levelCheck() Passed");
+            return true;
+        } else {
+            consolePush("Your level is not high enough for " + effect["name"]);
+            console.log("levelCheck() Failed");
+            return false;
+        }
+    }
+
+    function levelCheck2(obj,value) {
+        //eg levelCheck2(equipment,"silver sword")
+
+        for (var key in obj) {
+            if (obj[key]["name"] === value) {
+                if (obj[key]["levelReq"] <= character.charLevel) {
+                    console.log("LEVEL SUFFICIENT");
+                    return true;
+                } else {
+                    console.log("LEVEL INSUFFICIENT");
+                    return false;
+                }
+            }
+        }
+        console.log("Name not Matched");
+        return false;
+
+    }
+
+    function occupiedCheck() {
+        for (var key in character["equipment"]) {
+            if (character["equipment"][key]["type"] === equipment[userInputString]["type"]) {
+                console.log("SLOT OCCUPIED");
+                return true;
+            } else {
+                console.log("SLOT VACANT");
+                return false;
+            }
+        }
+    }
+
+    function classCheck(name) {
+        //class check (shouldn't need for casting as spells from wrong class cant be learned)
+        if(name.class.indexOf(character.class) > -1) {
+            // console.log("classCheck passed");
+            return true;
+        } else {
+            // console.log("classCheck failed");
+            consolePush("A " + character.class + " cannot equip a " + name.name);
+            return false;
+        }
+
+    }
+
+    function arrayCheck(obj,array,value) {
+        //checks to see if an items array contains a string
+
+        for (var key in obj) {
+            if (obj[key]["name"] === userInputString) {
+                console.log(obj[key][array].indexOf(character.class));
+                if (obj[key][array].indexOf(character.class) > -1) {
+
+
+                // if (obj[key][array] === value) {
+                    console.log("VALUE MATCHED");
+                    return true;
+
+                } else {
+                    console.log("VALUE NOT MATCHED");
+                    return false;
+                }
+            }
+        }
+
+        console.log("Name not Matched");
+        return false;
     }
 
     function moveableCheck(obj) {
@@ -283,43 +422,59 @@ function eqGame() {
         }
     }
 
-    function levelCheck(effect) {
-        // console.log(effect);
-        // console.log(effect["name"]);
-        // console.log(effect["levelReq"]);
-        if (effect["levelReq"] <= character.charLevel) {
-            return true;
-        } else {
-            consolePush("Your level is not high enough for " + effect["name"]);
-            return false;
-        }
-    }
 
-    function classCheck(name) {
-        //class check (shouldn't need for casting as spells from wrong class cant be learned)
-        if(name.class.indexOf(character.class) > -1) {
-            // console.log("classCheck passed");
-            return true;
-        } else {
-            // console.log("classCheck failed");
-            consolePush("A " + character.class + " cannot equip a " + name.name);
-            return false;
+    function inventoryCheck(name,display) {
+        console.log(name);
+        for (var key in character.inventory) {
+            if (character.inventory[key]["name"] === name) {
+                console.log(name);
+                console.log("inventoryCheck passed");
+                return true;
+            }
         }
 
-    }
-
-    function inventoryCheck(name) {
-        if (character.inventory.indexOf(name) > -1) {
-            // console.log("inventoryCheck passed");
-            return true;
-        } else {
-            // console.log("inventoryCheck failed");
+        if (display != "hide") {
             consolePush("You don't have that item in your inventory");
-            return false;
         }
 
-        // return character.inventory.indexOf(name)
+        console.log("inventoryCheck failed");
+        return false;
     }
+
+    function equippedCheck(name,display) {
+        console.log(name);
+        for (var key in character.equipment) {
+            if (character.equipment[key]["name"] === name) {
+                console.log(name);
+                console.log("equipmentCheck passed");
+                return true;
+            }
+        }
+        if (display != "hide") {
+            consolePush("You don't have that item equipped");
+        }
+        console.log("equipmentCheck failed");
+        return false;
+    }
+
+    function roomCheck(name,display) {
+        console.log(name);
+        for (var key in rooms[roomName]["items"]) {
+            if (rooms[roomName]["items"][key]["name"] === name) {
+                console.log(name);
+                console.log("roomCheck passed");
+                return true;
+            }
+        }
+
+        if (display != "hide") {
+            consolePush("That item is not in this room");
+        }
+        console.log("roomCheck failed");
+        return false;
+    }
+
+
 
     function spellBookCheck(effect) {
         if (character.spells.indexOf(effect["name"]) > -1) {
@@ -597,6 +752,7 @@ function eqGame() {
             },
 
             look: function(roomName){
+                console.log(rooms[roomName]["items"]);
                 loadDescription(roomName, "default");
                 listItems(roomName);
                 loadDescription(roomName, "exits");
@@ -610,8 +766,13 @@ function eqGame() {
                 consolePush("Name: " + character.charName);
                 consolePush("Class: " + character.class);
                 consolePush("Level: " + character.charLevel);
-                consolePush("Weapon: <span class='capitalize'>" + character.equipment.weapon + "</span>");
-                consolePush("Armour: " + character.equipment.chest);
+                consolePush("Weapon: <span class='capitalize'>" + itemName(character.equipment,"type","weapon") + "</span>");
+                consolePush("Armour: " + itemName(character.equipment,"type","chest"));
+                consolePush("Shield: " + itemName(character.equipment,"type","shield"));
+                consolePush("Legs: " + itemName(character.equipment,"type","legs"));
+                consolePush("Feet: " + itemName(character.equipment,"type","feet"));
+                consolePush("Head: " + itemName(character.equipment,"type","head"));
+                consolePush("Hands: " + itemName(character.equipment,"type","hands"));
                 consolePush("Health: " + character.charHealth);
                 consolePush("Mana: " + character.charMana);
                 consolePush("Strength: " + character.strength);
@@ -622,77 +783,118 @@ function eqGame() {
 
             },
 
-            list: function() {
-              listEquip();
-              consolePush(equippedList);
-            },
+            // list: function() {
+            //   listEquip();
+            //   consolePush(equippedList);
+            // },
 
-            exam: function(roomName,userInputString){
-                console.log("Examining " + userInputString);
-                itemPos = character.inventory.indexOf(userInputString);
-                //roomPos = rooms[roomName]["items"].indexOf(userInputString);
-                //console.log(roomPos);
-                console.log(itemPos);
-                if (itemPos > -1 || objCheck(rooms[roomName]["items"]) === true) {
+
+
+            exam: function() {
+
+                if (inventoryCheck(userInputString,"hide") || equippedCheck(userInputString,"hide") || roomCheck(userInputString,"hide") === true) {
                     consolePush("You examine the " + userInputString);
-                    consolePush("@@figure out how to display this nicely. needs to handle SPECIAL items");
-                    consolePush(equipment[userInputString]);
-                    console.log(equipment[userInputString]);
-                    consolePush("You see " + equipment[userInputString].desc);
-                    switch(equipment[userInputString].type) {
-                        case 'weapon' : consolePush("You use it to hurt things");
-                        break;
-                        case 'container':
-                            consolePush("Its a container");
-                            consolePush("Inside you see " + equipment[userInputString].contents)
-                        break;
-                        case 'shield':  consolePush("Its a shield");
-                        break;
-                        case 'head' : consolePush("Its for you head");
-                        break;
-                        case 'usable' : consolePush("You can use this item");
-                        break;
-                        default: consolePush("You cant do that");
+
+                    for (var key in equipment) {
+                        if (equipment[key]["name"] === userInputString) {
+                            consolePush("Description : " + equipment[key]["desc"]);
+                            consolePush("Type : " + equipment[key]["type"]);
+                            consolePush("Minimum Level : " + equipment[key]["levelReq"]);
+
+                            if (equipment[key]["type"] === "container") {
+                                consolePush("This container holds: ");
+                                for (var key2 in equipment[key]["contents"]) {
+                                    consolePush(equipment[key]["contents"][key2]["name"]);
+
+                                }
+
+
+                            }
+                            console.log("end");
+                        }
                     }
-                } else {
-                    consolePush("I don't see that here.")
                 }
 
             },
 
-            remove: function(roomName,userInputString) {
-            listEquip();
-            console.log(userInputString);
-            wornCheck = equippedList.indexOf(userInputString);
+            // exam2: function(roomName,userInputString){
+            //     console.log("Examining " + userInputString);
+            //     itemPos = character.inventory.indexOf(userInputString);
+            //     //roomPos = rooms[roomName]["items"].indexOf(userInputString);
+            //     //console.log(roomPos);
+            //     console.log(itemPos);
+            //     if (itemPos > -1 || objCheck(rooms[roomName]["items"]) === true) {
+            //         consolePush("You examine the " + userInputString);
+            //         consolePush("@@figure out how to display this nicely. needs to handle SPECIAL items");
+            //         consolePush(equipment[userInputString]);
+            //         console.log(equipment[userInputString]);
+            //         consolePush("You see " + equipment[userInputString].desc);
+            //         switch(equipment[userInputString].type) {
+            //             case 'weapon' : consolePush("You use it to hurt things");
+            //             break;
+            //             case 'container':
+            //                 consolePush("Its a container");
+            //                 consolePush("Inside you see " + equipment[userInputString].contents)
+            //             break;
+            //             case 'shield':  consolePush("Its a shield");
+            //             break;
+            //             case 'head' : consolePush("Its for you head");
+            //             break;
+            //             case 'usable' : consolePush("You can use this item");
+            //             break;
+            //             default: consolePush("You cant do that");
+            //         }
+            //     } else {
+            //         consolePush("I don't see that here.")
+            //     }
+            //
+            // },
 
-                if (wornCheck > -1) {
-                    consolePush("You remove the " + userInputString);
-                    typeCheck = equipment[userInputString].type;
-                    character.equipment[typeCheck] = "";
-                    character.inventory.push(userInputString);
+            // remove2: function(roomName,userInputString) {
+            // listEquip();
+            // console.log(userInputString);
+            // wornCheck = equippedList.indexOf(userInputString);
+            //
+            //     if (wornCheck > -1) {
+            //         consolePush("You remove the " + userInputString);
+            //         typeCheck = equipment[userInputString].type;
+            //         character.equipment[typeCheck] = "";
+            //         character.inventory.push(userInputString);
+            //
+            //
+            //     } else {
+            //         consolePush("You are not wearing " + userInputString);
+            //     }
+            // },
 
-                } else {
-                    consolePush("You are not wearing " + userInputString);
-                }
-            },
 
-            equip: function (roomName, userInputString) {
+            remove: function(item) {
 
-                if (inventoryCheck(userInputString) === true && levelCheck(equipment[userInputString]) === true && classCheck(equipment[userInputString]) && equipCheck(equipment[userInputString]["type"]) === true) {
-
-                    typeCheck = equipment[userInputString].type;  //check id type for swapping if occupied
-                    slotCheck = character.equipment[typeCheck];  //if slot full, remove current item
-
-                    if (character.equipment[typeCheck].length > 1) {
-                        actions.remove(roomName, slotCheck);
+                if (objCheck(character.equipment,userInputString) === true) {
+                    console.log("REMOVE CHECKS PASSED");
+                    for (var key in character.equipment) {
+                        if (character.equipment[key]["name"] === userInputString) {
+                            character.inventory[key] = character.equipment[key];
+                            delete character.equipment[key];
+                            consolePush("You remove the " + userInputString);
+                        }
                     }
 
-                    character.equipment[typeCheck] = userInputString; //equip to slot
-                    character.inventory.splice(inventoryCheck(userInputString), 1);  //remove from Inv
-                    consolePush("You equip the " + userInputString);
+
+
+                } else {
+                    console.log("Remove checks failed");
+                    consolePush("You can't do that");
                 }
 
-        },
+
+            },
+
+            equip: function () {
+                if (inventoryCheck(userInputString) && valueCheck(equipment, "use", "equip") && levelCheck2(equipment, userInputString) && arrayCheck(equipment, "class", character.class) === true) {
+                        equipItem(userInputString);
+                }
+            },
 
             pickup: function(roomName) {
                 //check object is in the room
@@ -700,36 +902,36 @@ function eqGame() {
                 //remove object from room inventory
                 //add object to character inventory
 
-                if (objCheck(rooms[roomName]["items"]) && moveableCheck(equipment[userInputString]) === true) {
+                if (objCheck(rooms[roomName]["items"],userInputString) && moveableCheck(equipment[userInputString]) === true) {
                     console.log("PICKUP CHECKS PASSED");
-
                     for (var key in rooms[roomName]["items"]) {
-                        // console.log(rooms[roomName]["items"][key]["name"]);
-                        // console.log(userInputString);
                         if (rooms[roomName]["items"][key]["name"] === userInputString) {
-                            console.log("MATCH");
-
                             // add to inventory
                             character.inventory[key] = rooms[roomName]["items"][key];
-
                             //remove from room
-                            delete rooms[roomName]["items"][key]
+                            delete rooms[roomName]["items"][key];
+                            consolePush("You pickup the " + userInputString);
                         }
                     }
+                } else {
+                    console.log("Pickup checks failed");
+                    consolePush("You can't do that");
                 }
             },
 
-            
-
             drop: function (roomName) {
-                inventoryPos = character.inventory.indexOf(userInputString);
-                if (inventoryPos > -1) {
-                    consolePush("You drop " + userInputString);
-                    character.inventory.splice(inventoryPos, 1);
-                    rooms[roomName]["items"].push(userInputString);
-
+                if(objCheck(character.inventory,userInputString) === true) {
+                    for (var key in character.inventory) {
+                        if (character.inventory[key]["name"] === userInputString) {
+                            //Add to room
+                            rooms[roomName]["items"][key] = character.inventory[key];
+                            //remove from inventory
+                            delete character.inventory[key];
+                        }
+                    }
                 } else {
-                    consolePush("You don't have <span class='capitalize'> " + userInputString + "</span>");
+                    console.log("Drop checks failed");
+                    consolePush("You can't do that");
                 }
             },
 
@@ -797,10 +999,9 @@ function eqGame() {
                 a.shift(); //strips the original string from the new array
                 castEffect = a[0];
                 select = "mob" + (a[2] - 1);
+                // console.log(a);
 
-
-
-                if(levelCheck(equipment[castEffect]) && inventoryCheck(equipment[castEffect]["name"]) && typeCheck(equipment[castEffect]["type"],"usable") === true) {
+                if(inventoryCheck(castEffect) && levelCheck(equipment[castEffect]) && typeCheck(equipment[castEffect]["type"],"usable") === true) {
                     //using item
                     amount = diceRoll(equipment[castEffect]["min"], equipment[castEffect]["max"]);
                     if (anyMobsCheck() === true) {
@@ -844,38 +1045,38 @@ function eqGame() {
             },
 
             test2: function() {
-                console.log(rooms[roomName]["items"]);
-                listItems(roomName);
+                console.log(character["equipment"]);
+
             },
 
             test: function(roomName,userInputString) {
 
+                // valueCheck(item,property,value)
+                // check leather armour:use = equip
 
-                // console.log(rooms[roomName]["items"]);
-                // //console.log(rooms[roomName]["items"][userInputString]);
-                // console.log(rooms[roomName]["items"]["name"]);
+                //obj = character.equipment
+                //property = use
+                //value = equip
+                // console.log(character.inventory);
+                // console.log(levelCheck2(equipment,"silver sword"));
+                //valueCheck(equipment,"use","equip");
+                //arrayCheck(equipment,"class",character.class)
 
-
-                for(var key in rooms[roomName]["items"]) {
-                    console.log(rooms[roomName]["items"][key]);
-                    //console.log(userInputString);
-                    if (rooms[roomName]["items"][key]["name"] === userInputString) {
-                        console.log("MATCH")
-                    }
-
-                    // console.log(rooms[roomName]["items"][key]["name"]);
-                    // var userInputString = rooms[roomName]["items"]["name"];
-                    // console.log(key);
-                    // invArray.push(value.name);
+                //console.log(equipment[userInputString]["type"]);
 
 
-                }
+                // console.log(character["equipment"]);
+                // console.log(equipment[userInputString]["type"]);
+                // console.log(valueCheck(character["equipment"],"slot",equipment[userInputString]["type"]))
 
+                //console.log(occupiedCheck(userInputString));
 
+                // equipItem(userInputString);
 
-            //     // checkParent(rooms[roomName]["items"],"iteml0001");
-            //     checkParent(rooms[roomName]["items"],"name","iron dagger");
-            //
+                //itemName(obj,type,value)
+
+                console.log(itemName(character.equipment,"type","weapon"));
+
             },
 
             clear: function() {

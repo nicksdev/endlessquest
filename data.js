@@ -12,7 +12,23 @@ var character = {
     charHealth: 50,
     maxMana: 50,
     charMana: 50,
+
     equipment: {
+        "item0010": {
+            type: "weapon",
+            name: "sharp dagger",
+        },
+        "item0011": {
+            type: "chest",
+            name: "leather armour",
+        }
+
+    },
+
+
+
+
+    equipment2: {
         weapon:"sharp dagger",
         shield:"wooden shield",
         chest:"leather armour",
@@ -21,6 +37,11 @@ var character = {
         feet:"",
         ring:""
     },
+
+
+
+
+
     spells: ["glow heal","hearth heal","giant strength","firebolt"],
     inventory: {
         "item0001": {
@@ -31,6 +52,7 @@ var character = {
         },
         "item0003": {
             name: "silver sword",
+            type: "weapon"
         },
         "item0004": {
             name: "fire wand",
@@ -170,18 +192,18 @@ equipment = {
 
 
 
-    "iron dagger OLD": {
-        name: "iron dagger",
-        desc: "a small iron dagger with a short dull blade",
-        type: "weapon",
-        levelReq: 0,
-        use: "equip",
-        minDamage: 1,
-        maxDamage: 2,
-        attack: 1,
-        class: ["wizard","warrior"],
-        moveable: true
-    },
+    // "iron dagger OLD": {
+    //     name: "iron dagger",
+    //     desc: "a small iron dagger with a short dull blade",
+    //     type: "weapon",
+    //     levelReq: 0,
+    //     use: "equip",
+    //     minDamage: 1,
+    //     maxDamage: 2,
+    //     attack: 1,
+    //     class: ["wizard","warrior"],
+    //     moveable: true
+    // },
 
 
     "small iron mace": {
@@ -341,7 +363,16 @@ equipment = {
         use: "",
         locked: false,
         trapped: false,
-        contents: ["wooden shield"],
+        contents: {
+            "item0101": {
+                type: "shield",
+                name: "wooden shield",
+            },
+            "item0102": {
+                type: "chest",
+                name: "chainmail armour",
+            },
+        },
         moveable: false
     },
 

@@ -27,6 +27,22 @@ TODO:
 *spell scrolls
 *container traps function
 //out of combat casting
+
+
+
+Change Equiped items to objects
+    +   completed remove
+    +   equip item
+    +   exam
+    +   equip / remove
+    -   take from container
+    -   put in container
+    -   calc total defence
+    -   include def check functions
+
+
+
+
 Searchable corpses, levelled lists loot
     - need to make room items an object rather than an array
 
