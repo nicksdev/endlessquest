@@ -35,8 +35,8 @@ Change Equiped items to objects
     +   equip item
     +   exam
     +   equip / remove
-    -   take from container
-    -   put in container
+    +   take from container
+    +   put in container
     -   calc total defence
     -   include def check functions
 

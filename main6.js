@@ -288,20 +288,19 @@ function eqGame() {
 
     //CHECK FUNCTIONS
 
-    function objCheck(obj, userInputString) {
+    function objCheck(obj, value) {
         //checks to see if something exists in an object
         console.log(obj);
         for(var key in obj) {
-            if (obj[key]["name"] === userInputString) {
+            if (obj[key]["name"] === value) {
                 console.log("CONTAINS OBJ");
                 return true;
             } else {
+                console.log(obj[key]["name"]);
                 console.log("NO OBJ");
                 return false;
             }
         }
-
-
     }
 
     function valueCheck(obj,property,value) {
@@ -319,7 +318,7 @@ function eqGame() {
             }
         }
         console.log("Name not Matched");
-        // return false;
+        return false;
     }
 
     function levelCheck(effect) {
@@ -936,57 +935,44 @@ function eqGame() {
             },
 
             put: function (roomName) {
-            //healing balm in small iron chest
+            //healing balm in small oak chest
                 a = userInputString.match(/^([a-z\s0-9]+) in ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
                 a.shift(); //strips the original string from the new array
-                // console.log(a);
-                if (rooms[roomName]["items"].indexOf(a[1]) > -1) {
-                    for (i = 0; i < rooms[roomName]["items"].length; i++) {
-                        n = a[1].search(rooms[roomName]["items"][i]);
-                        if (n > -1) {
-                            if (character.inventory.indexOf(a[0]) > -1) {
-                                for (j = 0; j < character.inventory.length; j++) {
-                                    p = a[0].search(equipment[a[1]].contents[j]);
-                                    if (p > -1) {
-                                        character.inventory.splice(p, 1); //remove item from inventory
-                                        equipment[a[1]].contents.push(a[0]);
-                                        consolePush("You put the " + a[0] + " in the " + a[1]);
+                if (inventoryCheck(a[0]) === true) {
+                    for (var key in equipment) {
+                        if (equipment[key]["name"] === a[1]) {
+                            // console.log(equipment[key]["contents"]);
+                            // console.log(character["inventory"]);
+                            for (var key2 in character["inventory"]) {
+                                if (character["inventory"][key2]["name"] === a[0]) {
+                                    console.log(character["inventory"][key2]);
+                                    equipment[key]["contents"][key2] = character["inventory"][key2];
+                                    delete character["inventory"][key2];
 
-                                    }
                                 }
-                            } else {
-                                consolePush("The " + a[0] + " is not in your inventory");
                             }
                         }
                     }
-                } else {
-                    consolePush("The " + a[1] + " is not here");
                 }
             },
 
             take: function(roomName) {
                 a = userInputString.match(/^([a-z\s0-9]+) from ([a-z\s0-9]+)$/); //breaks userInputString into array 'a'
                 a.shift(); //strips the original string from the new array
-                if (rooms[roomName]["items"].indexOf(a[1]) > -1) {
-                    for (i = 0; i < rooms[roomName]["items"].length; i++) {
-                        n = a[1].search(rooms[roomName]["items"][i]);
-                        if (n > -1) {
-                            if (equipment[a[1]].contents.indexOf(a[0]) > -1) {
-                                for (j = 0; j < equipment[a[1]].contents.length; j++) {
-                                    p = a[0].search(equipment[a[1]].contents[j]);
-                                    if (p > -1) {
-                                        console.log(a[0] + " found inside " + a[1]);
-                                        equipment[a[1]].contents.splice(p, 1); //remove item from container
-                                        character.inventory.push(a[0]);
-                                    }
+                for (var key in equipment) {
+                    if (equipment[key]["name"] === a[1]) {
+                        if (objCheck(equipment[key]["contents"],a[0]) === true) {
+                            for (var key2 in equipment[key]["contents"]) {
+                                // console.log(equipment[key]["contents"][key2]);
+                                // console.log(a[0]);
+                                if (equipment[key]["contents"][key2]["name"] === a[0]) {
+                                    character["inventory"][key2] = equipment[key]["contents"][key2];
+                                    delete equipment[key]["contents"][key2];
                                 }
-                            } else {
-                                consolePush("The " + a[0] + " is not in the " + a[1]);
                             }
                         }
+
                     }
-                } else {
-                    consolePush("The " + a[1] + " is not here");
                 }
             },
 
